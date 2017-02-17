@@ -1,0 +1,42 @@
+{
+  "name": "webgl-playground",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "run-s clean",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "run-s webpack",
+    "webpack": "webpack",
+    "clean": "rimraf dist"
+  },
+  "author": "Andrew Nesvadba",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-core": "6.23.1",
+    "babel-loader": "6.3.2",
+    "babel-preset-env": "1.1.8",
+    "css-loader": "^0.26.1",
+    "html-webpack-plugin": "2.28.0",
+    "npm-run-all": "4.0.1",
+    "rimraf": "2.5.4",
+    "style-loader": "^0.13.1",
+    "ts-loader": "2.0.0",
+    "typescript": "2.1.6",
+    "webpack": "2.2.1",
+    "webpack-dev-server": "2.3.0"
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "browsers": [
+              "last 2 versions"
+            ]
+          }
+        }
+      ]
+    ]
+  }
+}
