@@ -1,6 +1,6 @@
-export default function GLInstance(canvasID) {
-  const canvas = document.getElementById(canvasID);
-  const gl = canvas.getContext('webgl2');
+export default function GLInstance(canvasID): ExtendedWebGLContext | null {
+  const canvas = <HTMLCanvasElement>document.getElementById(canvasID);
+  const gl = <ExtendedWebGLContext>canvas.getContext('webgl2');
 
   if (!gl) {
     console.error('WebGL context is not available.'); // eslint-disable-line
@@ -30,6 +30,15 @@ export default function GLInstance(canvasID) {
     this.viewport(0, 0, w, h);
 
     return this;
+  }
+
+  gl.fCreateArrayBuffer = function (floatArray, isStatic = true) {
+    const buffer = <WebGLBuffer>this.createBuffer();
+    this.bindBuffer(this.ARRAY_BUFFER, buffer);
+    this.bufferData(this.ARRAY_BUFFER, floatArray, isStatic ? this.STATIC_DRAW : this.DYNAMIC_DRAW);
+    this.bindBuffer(this.ARRAY_BUFFER, null);
+
+    return buffer;
   }
 
   return gl;

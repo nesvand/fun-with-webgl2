@@ -4,7 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const webpackConfig = {
   entry: {
-    app: path.resolve(__dirname, 'src', 'index.js'),
+    app: path.resolve(__dirname, 'src', 'index.ts'),
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -20,8 +20,18 @@ const webpackConfig = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        loader: 'babel-loader',
+        test: /\.ts$/,
+        use: [
+          {
+            loader: 'babel-loader'
+          },
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true
+            }
+          }
+        ],
       },
       {
         test: /\.css$/,
@@ -45,7 +55,7 @@ const webpackConfig = {
       'node_modules',
       path.resolve(__dirname, 'src'),
     ],
-    extensions: ['.js', '.json', '.css', '.glsl'],
+    extensions: ['.js', '.json', '.css', '.glsl', '.ts'],
   },
   devtool: 'cheap-module-eval-source-map',
 };
