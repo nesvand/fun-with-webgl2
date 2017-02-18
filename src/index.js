@@ -1,1 +1,3 @@
-import 'app.css';
+import GLInstance from './gl';
+
+import './app.css';
