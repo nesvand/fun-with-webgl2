@@ -1,4 +1,4 @@
-const ONE_SECOND: number = 1000.0;
+const ONE_SECOND: number = 1000;
 
 export default class RenderLoop {
   msLastFrame: number | null;

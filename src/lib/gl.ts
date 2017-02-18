@@ -8,7 +8,7 @@ export default function GLInstance(canvasID): ExtendedWebGLContext | null {
   }
 
   // Setup GL - Set all the default configurations we need
-  gl.clearColor(1.0, 1.0, 1.0, 1.0); // Set clear colour
+  gl.clearColor(1, 1, 1, 1); // Set clear colour
 
   // Methods
   gl.fClear = function () {
