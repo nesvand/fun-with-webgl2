@@ -1,7 +1,10 @@
 {
-  "name": "webgl-playground",
+  "name": "fun-with-webgl2",
   "version": "1.0.0",
-  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:nesvand/fun-with-webgl2.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "run-s clean webpack",
@@ -10,7 +13,10 @@
     "webpack-dev-server": "webpack-dev-server",
     "clean": "rimraf dist"
   },
-  "author": "Andrew Nesvadba",
+  "author": {
+    "name": "Andrew Nesvadba",
+    "email": "nesvand@gmail.com"
+  },
   "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.23.1",
@@ -42,5 +48,6 @@
         }
       ]
     ]
-  }
+  },
+  "private": true
 }
