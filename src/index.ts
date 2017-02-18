@@ -39,7 +39,7 @@ window.addEventListener('load', () => {
     gl.fSetSize(500, 500)
       .fClear();
 
-    const shaderProg = ShaderUtil.domShaderProgram(gl, vertexShader, fragmentShader, true);
+    const shaderProg = ShaderUtil.shaderProgram(gl, vertexShader, fragmentShader, true);
 
     // Set up data buffers
     aVerts = new Float32Array([0, 0, 0,]);
@@ -55,7 +55,7 @@ window.addEventListener('load', () => {
     gRLoop = new RenderLoop(onRender).start();
   }
 
-  function onRender (dt: number) {
+  function onRender(dt: number) {
     if (gl) {
       let size;
       let radius;

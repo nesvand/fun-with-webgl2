@@ -1,14 +1,5 @@
 export default class ShaderUtil {
-  // static domShaderSrc(elementID) {
-  //   var element = document.getElementById(elementID);
-  //   if (!element || element.text == "") {
-  //     console.log(`${elementID} shader not found or no text.`);
-  //     return null;
-  //   }
-
-  //   return element.text;
-  // }
-  public static createShader (
+  public static createShader(
     gl: ExtendedWebGLContext,
     source: string,
     type: number
@@ -28,7 +19,7 @@ export default class ShaderUtil {
     return shader;
   }
 
-  public static createProgram (
+  public static createProgram(
     gl: ExtendedWebGLContext,
     vShader: WebGLShader,
     fShader: WebGLShader,
@@ -66,7 +57,7 @@ export default class ShaderUtil {
     return prog;
   }
 
-  public static domShaderProgram (
+  public static shaderProgram(
     gl: ExtendedWebGLContext,
     vShaderTxt: string,
     fShaderTxt: string,

@@ -1,4 +1,4 @@
-export default function GLInstance (canvasID): ExtendedWebGLContext | null {
+export default function GLInstance(canvasID: string): ExtendedWebGLContext | null {
   const canvas = <HTMLCanvasElement>document.getElementById(canvasID);
   const gl = <ExtendedWebGLContext>canvas.getContext('webgl2');
 
