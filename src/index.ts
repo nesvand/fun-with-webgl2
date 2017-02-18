@@ -42,7 +42,7 @@ window.addEventListener('load', () => {
     const shaderProg = ShaderUtil.domShaderProgram(gl, vertexShader, fragmentShader, true);
 
     // Set up data buffers
-    aVerts = new Float32Array([0, 0, 0]);
+    aVerts = new Float32Array([0, 0, 0,]);
     gBuffer = gl.fCreateArrayBuffer(aVerts);
     gVertCount = aVerts.length / 3; // positions are Vec3, so number of verts is buffer length / 3
 
@@ -55,7 +55,7 @@ window.addEventListener('load', () => {
     gRLoop = new RenderLoop(onRender).start();
   }
 
-  function onRender(dt: number) {
+  function onRender (dt: number) {
     if (gl) {
       let size;
       let radius;

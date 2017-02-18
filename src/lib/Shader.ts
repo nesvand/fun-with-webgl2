@@ -8,7 +8,7 @@ export default class ShaderUtil {
 
   //   return element.text;
   // }
-  public static createShader(
+  public static createShader (
     gl: ExtendedWebGLContext,
     source: string,
     type: number
@@ -28,7 +28,7 @@ export default class ShaderUtil {
     return shader;
   }
 
-  public static createProgram(
+  public static createProgram (
     gl: ExtendedWebGLContext,
     vShader: WebGLShader,
     fShader: WebGLShader,
@@ -66,7 +66,7 @@ export default class ShaderUtil {
     return prog;
   }
 
-  public static domShaderProgram(
+  public static domShaderProgram (
     gl: ExtendedWebGLContext,
     vShaderTxt: string,
     fShaderTxt: string,

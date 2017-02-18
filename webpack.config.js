@@ -23,14 +23,14 @@ const webpackConfig = {
         test: /\.ts$/,
         use: [
           {
-            loader: 'babel-loader'
+            loader: 'babel-loader',
           },
           {
             loader: 'ts-loader',
             options: {
-              transpileOnly: true
-            }
-          }
+              transpileOnly: true,
+            },
+          },
         ],
       },
       {
@@ -44,8 +44,8 @@ const webpackConfig = {
         test: /\.glsl$/,
         use: [
           {
-            loader: 'webpack-glsl-loader'
-          }
+            loader: 'webpack-glsl-loader',
+          },
         ],
       },
     ],
@@ -55,7 +55,7 @@ const webpackConfig = {
       'node_modules',
       path.resolve(__dirname, 'src'),
     ],
-    extensions: ['.js', '.json', '.css', '.glsl', '.ts'],
+    extensions: ['.js', '.json', '.css', '.glsl', '.ts',],
   },
   devtool: 'cheap-module-eval-source-map',
 };
