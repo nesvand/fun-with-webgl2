@@ -30,6 +30,14 @@ const webpackConfig = {
           use: 'css-loader',
         }),
       },
+      {
+        test: /\.glsl$/,
+        use: [
+          {
+            loader: 'webpack-glsl-loader'
+          }
+        ],
+      },
     ],
   },
   resolve: {
@@ -37,9 +45,9 @@ const webpackConfig = {
       'node_modules',
       path.resolve(__dirname, 'src'),
     ],
-    extensions: ['.js', '.json', '.css'],
+    extensions: ['.js', '.json', '.css', '.glsl'],
   },
-  devtool: 'source-map',
+  devtool: 'cheap-module-eval-source-map',
 };
 
 module.exports = webpackConfig;

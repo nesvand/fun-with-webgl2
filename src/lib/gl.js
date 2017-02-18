@@ -1,6 +1,6 @@
 export default function GLInstance(canvasID) {
   const canvas = document.getElementById(canvasID);
-  const gl = canvas.getContext('webgl');
+  const gl = canvas.getContext('webgl2');
 
   if (!gl) {
     console.error('WebGL context is not available.'); // eslint-disable-line
