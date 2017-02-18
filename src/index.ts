@@ -19,6 +19,8 @@ window.addEventListener('load', () => {
 
   // Global Variables
   let gVertCount = 0;
+  let aVerts: Float32Array;
+  let gBuffer: WebGLBuffer;
   let uPointSizeLoc: WebGLUniformLocation | null = -1;
   let uAngleLoc: WebGLUniformLocation | null = 0;
   let uRadiusLoc: WebGLUniformLocation | null = 0;
@@ -40,8 +42,8 @@ window.addEventListener('load', () => {
     const shaderProg = ShaderUtil.domShaderProgram(gl, vertexShader, fragmentShader, true);
 
     // Set up data buffers
-    const aVerts = new Float32Array([0, 0, 0]);
-    gl.fCreateArrayBuffer(aVerts);
+    aVerts = new Float32Array([0, 0, 0]);
+    gBuffer = gl.fCreateArrayBuffer(aVerts);
     gVertCount = aVerts.length / 3; // positions are Vec3, so number of verts is buffer length / 3
 
     // Set up for drawing
