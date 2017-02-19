@@ -8,14 +8,14 @@ export default class RenderLoop {
   msFpsLimit: number;
   run: Function;
 
-  constructor (cb: RenderLoopCallback, fps?: number) {
+  constructor(cb: RenderLoopCallback, fps?: number) {
     const self = this;
     this.msLastFrame = null; // The time in ms of the last frame
     this.callback = cb; // Function to call each frame
     this.isActive = false; // Control the on/off state of the render loop
     this.fps = 0; // Save the value of how fast the loop is going
 
-    if (fps && fps > 0) { // Build a run method that limits the framerate
+    if (fps !== undefined && fps > 0) { // Build a run method that limits the framerate
       this.msFpsLimit = ONE_SECOND / fps; // Calc ms per frame in one second of time
 
       this.run = limitedRun;
@@ -24,7 +24,7 @@ export default class RenderLoop {
       this.run = optimisedRun;
     }
 
-    function limitedRun () {
+    function limitedRun() {
       // Calc deltatime between frames and the FPS currently
       const msCurrent = performance.now();
       const msDelta = (msCurrent - self.msLastFrame);
@@ -41,7 +41,7 @@ export default class RenderLoop {
       }
     }
 
-    function optimisedRun () {
+    function optimisedRun() {
       // Calc deltatime between frames and the FPS currently
       const msCurrent = performance.now(); // gives you the whole number of ms since the dawn of time
       const deltaTime = (msCurrent - self.msLastFrame) / ONE_SECOND; // ms between frames as a fraction of a second
@@ -57,14 +57,14 @@ export default class RenderLoop {
     }
   }
 
-  start (): RenderLoop {
+  start(): RenderLoop {
     this.isActive = true;
     this.msLastFrame = performance.now();
     window.requestAnimationFrame(<FrameRequestCallback>this.run);
     return this;
   }
 
-  stop () {
+  stop() {
     this.isActive = false;
   }
 }
