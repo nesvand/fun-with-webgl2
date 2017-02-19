@@ -6,6 +6,7 @@ import GLInstance from './lib/gl';
 import { ShaderUtil, Shader } from './lib/Shader';
 import RenderLoop from './lib/RenderLoop';
 import Model from './lib/Model';
+import { GridAxis } from './lib/Primatives';
 
 // Shaders
 import vertexShaderText from './shaders/vertex_shader.glsl';
@@ -40,13 +41,14 @@ window.addEventListener('load', () => {
       .fClear();
 
     // SHADER STEPS
-    gShader = new TestShader(gl);
+    gShader = new TestShader(gl, [0.8, 0.8, 0.8, 1, 0, 0, 0, 1, 0, 0, 0, 1]);
 
     // DATA BUFFER
-    const mesh = gl.fCreateMeshVAO('dots', null, [0, 0, 0, 0.1, 0.1, 0, 0.1, -0.1, 0, -0.1, -0.1, 0, -0.1, 0.1, 0]);
-    mesh.drawMode = gl.POINTS;
+    // const mesh = gl.fCreateMeshVAO('lines', null, [0, 1, 0, 0, -1, 0, -1, 0, 0, 1, 0, 0]);
+    // mesh.drawMode = gl.LINES;
 
-    gModel = new Model(mesh);
+    // gModel = new Model(mesh);
+    gModel = new Model(GridAxis.createMesh(gl));
 
     // Set up for drawing
     gRLoop = new RenderLoop(onRender).start();
@@ -54,17 +56,11 @@ window.addEventListener('load', () => {
 
   function onRender(dt: number) {
     if (gl) {
-      gPointSize += gPointSizeStep * dt;
-      gAngle += gAngleStep * dt;
-
-      let size = (Math.sin(gPointSize) * 10) + 30;
-
       gl.fClear();
 
       if (gShader && gModel) {
         gShader
           .activate()
-          .set(size, gAngle)
           .renderModel(gModel);
       }
     }
@@ -72,21 +68,12 @@ window.addEventListener('load', () => {
 });
 
 class TestShader extends Shader {
-  uniformLoc: any;
-
-  constructor(gl: ExtendedWebGLContext) {
+  constructor(gl: ExtendedWebGLContext, colorArray: number[]) {
     super(gl, vertexShaderText, fragmentShaderText);
 
-    this.uniformLoc.uPointSize = gl.getUniformLocation(this.program, 'uPointSize');
-    this.uniformLoc.uAngle = gl.getUniformLocation(this.program, 'uAngle');
+    const uColor: WebGLUniformLocation | null = gl.getUniformLocation(this.program, 'uColor');
+    gl.uniform3fv(uColor, colorArray);
 
     gl.useProgram(null);
-  }
-
-  set(size: number, angle: number): TestShader {
-    this.gl.uniform1f(this.uniformLoc.uPointSize, size);
-    this.gl.uniform1f(this.uniformLoc.uAngle, angle);
-
-    return this;
   }
 }
