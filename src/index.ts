@@ -3,7 +3,7 @@ import './assets/app.css';
 
 // Libs
 import GLInstance from './lib/gl';
-import { ShaderUtil, Shader, } from './lib/Shader';
+import { Shader, } from './lib/Shader';
 import RenderLoop from './lib/RenderLoop';
 import Model from './lib/Model';
 import { GridAxis, } from './lib/Primatives';
