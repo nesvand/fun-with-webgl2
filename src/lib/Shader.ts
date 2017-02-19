@@ -161,7 +161,6 @@ class Shader {
       }
     }
 
-
     this.gl.bindVertexArray(null);
 
     return this;

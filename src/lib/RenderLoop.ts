@@ -10,6 +10,7 @@ export default class RenderLoop {
 
   constructor(cb: RenderLoopCallback, fps?: number) {
     const self = this;
+
     this.msLastFrame = null; // The time in ms of the last frame
     this.callback = cb; // Function to call each frame
     this.isActive = false; // Control the on/off state of the render loop
