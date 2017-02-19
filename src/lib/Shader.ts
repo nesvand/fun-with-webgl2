@@ -4,13 +4,13 @@ import {
   ATTR_POSITION_LOC,
   ATTR_POSITION_NAME,
   ATTR_UV_LOC,
-  ATTR_UV_NAME
+  ATTR_UV_NAME,
 } from './globals';
 
 import Model from './Model';
 
 class ShaderUtil {
-  static createShader(gl: ExtendedWebGLContext, source: string, type: number): WebGLShader | null {
+  static createShader (gl: ExtendedWebGLContext, source: string, type: number): WebGLShader | null {
     const shader = gl.createShader(type);
 
     gl.shaderSource(shader, source);
@@ -26,7 +26,7 @@ class ShaderUtil {
     return shader;
   }
 
-  static createProgram(gl: ExtendedWebGLContext, vShader: WebGLShader, fShader: WebGLShader, doValidate: boolean): WebGLProgram | null {
+  static createProgram (gl: ExtendedWebGLContext, vShader: WebGLShader, fShader: WebGLShader, doValidate: boolean): WebGLProgram | null {
     // Link shaders together
     const prog = gl.createProgram();
     gl.attachShader(prog, vShader);
@@ -69,7 +69,7 @@ class ShaderUtil {
   //----------------------
   // HELPER FUNCTIONS
   //----------------------
-  static shaderProgram(gl: ExtendedWebGLContext, vShaderTxt: string, fShaderTxt: string, doValidate: boolean): WebGLProgram | null {
+  static shaderProgram (gl: ExtendedWebGLContext, vShaderTxt: string, fShaderTxt: string, doValidate: boolean): WebGLProgram | null {
     const vShader = ShaderUtil.createShader(gl, vShaderTxt, gl.VERTEX_SHADER);
     if (vShader === null) {
       gl.deleteShader(vShader);
@@ -89,7 +89,7 @@ class ShaderUtil {
   // SETTERS / GETTERS
   //----------------------
 
-  static getStandardAttribLocations(gl: ExtendedWebGLContext, program: WebGLProgram): AttribLocations {
+  static getStandardAttribLocations (gl: ExtendedWebGLContext, program: WebGLProgram): AttribLocations {
     return {
       position: gl.getAttribLocation(program, ATTR_POSITION_NAME),
       norm: gl.getAttribLocation(program, ATTR_NORMAL_NAME),
@@ -104,7 +104,7 @@ class Shader {
   attribLoc: AttribLocations;
   uniformLoc: any;
 
-  constructor(gl: ExtendedWebGLContext, vertShaderSource: string, fragmentShaderSource: string) {
+  constructor (gl: ExtendedWebGLContext, vertShaderSource: string, fragmentShaderSource: string) {
     this.program = ShaderUtil.shaderProgram(gl, vertShaderSource, fragmentShaderSource, true);
 
     if (this.program !== null) {
@@ -118,17 +118,17 @@ class Shader {
   //--------------
   // METHODS
   //--------------
-  activate() {
+  activate () {
     this.gl.useProgram(this.program);
     return this;
   }
 
-  deactivate() {
+  deactivate () {
     this.gl.useProgram(null);
     return this;
   }
 
-  dispose() {
+  dispose () {
     if (this.gl.getParameter(this.gl.CURRENT_PROGRAM) === this.program) {
       this.gl.useProgram(null);
     }
@@ -140,9 +140,9 @@ class Shader {
   // RENDER METHODS
   //--------------
 
-  preRender() { }
+  preRender () { }
 
-  renderModel(model: Model) {
+  renderModel (model: Model) {
     let vao = model.mesh.vao;
     let indexCount = model.mesh.indexCount;
     let drawMode = model.mesh.drawMode;
@@ -169,5 +169,5 @@ class Shader {
 
 export {
   ShaderUtil,
-  Shader
+  Shader,
 }

@@ -3,10 +3,10 @@ import './assets/app.css';
 
 // Libs
 import GLInstance from './lib/gl';
-import { ShaderUtil, Shader } from './lib/Shader';
+import { ShaderUtil, Shader, } from './lib/Shader';
 import RenderLoop from './lib/RenderLoop';
 import Model from './lib/Model';
-import { GridAxis } from './lib/Primatives';
+import { GridAxis, } from './lib/Primatives';
 
 // Shaders
 import vertexShaderText from './shaders/vertex_shader.glsl';
@@ -41,7 +41,7 @@ window.addEventListener('load', () => {
       .fClear();
 
     // SHADER STEPS
-    gShader = new TestShader(gl, [0.8, 0.8, 0.8, 1, 0, 0, 0, 1, 0, 0, 0, 1]);
+    gShader = new TestShader(gl, [0.8, 0.8, 0.8, 1, 0, 0, 0, 1, 0, 0, 0, 1,]);
 
     // DATA BUFFER
     // const mesh = gl.fCreateMeshVAO('lines', null, [0, 1, 0, 0, -1, 0, -1, 0, 0, 1, 0, 0]);
@@ -54,7 +54,7 @@ window.addEventListener('load', () => {
     gRLoop = new RenderLoop(onRender).start();
   }
 
-  function onRender(dt: number) {
+  function onRender (dt: number) {
     if (gl) {
       gl.fClear();
 
@@ -68,7 +68,7 @@ window.addEventListener('load', () => {
 });
 
 class TestShader extends Shader {
-  constructor(gl: ExtendedWebGLContext, colorArray: number[]) {
+  constructor (gl: ExtendedWebGLContext, colorArray: number[]) {
     super(gl, vertexShaderText, fragmentShaderText);
 
     const uColor: WebGLUniformLocation | null = gl.getUniformLocation(this.program, 'uColor');

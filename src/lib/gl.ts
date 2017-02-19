@@ -4,10 +4,10 @@ import {
   ATTR_POSITION_LOC,
   ATTR_POSITION_NAME,
   ATTR_UV_LOC,
-  ATTR_UV_NAME
+  ATTR_UV_NAME,
 } from './globals';
 
-export default function GLInstance(canvasID: string): ExtendedWebGLContext | null {
+export default function GLInstance (canvasID: string): ExtendedWebGLContext | null {
   const canvas = <HTMLCanvasElement>document.getElementById(canvasID);
   const gl = <ExtendedWebGLContext>canvas.getContext('webgl2');
 
@@ -54,7 +54,7 @@ export default function GLInstance(canvasID: string): ExtendedWebGLContext | nul
 
   gl.fCreateMeshVAO = function (name, arrayIndex, arrayVert, arrayNorm, arrayUv) {
     const meshVAO: MeshVAO = {
-      drawMode: gl.TRIANGLES
+      drawMode: gl.TRIANGLES,
     };
 
     meshVAO.vao = gl.createVertexArray();

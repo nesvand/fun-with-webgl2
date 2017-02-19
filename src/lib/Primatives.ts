@@ -4,11 +4,11 @@ import {
   ATTR_POSITION_LOC,
   ATTR_POSITION_NAME,
   ATTR_UV_LOC,
-  ATTR_UV_NAME
+  ATTR_UV_NAME,
 } from './globals';
 
 class GridAxis {
-  static createMesh(gl: ExtendedWebGLContext) {
+  static createMesh (gl: ExtendedWebGLContext) {
     const verts: number[] = [];
     const size = 1.8;
     const div = 10;
@@ -69,7 +69,7 @@ class GridAxis {
       vao: gl.createVertexArray(),
       vertexComponentLen: -1,
       vertexCount: -1,
-      bufVertices: gl.createBuffer()
+      bufVertices: gl.createBuffer(),
     };
 
     let strideLen: number;
@@ -112,5 +112,5 @@ class GridAxis {
 }
 
 export {
-  GridAxis
+  GridAxis,
 }
