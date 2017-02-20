@@ -7,8 +7,6 @@ import { Shader, } from './lib/Shader';
 import RenderLoop from './lib/RenderLoop';
 import Model from './lib/Model';
 import { GridAxis, } from './lib/Primatives';
-import { Vector3, Matrix4, } from './lib/Math';
-import Transform from './lib/Transform';
 
 // Shaders
 import vertexShaderText from './shaders/vertex_shader.glsl';
@@ -19,7 +17,7 @@ window.addEventListener('load', () => {
   let gl: ExtendedWebGLContextLike;
 
   // Render Loop
-  let gRLoop: RenderLoop;
+  // let gRLoop: RenderLoop;
 
   // Model
   let gModel: Model;
@@ -40,10 +38,10 @@ window.addEventListener('load', () => {
       .setRotation(0, 0, 45)
       .setPosition(0.8, 0.8, 0);
 
-    gRLoop = new RenderLoop(onRender).start();
+    new RenderLoop(onRender).start();
   }
 
-  function onRender (dt: number) {
+  function onRender () {
     if (gl) {
       gl.fClear();
 

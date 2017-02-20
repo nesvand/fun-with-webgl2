@@ -10,7 +10,7 @@ import {
 import Model from './Model';
 
 class ShaderUtil {
-  static createShader (gl: ExtendedWebGLContext, source: string, type: number): WebGLShader | null {
+  static createShader (gl: ExtendedWebGLContext, source: string, type: number) {
     const shader = gl.createShader(type);
 
     gl.shaderSource(shader, source);
@@ -18,9 +18,15 @@ class ShaderUtil {
 
     // Handle errors if the shader fails to compile
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      console.error(`Error compiling shader : ${source}`, gl.getShaderInfoLog(shader));
+      const infoLog = gl.getShaderInfoLog(shader);
+
       gl.deleteShader(shader);
-      return null;
+
+      throw Error(infoLog || `Error compiling shader : ${source}`);
+    }
+
+    if (!shader) {
+      throw Error(`Shader returned as null: ${source}`);
     }
 
     return shader;
@@ -42,18 +48,22 @@ class ShaderUtil {
 
     // Check if successful
     if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-      console.error(`Error creating shader program.`, gl.getProgramInfoLog(prog));
+      const infoLog = gl.getProgramInfoLog(prog);
+
       gl.deleteProgram(prog);
-      return null;
+
+      throw Error(infoLog || 'Error creating shader program.');
     }
 
     // Only do this for additional debugging
     if (doValidate) {
       gl.validateProgram(prog);
       if (!gl.getProgramParameter(prog, gl.VALIDATE_STATUS)) {
-        console.error(`Error validating program.`, gl.getProgramInfoLog(prog));
+        const infoLog = gl.getProgramInfoLog(prog);
+
         gl.deleteProgram(prog);
-        return null;
+
+        throw Error(infoLog || 'Error validating program.');
       }
     }
 

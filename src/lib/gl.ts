@@ -1,13 +1,10 @@
 import {
   ATTR_NORMAL_LOC,
-  ATTR_NORMAL_NAME,
   ATTR_POSITION_LOC,
-  ATTR_POSITION_NAME,
   ATTR_UV_LOC,
-  ATTR_UV_NAME,
 } from './globals';
 
-export default function GLInstance (canvasID: string): ExtendedWebGLContext | null {
+export default function GLInstance (canvasID: string) {
   const canvas = <HTMLCanvasElement>document.getElementById(canvasID);
   const gl = <ExtendedWebGLContext>canvas.getContext('webgl2');
 

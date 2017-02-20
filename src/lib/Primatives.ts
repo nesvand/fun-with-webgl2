@@ -1,10 +1,5 @@
 import {
-  ATTR_NORMAL_LOC,
-  ATTR_NORMAL_NAME,
   ATTR_POSITION_LOC,
-  ATTR_POSITION_NAME,
-  ATTR_UV_LOC,
-  ATTR_UV_NAME,
 } from './globals';
 
 class GridAxis {
