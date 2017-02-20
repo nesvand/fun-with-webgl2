@@ -96,6 +96,15 @@ class ShaderUtil {
       uv: gl.getAttribLocation(program, ATTR_UV_NAME),
     }
   }
+
+  static getStandardUniformLocations (gl: ExtendedWebGLContext, program: WebGLProgram): UniformLocations {
+    return {
+      perspective: gl.getUniformLocation(program, 'uPMatrix'),
+      modelMatrix: gl.getUniformLocation(program, 'uMVMatrix'),
+      cameraMatrix: gl.getUniformLocation(program, 'uCameraMatrix'),
+      mainTexture: gl.getUniformLocation(program, 'uMainTex'),
+    }
+  }
 }
 
 class Shader {
@@ -111,7 +120,7 @@ class Shader {
       this.gl = gl;
       gl.useProgram(this.program);
       this.attribLoc = ShaderUtil.getStandardAttribLocations(this.gl, this.program);
-      this.uniformLoc = {};
+      this.uniformLoc = ShaderUtil.getStandardUniformLocations(this.gl, this.program);
     }
   }
 
@@ -125,6 +134,24 @@ class Shader {
 
   deactivate () {
     this.gl.useProgram(null);
+    return this;
+  }
+
+  setPerspective (matData: any) {
+    this.gl.uniformMatrix4fv(this.uniformLoc.perspective, false, matData);
+
+    return this;
+  }
+
+  setModelMatrix (matData: any) {
+    this.gl.uniformMatrix4fv(this.uniformLoc.modelMatrix, false, matData);
+
+    return this;
+  }
+
+  setCameraMatrix (matData: any) {
+    this.gl.uniformMatrix4fv(this.uniformLoc.cameraMatrix, false, matData);
+
     return this;
   }
 
@@ -143,22 +170,29 @@ class Shader {
   preRender () { }
 
   renderModel (model: Model) {
-    let vao = model.mesh.vao;
-    let indexCount = model.mesh.indexCount;
-    let drawMode = model.mesh.drawMode;
-    let vertexCount = model.mesh.vertexCount;
+    this.setModelMatrix(model.transform.getViewMatrix());
+    this.gl.bindVertexArray(model.mesh.vao);
 
-    this.gl.bindVertexArray(vao);
-
-    if (drawMode !== undefined) {
-      if (indexCount !== undefined) {
-        this.gl.drawElements(drawMode, indexCount, this.gl.UNSIGNED_SHORT, 0);
-      }
-      else {
-        if (vertexCount !== undefined) {
-          this.gl.drawArrays(drawMode, 0, vertexCount);
+    if (model.mesh.drawMode !== undefined) {
+      if (model.mesh.indexCount) {
+        if (model.mesh.indexLength !== undefined) {
+          this.gl.drawElements(model.mesh.drawMode, model.mesh.indexLength, this.gl.UNSIGNED_SHORT, 0);
+        }
+        else {
+          throw TypeError('[renderModel] model missing indexLength');
         }
       }
+      else {
+        if (model.mesh.vertexCount !== undefined) {
+          this.gl.drawArrays(model.mesh.drawMode, 0, model.mesh.vertexCount);
+        }
+        else {
+          throw TypeError('[renderModel] model missing vertexCount');
+        }
+      }
+    }
+    else {
+      throw TypeError('[renderModel] model missing drawMode');
     }
 
     this.gl.bindVertexArray(null);

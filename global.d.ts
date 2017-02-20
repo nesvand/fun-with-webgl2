@@ -503,5 +503,12 @@ interface AttribLocations {
   uv: number;
 }
 
+interface UniformLocations {
+  perspective: WebGLUniformLocation | null;
+  modelMatrix: WebGLUniformLocation | null;
+  cameraMatrix: WebGLUniformLocation | null;
+  mainTexture: WebGLUniformLocation | null;
+}
+
 type ExtendedWebGLContextLike = ExtendedWebGLContext | null;
 type RenderLoopCallback = (deltaTime: number) => any;
