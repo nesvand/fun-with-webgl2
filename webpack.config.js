@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const webpackConfig = {
+module.exports = {
   entry: {
     app: path.resolve(__dirname, 'src', 'index.ts'),
   },
@@ -13,7 +13,6 @@ const webpackConfig = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.html',
-      inject: 'head',
     }),
     new ExtractTextPlugin('styles.css'),
   ],
@@ -59,5 +58,3 @@ const webpackConfig = {
   },
   devtool: 'cheap-module-eval-source-map',
 };
-
-module.exports = webpackConfig;
