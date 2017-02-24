@@ -8,6 +8,9 @@ declare module "*.glsl" {
   export default _;
 }
 
+//------------------------------------
+// WEBGL2 SPECS - https://www.khronos.org/registry/webgl/specs/latest/2.0/
+
 declare var WebGL2RenderingContext: {
   prototype: WebGL2RenderingContext;
   init(): WebGL2RenderingContext;
@@ -281,9 +284,8 @@ declare var WebGL2RenderingContext: {
   readonly MAX_CLIENT_WAIT_TIMEOUT_WEBGL: GLenum;
 }
 
-type Uint32List = Uint32Array;
-
-interface WebGL2RenderingContext extends WebGLRenderingContext {
+// WebGL2 Interfaces
+interface WebGL2RenderingContext {
   /* Buffer objects */
   // WebGL1:
   bufferData(target: GLenum, size: GLsizeiptr, usage: GLenum): void;
@@ -317,28 +319,28 @@ interface WebGL2RenderingContext extends WebGLRenderingContext {
   texStorage3D(target: GLenum, levels: GLsizei, internalformat: GLenum, width: GLsizei, height: GLsizei, depth: GLsizei): void;
 
   // WebGL1 legacy entrypoints:
-  texImage2D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, border: GLint, format: GLenum, type: GLenum, pixels: ArrayBufferView | null): void;
-  texImage2D(target: GLenum, level: GLint, internalformat: GLint, format: GLenum, type: GLenum, source: TexImageSource); // May throw DOMExceptio: voidn
+  texImage2D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, border: GLint, format: GLenum, type: GLenum, pixels?: ArrayBufferView): void;
+  texImage2D(target: GLenum, level: GLint, internalformat: GLint, format: GLenum, type: GLenum, source: TexImageSource): void; // May throw DOMException
 
   texSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, pixels: ArrayBufferView | null): void;
-  texSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, format: GLenum, type: GLenum, source: TexImageSource); // May throw DOMExceptio: voidn
+  texSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, format: GLenum, type: GLenum, source: TexImageSource): void; // May throw DOMException
 
   // WebGL2 entrypoints:
   texImage2D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, border: GLint, format: GLenum, type: GLenum, pboOffset: GLintptr): void;
-  texImage2D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, border: GLint, format: GLenum, type: GLenum, source: TexImageSource); // May throw DOMExceptio: voidn
+  texImage2D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, border: GLint, format: GLenum, type: GLenum, source: TexImageSource): void; // May throw DOMException
   texImage2D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, border: GLint, format: GLenum, type: GLenum, srcData: ArrayBufferView, srcOffset: GLuint): void;
 
   texImage3D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, border: GLint, format: GLenum, type: GLenum, pboOffset: GLintptr): void;
-  texImage3D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, border: GLint, format: GLenum, type: GLenum, source: TexImageSource); // May throw DOMExceptio: voidn
+  texImage3D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, border: GLint, format: GLenum, type: GLenum, source: TexImageSource): void; // May throw DOMException
   texImage3D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, border: GLint, format: GLenum, type: GLenum, srcData: ArrayBufferView | null): void;
   texImage3D(target: GLenum, level: GLint, internalformat: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, border: GLint, format: GLenum, type: GLenum, srcData: ArrayBufferView, srcOffset: GLuint): void;
 
   texSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, pboOffset: GLintptr): void;
-  texSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, source: TexImageSource); // May throw DOMExceptio: voidn
+  texSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, source: TexImageSource): void; // May throw DOMException
   texSubImage2D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, width: GLsizei, height: GLsizei, format: GLenum, type: GLenum, srcData: ArrayBufferView, srcOffset: GLuint): void;
 
   texSubImage3D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, zoffset: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, format: GLenum, type: GLenum, pboOffset: GLintptr): void;
-  texSubImage3D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, zoffset: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, format: GLenum, type: GLenum, source: TexImageSource); // May throw DOMExceptio: voidn
+  texSubImage3D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, zoffset: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, format: GLenum, type: GLenum, source: TexImageSource): void; // May throw DOMException
   texSubImage3D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, zoffset: GLint, width: GLsizei, height: GLsizei, depth: GLsizei, format: GLenum, type: GLenum, srcData: ArrayBufferView | null, srcOffset?: GLuint): void;
 
   copyTexSubImage3D(target: GLenum, level: GLint, xoffset: GLint, yoffset: GLint, zoffset: GLint, x: GLint, y: GLint, width: GLsizei, height: GLsizei): void;
@@ -745,6 +747,30 @@ interface WebGL2RenderingContext extends WebGLRenderingContext {
   /* WebGL-specific enums */
   readonly MAX_CLIENT_WAIT_TIMEOUT_WEBGL: GLenum;
 }
+interface WebGLQuery extends WebGLObject {
+}
+
+interface WebGLSampler extends WebGLObject {
+}
+
+interface WebGLSync extends WebGLObject {
+}
+
+interface WebGLTransformFeedback extends WebGLObject {
+}
+
+interface WebGLVertexArrayObject extends WebGLObject {
+}
+
+// WebGL2 Types
+type BufferDataSource = ArrayBuffer | ArrayBufferView;
+type DOMString = string;
+type Int32List = number[];
+type Float32List = number[];
+type GLint64 = number;
+type GLuint64 = number;
+type TexImageSource = ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement;
+type Uint32List = Uint32Array | GLuint[];
 
 interface ExtendedWebGLContext extends WebGL2RenderingContext {
   fClear(): ExtendedWebGLContext;
@@ -786,8 +812,3 @@ interface UniformLocations {
 
 type ExtendedWebGLContextLike = ExtendedWebGLContext | null;
 type RenderLoopCallback = (deltaTime: number) => any;
-type GLint64 = number;
-type GLuint64 = number;
-type Float32List = number[];
-type Int32List = number[];
-type DOMString = string;
