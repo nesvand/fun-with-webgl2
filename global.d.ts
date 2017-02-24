@@ -285,7 +285,7 @@ declare var WebGL2RenderingContext: {
 }
 
 // WebGL2 Interfaces
-interface WebGL2RenderingContext {
+interface WebGL2RenderingContext extends WebGLRenderingContext {
   /* Buffer objects */
   // WebGL1:
   bufferData(target: GLenum, size: GLsizeiptr, usage: GLenum): void;
@@ -747,6 +747,7 @@ interface WebGL2RenderingContext {
   /* WebGL-specific enums */
   readonly MAX_CLIENT_WAIT_TIMEOUT_WEBGL: GLenum;
 }
+
 interface WebGLQuery extends WebGLObject {
 }
 
@@ -812,3 +813,4 @@ interface UniformLocations {
 
 type ExtendedWebGLContextLike = ExtendedWebGLContext | null;
 type RenderLoopCallback = (deltaTime: number) => any;
+type MixedFloat32Array = Float32Array | number[];
