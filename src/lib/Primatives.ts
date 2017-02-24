@@ -5,11 +5,11 @@ import {
 import Model from './Model';
 
 class GridAxis {
-  static createModel (gl: ExtendedWebGLContext, axis: boolean) {
+  static createModel(gl: ExtendedWebGLContext, axis: boolean) {
     return new Model(GridAxis.createMesh(gl, axis));
   }
 
-  static createMesh (gl: ExtendedWebGLContext, axis: boolean) {
+  static createMesh(gl: ExtendedWebGLContext, axis: boolean) {
     const verts: number[] = [];
     const size = 1.8;
     const div = 10;
@@ -127,6 +127,38 @@ class GridAxis {
   }
 }
 
+class Quad {
+  static createModel(gl: ExtendedWebGLContext) {
+    return new Model(Quad.createMesh(gl));
+  }
+
+  static createMesh(gl: ExtendedWebGLContext) {
+    const aVert = [
+      -0.5, 0.5, 0,
+      -0.5, -0.5, 0,
+      0.5, -0.5, 0,
+      0.5, 0.5, 0,
+    ];
+    const aUV = [
+      0, 0,
+      0, 1,
+      1, 1,
+      1, 0,
+    ];
+    const aIndex = [
+      0, 1, 2,
+      2, 3, 0
+    ]
+    const mesh = gl.fCreateMeshVAO('Quad', aIndex, aVert, null, aUV);
+
+    mesh.noCulling = false;
+    mesh.doBlending = false;
+
+    return mesh;
+  }
+}
+
 export {
   GridAxis,
+  Quad,
 }
