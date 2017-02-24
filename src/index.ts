@@ -43,7 +43,7 @@ window.addEventListener('load', () => {
     gShader = new TestShader(gl, [0.8, 0.8, 0.8, 1, 0, 0, 0, 1, 0, 0, 0, 1,]); // Gray, Red, Green, Blue
     gShader.activate().setPerspective(gCamera.projectionMatrix).deactivate(); // Push projection data to shader
 
-    gModel = new Model(GridAxis.createMesh(gl));
+    gModel = new Model(GridAxis.createMesh(gl, true));
       // .setScale(0.4, 0.4, 0.4)
       // .setRotation(0, 0, 45)
       // .setPosition(0.8, 0.8, 0);
