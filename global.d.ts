@@ -778,7 +778,13 @@ interface ExtendedWebGLContext extends WebGL2RenderingContext {
   fSetSize(w: number, h: number): ExtendedWebGLContext;
   fFitScreen(wp: number, hp: number): ExtendedWebGLContext;
   fCreateArrayBuffer(floatArray: Float32Array, isStatic?: boolean): WebGLBuffer;
-  fCreateMeshVAO(name: string, arrayIndex: number[] | null, arrayVert?: number[], arrayNorm?: number[], arrayUv?: number[]): MeshVAO;
+  fCreateMeshVAO(
+    name: string,
+    arrayIndex: NullableNumberArray,
+    arrayVert?: NullableNumberArray,
+    arrayNorm?: NullableNumberArray,
+    arrayUv?: NullableNumberArray
+  ): MeshVAO;
   mMeshCache: CachedMeshVAO;
 }
 
@@ -793,6 +799,8 @@ interface MeshVAO {
   bufIndex?: WebGLBuffer | null;
   indexCount?: number;
   indexLength?: number;
+  noCulling?: boolean;
+  doBlending?: boolean;
 }
 
 interface CachedMeshVAO {
@@ -815,3 +823,4 @@ interface UniformLocations {
 type ExtendedWebGLContextLike = ExtendedWebGLContext | null;
 type RenderLoopCallback = (deltaTime: number) => any;
 type MixedFloat32Array = Float32Array | number[];
+type NullableNumberArray = number[] | null;
