@@ -7,6 +7,7 @@ import { Shader, } from './lib/Shader';
 import RenderLoop from './lib/RenderLoop';
 import Model from './lib/Model';
 import { GridAxis, } from './lib/Primatives';
+import {Camera, CameraController} from './lib/Camera';
 
 // Shaders
 import vertexShaderText from './shaders/vertex_shader.glsl';
@@ -25,28 +26,39 @@ window.addEventListener('load', () => {
   // Global Variables
   let gShader: TestShader;
 
+  // Global Camera
+  let gCamera: Camera;
+  let gCameraCtrl: CameraController;
+
   gl = GLInstance('glcanvas');
 
   if (gl) {
     gl.fSetSize(500, 500)
       .fClear();
 
-    gShader = new TestShader(gl, [0.8, 0.8, 0.8, 1, 0, 0, 0, 1, 0, 0, 0, 1,]);
+      gCamera = new Camera(gl);
+      gCamera.transform.position.set(0, 1, 3);
+      gCameraCtrl = new CameraController(gl, gCamera);
 
-    gModel = new Model(GridAxis.createMesh(gl))
-      .setScale(0.4, 0.4, 0.4)
-      .setRotation(0, 0, 45)
-      .setPosition(0.8, 0.8, 0);
+    gShader = new TestShader(gl, [0.8, 0.8, 0.8, 1, 0, 0, 0, 1, 0, 0, 0, 1,]); // Gray, Red, Green, Blue
+    gShader.activate().setPerspective(gCamera.projectionMatrix).deactivate(); // Push projection data to shader
+
+    gModel = new Model(GridAxis.createMesh(gl));
+      // .setScale(0.4, 0.4, 0.4)
+      // .setRotation(0, 0, 45)
+      // .setPosition(0.8, 0.8, 0);
 
     new RenderLoop(onRender).start();
   }
 
   function onRender () {
+    gCamera.updateViewMatrix();
+
     if (gl) {
       gl.fClear();
 
-      gShader
-        .activate()
+      gShader.activate()
+        .setCameraMatrix(gCamera.viewMatrix)
         .renderModel(gModel.preRender());
     }
   }

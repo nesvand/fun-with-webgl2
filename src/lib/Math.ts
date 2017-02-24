@@ -154,7 +154,7 @@ class Matrix4 {
   }
 
   // From glMatrix
-  static perspective (out: number[], fovy: number, aspect: number, near: number, far: number) {
+  static perspective(out: MixedFloat32Array, fovy: number, aspect: number, near: number, far: number) {
     const f = 1.0 / Math.tan(fovy / 2);
     const nf = 1 / (near - far);
 
