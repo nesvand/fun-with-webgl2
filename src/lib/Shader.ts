@@ -10,7 +10,7 @@ import {
 import Model from './Model';
 
 class ShaderUtil {
-  static createShader (gl: ExtendedWebGLContext, source: string, type: number) {
+  static createShader(gl: ExtendedWebGLContext, source: string, type: number) {
     const shader = gl.createShader(type);
 
     gl.shaderSource(shader, source);
@@ -32,7 +32,7 @@ class ShaderUtil {
     return shader;
   }
 
-  static createProgram (gl: ExtendedWebGLContext, vShader: WebGLShader, fShader: WebGLShader, doValidate: boolean): WebGLProgram | null {
+  static createProgram(gl: ExtendedWebGLContext, vShader: WebGLShader, fShader: WebGLShader, doValidate: boolean): WebGLProgram | null {
     // Link shaders together
     const prog = gl.createProgram();
     gl.attachShader(prog, vShader);
@@ -79,7 +79,7 @@ class ShaderUtil {
   //----------------------
   // HELPER FUNCTIONS
   //----------------------
-  static shaderProgram (gl: ExtendedWebGLContext, vShaderTxt: string, fShaderTxt: string, doValidate: boolean): WebGLProgram | null {
+  static shaderProgram(gl: ExtendedWebGLContext, vShaderTxt: string, fShaderTxt: string, doValidate: boolean): WebGLProgram | null {
     const vShader = ShaderUtil.createShader(gl, vShaderTxt, gl.VERTEX_SHADER);
     if (vShader === null) {
       gl.deleteShader(vShader);
@@ -99,7 +99,7 @@ class ShaderUtil {
   // SETTERS / GETTERS
   //----------------------
 
-  static getStandardAttribLocations (gl: ExtendedWebGLContext, program: WebGLProgram): AttribLocations {
+  static getStandardAttribLocations(gl: ExtendedWebGLContext, program: WebGLProgram): AttribLocations {
     return {
       position: gl.getAttribLocation(program, ATTR_POSITION_NAME),
       norm: gl.getAttribLocation(program, ATTR_NORMAL_NAME),
@@ -107,7 +107,7 @@ class ShaderUtil {
     }
   }
 
-  static getStandardUniformLocations (gl: ExtendedWebGLContext, program: WebGLProgram): UniformLocations {
+  static getStandardUniformLocations(gl: ExtendedWebGLContext, program: WebGLProgram): UniformLocations {
     return {
       perspective: gl.getUniformLocation(program, 'uPMatrix'),
       modelMatrix: gl.getUniformLocation(program, 'uMVMatrix'),
@@ -121,9 +121,9 @@ class Shader {
   program: WebGLProgram | null;
   gl: ExtendedWebGLContext;
   attribLoc: AttribLocations;
-  uniformLoc: any;
+  uniformLoc: UniformLocations;
 
-  constructor (gl: ExtendedWebGLContext, vertShaderSource: string, fragmentShaderSource: string) {
+  constructor(gl: ExtendedWebGLContext, vertShaderSource: string, fragmentShaderSource: string) {
     this.program = ShaderUtil.shaderProgram(gl, vertShaderSource, fragmentShaderSource, true);
 
     if (this.program !== null) {
@@ -137,35 +137,35 @@ class Shader {
   //--------------
   // METHODS
   //--------------
-  activate () {
+  activate() {
     this.gl.useProgram(this.program);
     return this;
   }
 
-  deactivate () {
+  deactivate() {
     this.gl.useProgram(null);
     return this;
   }
 
-  setPerspective (matData: number[]) {
+  setPerspective(matData: MixedFloat32Array) {
     this.gl.uniformMatrix4fv(this.uniformLoc.perspective, false, matData);
 
     return this;
   }
 
-  setModelMatrix (matData: number[]) {
+  setModelMatrix(matData: MixedFloat32Array) {
     this.gl.uniformMatrix4fv(this.uniformLoc.modelMatrix, false, matData);
 
     return this;
   }
 
-  setCameraMatrix (matData: number[]) {
+  setCameraMatrix(matData: MixedFloat32Array) {
     this.gl.uniformMatrix4fv(this.uniformLoc.cameraMatrix, false, matData);
 
     return this;
   }
 
-  dispose () {
+  dispose() {
     if (this.gl.getParameter(this.gl.CURRENT_PROGRAM) === this.program) {
       this.gl.useProgram(null);
     }
@@ -177,35 +177,45 @@ class Shader {
   // RENDER METHODS
   //--------------
 
-  preRender () { }
+  preRender() { }
 
-  renderModel (model: Model) {
+  renderModel(model: Model) {
     this.setModelMatrix(model.transform.getViewMatrix());
     this.gl.bindVertexArray(model.mesh.vao);
 
+    if (model.mesh.noCulling) {
+      this.gl.disable(this.gl.CULL_FACE);
+    }
+
+    if (model.mesh.doBlending) {
+      this.gl.enable(this.gl.BLEND);
+    }
+
     if (model.mesh.drawMode !== undefined) {
       if (model.mesh.indexCount) {
-        if (model.mesh.indexLength !== undefined) {
-          this.gl.drawElements(model.mesh.drawMode, model.mesh.indexLength, this.gl.UNSIGNED_SHORT, 0);
-        }
-        else {
-          throw TypeError('[renderModel] model missing indexLength');
-        }
+        this.gl.drawElements(model.mesh.drawMode, model.mesh.indexCount, this.gl.UNSIGNED_SHORT, 0);
       }
       else {
         if (model.mesh.vertexCount !== undefined) {
           this.gl.drawArrays(model.mesh.drawMode, 0, model.mesh.vertexCount);
+          this.gl.bindVertexArray(null);
         }
         else {
-          throw TypeError('[renderModel] model missing vertexCount');
+          throw TypeError('[Shader][renderModel] model missing vertexCount');
         }
       }
     }
     else {
-      throw TypeError('[renderModel] model missing drawMode');
+      throw TypeError('[Shader][renderModel] model missing drawMode');
     }
 
-    this.gl.bindVertexArray(null);
+    if (model.mesh.noCulling) {
+      this.gl.enable(this.gl.CULL_FACE);
+    }
+
+    if (model.mesh.doBlending) {
+      this.gl.disable(this.gl.BLEND);
+    }
 
     return this;
   }
