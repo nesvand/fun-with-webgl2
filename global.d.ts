@@ -785,7 +785,9 @@ interface ExtendedWebGLContext extends WebGL2RenderingContext {
     arrayNorm?: NullableNumberArray,
     arrayUv?: NullableNumberArray
   ): MeshVAO;
+  fLoadTexture(name: string, image: TexImageSource, doYFlip?: boolean): WebGLTexture | null;
   mMeshCache: CachedMeshVAO;
+  mTextureCache: CachedTexture;
 }
 
 interface MeshVAO {
@@ -804,7 +806,11 @@ interface MeshVAO {
 }
 
 interface CachedMeshVAO {
-  [index: string]: MeshVAO
+  [index: string]: MeshVAO;
+}
+
+interface CachedTexture {
+  [index: string]: WebGLTexture | null;
 }
 
 interface AttribLocations {

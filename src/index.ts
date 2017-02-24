@@ -1,5 +1,6 @@
 // Assets
 import './assets/app.css';
+import './assets/uvgrid01.jpg';
 
 // Libs
 import GLInstance from './lib/gl';
@@ -31,7 +32,7 @@ window.addEventListener('load', () => {
   let gridShader: Shader;
   let gridModel: Model;
 
-  let testShader: Shader;
+  let testShader: TestShader;
   let gModel: Model;
   let gModel2: Model;
 
@@ -45,15 +46,20 @@ window.addEventListener('load', () => {
     gCamera.transform.position.set(0, 1, 3);
     gCameraCtrl = new CameraController(gl, gCamera);
 
+    // Load up resources
+    gl.fLoadTexture('tex001', <HTMLImageElement>document.getElementById('imgTex'));
+
     // Setup Grid
     gridShader = new GridAxisShader(gl, gCamera.projectionMatrix);
     gridModel = GridAxis.createModel(gl, true);
 
-    testShader = new TestShader(gl, gCamera.projectionMatrix);
+    testShader = new TestShader(gl, gCamera.projectionMatrix)
+      .setTexture(gl.mTextureCache['tex001']);
+
     gModel = MultiQuad.createModel(gl);
 
     // gModel = Quad.createModel(gl);
-    // gModel.setPosition(0, 1, 0).setScale(0.2, 0.2, 0.2);
+    // gModel.setPosition(0, 0.6, 0);
 
     // gModel2 = new Model(gl.mMeshCache['Quad']);
 
@@ -69,7 +75,7 @@ window.addEventListener('load', () => {
         .setCameraMatrix(gCamera.viewMatrix)
         .renderModel(gridModel.preRender());
 
-      testShader.activate()
+      testShader.activate().preRender()
         .setCameraMatrix(gCamera.viewMatrix)
         .renderModel(gModel.preRender());
       // .renderModel(gModel2.preRender());
@@ -78,10 +84,28 @@ window.addEventListener('load', () => {
 });
 
 class TestShader extends Shader {
+  mainTexture: WebGLTexture;
+
   constructor(gl: ExtendedWebGLContext, projectionMatrix: MixedFloat32Array) {
     super(gl, vShader, fShader);
 
     this.setPerspective(projectionMatrix);
+
+    this.mainTexture = -1;
     gl.useProgram(null);
+  }
+
+  setTexture(textureID: WebGLTexture) {
+    this.mainTexture = textureID;
+    return this;
+  }
+
+  preRender() {
+    // Setup Texture
+    this.gl.activeTexture(this.gl.TEXTURE0);
+    this.gl.bindTexture(this.gl.TEXTURE_2D, this.mainTexture);
+    this.gl.uniform1i(this.uniformLoc.mainTexture, 0);
+
+    return this;
   }
 }
