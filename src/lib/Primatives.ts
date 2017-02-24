@@ -158,7 +158,56 @@ class Quad {
   }
 }
 
+class MultiQuad {
+  static createModel(gl: ExtendedWebGLContext) {
+    return new Model(MultiQuad.createMesh(gl));
+  }
+
+  static createMesh(gl: ExtendedWebGLContext) {
+    const aIndex: number[] = [];
+    const aUV: number[] = [];
+    const aVert: number[] = [];
+
+    for (let i = 0; i < 50; i++) {
+      const size = 0.2 + (0.8 * Math.random());
+      const half = size * 0.5;
+      const angle = Math.PI * 2 * Math.random();
+      const dx = half * Math.cos(angle);
+      const dy = half * Math.sin(angle);
+      const x = -2.5 + (Math.random() * 5);
+      const y = -2.5 + (Math.random() * 5);
+      const z = -2.5 + (Math.random() * 5);
+      const p = i * 4;
+
+      aVert.push(x - dx, y + half, z - dy); // Top Left
+      aVert.push(x - dx, y - half, z - dy); // Bottom Left
+      aVert.push(x + dx, y - half, z + dy); // Bottom Right
+      aVert.push(x + dx, y + half, z + dy); // Top Right
+
+      aUV.push(
+        0, 0,
+        0, 1,
+        1, 1,
+        1, 0,
+      );
+
+      aIndex.push(
+        p, p + 1, p + 2,
+        p + 2, p + 3, p,
+      )
+    }
+
+    const mesh = gl.fCreateMeshVAO('MultiQuad', aIndex, aVert, null, aUV);
+
+    mesh.noCulling = true;
+    mesh.doBlending = true;
+
+    return mesh;
+  }
+}
+
 export {
   GridAxis,
   Quad,
+  MultiQuad,
 }

@@ -14,7 +14,7 @@ import vShader from './shaders/vShader.glsl';
 import fShader from './shaders/fShader.glsl';
 
 // Models
-import { GridAxis, Quad, } from './lib/Primatives';
+import { GridAxis, Quad, MultiQuad, } from './lib/Primatives';
 
 window.addEventListener('load', () => {
   // Global Context
@@ -50,10 +50,12 @@ window.addEventListener('load', () => {
     gridModel = GridAxis.createModel(gl, true);
 
     testShader = new TestShader(gl, gCamera.projectionMatrix);
-    gModel = Quad.createModel(gl);
-    gModel.setPosition(0, 1, 0).setScale(0.2, 0.2, 0.2);
+    gModel = MultiQuad.createModel(gl);
 
-    gModel2 = new Model(gl.mMeshCache['Quad']);
+    // gModel = Quad.createModel(gl);
+    // gModel.setPosition(0, 1, 0).setScale(0.2, 0.2, 0.2);
+
+    // gModel2 = new Model(gl.mMeshCache['Quad']);
 
     new RenderLoop(onRender).start();
   }
@@ -69,8 +71,8 @@ window.addEventListener('load', () => {
 
       testShader.activate()
         .setCameraMatrix(gCamera.viewMatrix)
-        .renderModel(gModel.preRender())
-        .renderModel(gModel2.preRender());
+        .renderModel(gModel.preRender());
+      // .renderModel(gModel2.preRender());
     }
   }
 });
