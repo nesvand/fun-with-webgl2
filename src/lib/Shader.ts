@@ -147,19 +147,19 @@ class Shader {
     return this;
   }
 
-  setPerspective (matData: any) {
+  setPerspective (matData: number[]) {
     this.gl.uniformMatrix4fv(this.uniformLoc.perspective, false, matData);
 
     return this;
   }
 
-  setModelMatrix (matData: any) {
+  setModelMatrix (matData: number[]) {
     this.gl.uniformMatrix4fv(this.uniformLoc.modelMatrix, false, matData);
 
     return this;
   }
 
-  setCameraMatrix (matData: any) {
+  setCameraMatrix (matData: number[]) {
     this.gl.uniformMatrix4fv(this.uniformLoc.cameraMatrix, false, matData);
 
     return this;

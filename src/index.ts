@@ -6,47 +6,42 @@ import GLInstance from './lib/gl';
 import { Shader, } from './lib/Shader';
 import RenderLoop from './lib/RenderLoop';
 import Model from './lib/Model';
-import { GridAxis, } from './lib/Primatives';
-import {Camera, CameraController} from './lib/Camera';
+import { Camera, CameraController, } from './lib/Camera';
 
 // Shaders
-import vertexShaderText from './shaders/vertex_shader.glsl';
-import fragmentShaderText from './shaders/fragment_shader.glsl';
+import GridAxisShader from './shaders/GridAxisShader';
+
+// Models
+import { GridAxis, } from './lib/Primatives';
 
 window.addEventListener('load', () => {
   // Global Context
   let gl: ExtendedWebGLContextLike;
 
-  // Render Loop
-  // let gRLoop: RenderLoop;
-
-  // Model
-  let gModel: Model;
-
-  // Global Variables
-  let gShader: TestShader;
-
   // Global Camera
   let gCamera: Camera;
   let gCameraCtrl: CameraController;
 
+  // Render Loop
+  // let gRLoop: RenderLoop;
+
+  // Grid
+  let gridShader: Shader;
+  let gridModel: Model;
+
   gl = GLInstance('glcanvas');
 
   if (gl) {
-    gl.fSetSize(500, 500)
+    gl.fFitScreen(0.95, 0.9)
       .fClear();
 
-      gCamera = new Camera(gl);
-      gCamera.transform.position.set(0, 1, 3);
-      gCameraCtrl = new CameraController(gl, gCamera);
+    gCamera = new Camera(gl);
+    gCamera.transform.position.set(0, 1, 3);
+    gCameraCtrl = new CameraController(gl, gCamera);
 
-    gShader = new TestShader(gl, [0.8, 0.8, 0.8, 1, 0, 0, 0, 1, 0, 0, 0, 1,]); // Gray, Red, Green, Blue
-    gShader.activate().setPerspective(gCamera.projectionMatrix).deactivate(); // Push projection data to shader
+    gridShader = new GridAxisShader(gl, gCamera.projectionMatrix);
 
-    gModel = new Model(GridAxis.createMesh(gl, true));
-      // .setScale(0.4, 0.4, 0.4)
-      // .setRotation(0, 0, 45)
-      // .setPosition(0.8, 0.8, 0);
+    gridModel = GridAxis.createModel(gl, true);
 
     new RenderLoop(onRender).start();
   }
@@ -57,20 +52,9 @@ window.addEventListener('load', () => {
     if (gl) {
       gl.fClear();
 
-      gShader.activate()
+      gridShader.activate()
         .setCameraMatrix(gCamera.viewMatrix)
-        .renderModel(gModel.preRender());
+        .renderModel(gridModel.preRender());
     }
   }
 });
-
-class TestShader extends Shader {
-  constructor (gl: ExtendedWebGLContext, colorArray: number[]) {
-    super(gl, vertexShaderText, fragmentShaderText);
-
-    const uColor = gl.getUniformLocation(this.program, 'uColor');
-    gl.uniform3fv(uColor, colorArray);
-
-    gl.useProgram(null);
-  }
-}

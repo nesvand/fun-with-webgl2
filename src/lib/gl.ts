@@ -40,6 +40,10 @@ export default function GLInstance (canvasID: string) {
     return gl;
   }
 
+  gl.fFitScreen = function (wp: number, hp: number) {
+    return this.fSetSize(window.innerWidth * (wp || 1), window.innerHeight * (hp || 1));
+  }
+
   gl.fCreateArrayBuffer = function (floatArray, isStatic = true) {
     const buffer = <WebGLBuffer>gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);

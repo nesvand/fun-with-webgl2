@@ -776,6 +776,7 @@ type Uint32List = Uint32Array | GLuint[];
 interface ExtendedWebGLContext extends WebGL2RenderingContext {
   fClear(): ExtendedWebGLContext;
   fSetSize(w: number, h: number): ExtendedWebGLContext;
+  fFitScreen(wp: number, hp: number): ExtendedWebGLContext;
   fCreateArrayBuffer(floatArray: Float32Array, isStatic?: boolean): WebGLBuffer;
   fCreateMeshVAO(name: string, arrayIndex: number[] | null, arrayVert?: number[], arrayNorm?: number[], arrayUv?: number[]): MeshVAO;
   mMeshCache: CachedMeshVAO;
