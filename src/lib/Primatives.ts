@@ -151,8 +151,8 @@ class Quad {
     ]
     const mesh = gl.fCreateMeshVAO('Quad', aIndex, aVert, null, aUV);
 
-    mesh.noCulling = false;
-    mesh.doBlending = false;
+    mesh.noCulling = true;
+    mesh.doBlending = true;
 
     return mesh;
   }
