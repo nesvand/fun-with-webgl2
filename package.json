@@ -11,7 +11,10 @@
     "start": "run-s webpack-dev-server",
     "webpack": "webpack -p",
     "webpack-dev-server": "webpack-dev-server",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "lint:es": "eslint src/ || exit 0",
+    "lint:ts": "tslint -c \".tslint.json\" \"src/**/*.ts\" || exit 0",
+    "lint": "run-s lint:es lint:ts"
   },
   "author": {
     "name": "Andrew Nesvadba",
@@ -32,8 +35,8 @@
     "rimraf": "^2.6.0",
     "style-loader": "^0.13.1",
     "ts-loader": "^2.0.1",
+    "tslint": "^4.4.2",
     "typescript": "^2.2.1",
-    "typescript-eslint-parser": "^1.0.3",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.1",
     "webpack-glsl-loader": "^1.0.1"
