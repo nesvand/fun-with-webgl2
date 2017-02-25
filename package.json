@@ -1,5 +1,6 @@
 {
   "name": "fun-with-webgl2",
+  "description": "Building upon @sketchpunklabs YouTube series by utilising a Typescript environment",
   "version": "1.0.0",
   "repository": {
     "type": "git",
@@ -14,7 +15,9 @@
     "clean": "rimraf dist",
     "lint:es": "eslint src/ || exit 0",
     "lint:ts": "tslint -c \".tslint.json\" \"src/**/*.ts\" || exit 0",
-    "lint": "run-s lint:es lint:ts"
+    "lint": "run-s lint:es lint:ts",
+    "serve:local": "serve dist --port 8080",
+    "serve": "run-s build serve:local"
   },
   "author": {
     "name": "Andrew Nesvadba",
@@ -33,6 +36,7 @@
     "html-webpack-plugin": "^2.28.0",
     "npm-run-all": "^4.0.1",
     "rimraf": "^2.6.0",
+    "serve": "^3.4.1",
     "style-loader": "^0.13.1",
     "ts-loader": "^2.0.1",
     "tslint": "^4.4.2",
