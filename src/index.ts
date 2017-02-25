@@ -100,7 +100,7 @@ window.addEventListener('load', () => {
       gl, gCamera.projectionMatrix,
       gl.mTextureCache['skybox01'],
       gl.mTextureCache['skybox02'],
-   );
+    );
 
     new RenderLoop(onRender).start();
   }
