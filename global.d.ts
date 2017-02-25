@@ -787,6 +787,7 @@ interface ExtendedWebGLContext extends WebGL2RenderingContext {
     vertLen?: number
   ): MeshVAO;
   fLoadTexture(name: string, image: TexImageSource, doYFlip?: boolean): WebGLTexture | null;
+  fLoadCubeMap(name: string, imageArray: TexImageSource[]): WebGLTexture | null
   mMeshCache: CachedMeshVAO;
   mTextureCache: CachedTexture;
 }

@@ -207,12 +207,13 @@ class MultiQuad {
 }
 
 class Cube {
-  static createModel(gl: ExtendedWebGLContext) {
-    return new Model(Cube.createMesh(gl, 1, 1, 1, 0, 0, 0));
+  static createModel(gl: ExtendedWebGLContext, name: string = 'Cube') {
+    return new Model(Cube.createMesh(gl, name, 1, 1, 1, 0, 0, 0));
   }
 
   static createMesh(
     gl: ExtendedWebGLContext,
+    name: string,
     width: number, height: number, depth: number,
     x: number, y: number, z: number
   ) {
@@ -284,9 +285,9 @@ class Cube {
       0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
     ];
 
-    const mesh = gl.fCreateMeshVAO('Cube', aIndex, aVert, aNorm, aUV, 4);
+    const mesh = gl.fCreateMeshVAO(name, aIndex, aVert, aNorm, aUV, 4);
 
-    // mesh.noCulling = true;
+    mesh.noCulling = true;
 
     return mesh;
   }
