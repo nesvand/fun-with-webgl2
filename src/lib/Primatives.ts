@@ -206,8 +206,95 @@ class MultiQuad {
   }
 }
 
+class Cube {
+  static createModel(gl: ExtendedWebGLContext) {
+    return new Model(Cube.createMesh(gl, 1, 1, 1, 0, 0, 0));
+  }
+
+  static createMesh(
+    gl: ExtendedWebGLContext,
+    width: number, height: number, depth: number,
+    x: number, y: number, z: number
+  ) {
+    const w = width * 0.5;
+    const h = height * 0.5;
+    const d = depth * 0.5;
+    let x0 = x - w;
+    let x1 = x + w;
+    let y0 = y - h;
+    let y1 = y + h;
+    let z0 = z - d;
+    let z1 = z + d;
+
+    const aVert = [
+      x0, y1, z1, 0, // Front
+      x0, y0, z1, 0,
+      x1, y0, z1, 0,
+      x1, y1, z1, 0,
+
+      x1, y1, z0, 1, // Back
+      x1, y0, z0, 1,
+      x0, y0, z0, 1,
+      x0, y1, z0, 1,
+
+      x0, y1, z0, 2, // Left
+      x0, y0, z0, 2,
+      x0, y0, z1, 2,
+      x0, y1, z1, 2,
+
+      x0, y0, z1, 3, // Bottom
+      x0, y0, z0, 3,
+      x1, y0, z0, 3,
+      x1, y0, z1, 3,
+
+      x1, y1, z1, 4, // Right
+      x1, y0, z1, 4,
+      x1, y0, z0, 4,
+      x1, y1, z0, 4,
+
+      x0, y1, z0, 5, // Top
+      x0, y1, z1, 5,
+      x1, y1, z1, 5,
+      x1, y1, z0, 5,
+    ];
+
+    let aIndex: number[] = [];
+
+    for (let i = 0; i < aVert.length / 4; i += 2) {
+      aIndex.push(i, i + 1, (Math.floor(i / 4) * 4) + ((i + 2) % 4));
+    }
+
+    let aUV: number[] = [];
+
+    for (let i = 0; i < 6; i++) {
+      aUV.push(
+        0, 0,
+        0, 1,
+        1, 1,
+        1, 0,
+      );
+    }
+
+    const aNorm = [
+      0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
+      0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1,
+      -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0,
+      0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,
+      1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+      0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+    ];
+
+    const mesh = gl.fCreateMeshVAO('Cube', aIndex, aVert, aNorm, aUV, 4);
+
+    // mesh.noCulling = true;
+
+    return mesh;
+  }
+}
+
 export {
   GridAxis,
   Quad,
   MultiQuad,
+  Cube
 }

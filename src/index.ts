@@ -4,6 +4,7 @@ import './assets/uvgrid01.jpg';
 
 // Libs
 import GLInstance from './lib/gl';
+import { GLUtil } from './lib/gl';
 import { Shader, } from './lib/Shader';
 import RenderLoop from './lib/RenderLoop';
 import Model from './lib/Model';
@@ -15,7 +16,7 @@ import vShader from './shaders/vShader.glsl';
 import fShader from './shaders/fShader.glsl';
 
 // Models
-import { GridAxis, Quad, MultiQuad, } from './lib/Primatives';
+import { GridAxis, Quad, MultiQuad, Cube, } from './lib/Primatives';
 
 window.addEventListener('load', () => {
   // Global Context
@@ -29,8 +30,8 @@ window.addEventListener('load', () => {
   // let gRLoop: RenderLoop;
 
   // Grid
-  let gridShader: Shader;
-  let gridModel: Model;
+  let gGridShader: Shader;
+  let gGridModel: Model;
 
   let testShader: TestShader;
   let gModel: Model;
@@ -39,8 +40,7 @@ window.addEventListener('load', () => {
   gl = GLInstance('glcanvas');
 
   if (gl) {
-    gl.fFitScreen(0.95, 0.9)
-      .fClear();
+    gl.fFitScreen(0.95, 0.95).fClear();
 
     gCamera = new Camera(gl);
     gCamera.transform.position.set(0, 1, 3);
@@ -50,18 +50,14 @@ window.addEventListener('load', () => {
     gl.fLoadTexture('tex001', <HTMLImageElement>document.getElementById('imgTex'));
 
     // Setup Grid
-    gridShader = new GridAxisShader(gl, gCamera.projectionMatrix);
-    gridModel = GridAxis.createModel(gl, true);
+    gGridShader = new GridAxisShader(gl, gCamera.projectionMatrix);
+    gGridModel = GridAxis.createModel(gl, false);
 
     testShader = new TestShader(gl, gCamera.projectionMatrix)
       .setTexture(gl.mTextureCache['tex001']);
 
-    gModel = MultiQuad.createModel(gl);
-
-    // gModel = Quad.createModel(gl);
-    // gModel.setPosition(0, 0.6, 0);
-
-    // gModel2 = new Model(gl.mMeshCache['Quad']);
+    gModel = Cube.createModel(gl);
+    gModel.setPosition(0, 0.6, 0);
 
     new RenderLoop(onRender).start();
   }
@@ -71,14 +67,14 @@ window.addEventListener('load', () => {
       gCamera.updateViewMatrix();
       gl.fClear();
 
-      gridShader.activate()
+      gGridShader.activate()
         .setCameraMatrix(gCamera.viewMatrix)
-        .renderModel(gridModel.preRender());
+        .renderModel(gGridModel.preRender());
 
       testShader.activate().preRender()
         .setCameraMatrix(gCamera.viewMatrix)
+        .setTime(performance.now())
         .renderModel(gModel.preRender());
-      // .renderModel(gModel2.preRender());
     }
   }
 });
@@ -89,10 +85,27 @@ class TestShader extends Shader {
   constructor(gl: ExtendedWebGLContext, projectionMatrix: MixedFloat32Array) {
     super(gl, vShader, fShader);
 
+    this.uniformLoc.time = gl.getUniformLocation(this.program, 'uTime');
+
+    const uColor = gl.getUniformLocation(this.program, 'uColor');
+    gl.uniform3fv(uColor, new Float32Array(GLUtil.rgbArray(
+      0xFF0000,
+      0x00FF00,
+      0x0000FF,
+      0xFFFF00,
+      0x00FFFF,
+      0xFF00FF
+    )));
+
     this.setPerspective(projectionMatrix);
 
     this.mainTexture = -1;
     gl.useProgram(null);
+  }
+
+  setTime(t: number) {
+    this.gl.uniform1f(this.uniformLoc.time, t);
+    return this;
   }
 
   setTexture(textureID: WebGLTexture) {

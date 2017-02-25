@@ -40,7 +40,7 @@ export default function GLInstance(canvasID: string) {
     return buffer;
   }
 
-  gl.fCreateMeshVAO = function (name, arrayIndex, arrayVert, arrayNorm, arrayUv) {
+  gl.fCreateMeshVAO = function (name, arrayIndex, arrayVert, arrayNorm, arrayUv, vertLength) {
     const meshVAO: MeshVAO = {
       drawMode: gl.TRIANGLES,
     };
@@ -48,18 +48,18 @@ export default function GLInstance(canvasID: string) {
     meshVAO.vao = gl.createVertexArray();
     gl.bindVertexArray(meshVAO.vao);
 
-    if (arrayVert) {
+    if (!!arrayVert) {
       meshVAO.bufVertices = gl.createBuffer();
-      meshVAO.vertexComponentLen = 3;
+      meshVAO.vertexComponentLen = vertLength || 3;
       meshVAO.vertexCount = arrayVert.length / meshVAO.vertexComponentLen;
 
       gl.bindBuffer(gl.ARRAY_BUFFER, meshVAO.bufVertices);
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arrayVert), gl.STATIC_DRAW);
       gl.enableVertexAttribArray(ATTR_POSITION_LOC);
-      gl.vertexAttribPointer(ATTR_POSITION_LOC, 3, gl.FLOAT, false, 0, 0);
+      gl.vertexAttribPointer(ATTR_POSITION_LOC, meshVAO.vertexComponentLen, gl.FLOAT, false, 0, 0);
     }
 
-    if (arrayNorm) {
+    if (!!arrayNorm) {
       meshVAO.bufNormals = gl.createBuffer();
 
       gl.bindBuffer(gl.ARRAY_BUFFER, meshVAO.bufNormals);
@@ -68,7 +68,7 @@ export default function GLInstance(canvasID: string) {
       gl.vertexAttribPointer(ATTR_NORMAL_LOC, 3, gl.FLOAT, false, 0, 0);
     }
 
-    if (arrayUv) {
+    if (!!arrayUv) {
       meshVAO.bufUvs = gl.createBuffer();
 
       gl.bindBuffer(gl.ARRAY_BUFFER, meshVAO.bufUvs);
@@ -77,7 +77,7 @@ export default function GLInstance(canvasID: string) {
       gl.vertexAttribPointer(ATTR_UV_LOC, 2, gl.FLOAT, false, 0, 0);
     }
 
-    if (arrayIndex) {
+    if (!!arrayIndex) {
       meshVAO.bufIndex = gl.createBuffer();
       meshVAO.indexCount = arrayIndex.length;
 
@@ -144,4 +144,26 @@ export default function GLInstance(canvasID: string) {
   }
 
   return gl;
+}
+
+class GLUtil {
+  static rgbArray(...args: number[]) {
+    if (args.length === 0) {
+      return null;
+    }
+
+    return args.reduce((rgbArray: number[], hexVal) => {
+      rgbArray.push(
+        (hexVal & 0xFF0000) >>> 16,
+        (hexVal & 0x00FF00) >>> 8,
+        hexVal & 0x0000FF
+      );
+
+      return rgbArray;
+    }, []);
+  }
+}
+
+export {
+  GLUtil,
 }

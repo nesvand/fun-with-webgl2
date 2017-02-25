@@ -783,7 +783,8 @@ interface ExtendedWebGLContext extends WebGL2RenderingContext {
     arrayIndex: NullableNumberArray,
     arrayVert?: NullableNumberArray,
     arrayNorm?: NullableNumberArray,
-    arrayUv?: NullableNumberArray
+    arrayUv?: NullableNumberArray,
+    vertLen?: number
   ): MeshVAO;
   fLoadTexture(name: string, image: TexImageSource, doYFlip?: boolean): WebGLTexture | null;
   mMeshCache: CachedMeshVAO;
