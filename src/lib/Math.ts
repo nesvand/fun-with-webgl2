@@ -4,16 +4,16 @@ class Vector3 {
   y: number;
   z: number;
 
-  constructor (x?: number | null, y?: number | null, z?: number | null ) {
+  constructor (x?: number | null, y?: number | null, z?: number | null) {
     this.x = x || 0.0;
     this.y = y || 0.0;
     this.z = z || 0.0;
   }
 
-  magnitude (v?: { x: number, y: number } ) {
+  magnitude (v?: { x: number, y: number }) {
     // Only get the magnitude of this vector
     if (v === undefined) {
-      return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z );
+      return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
     // Get magnitude based on another vector
@@ -21,7 +21,7 @@ class Vector3 {
     let y = v.y - this.y;
     let z = v.y - this.z;
 
-    return Math.sqrt(x * x + y * y + z * z );
+    return Math.sqrt(x * x + y * y + z * z);
   }
 
   normalize () {
@@ -34,7 +34,7 @@ class Vector3 {
     return this;
   }
 
-  set (x: number, y: number, z: number ) {
+  set (x: number, y: number, z: number) {
     this.x = x;
     this.y = y;
     this.z = z;
@@ -42,7 +42,7 @@ class Vector3 {
     return this;
   }
 
-  multiScalar (v: number ) {
+  multiScalar (v: number) {
     this.x *= v;
     this.y *= v;
     this.z *= v;
@@ -51,15 +51,15 @@ class Vector3 {
   }
 
   getArray () {
-    return [this.x, this.y, this.z ];
+    return [this.x, this.y, this.z];
   }
 
   getFloatArray () {
-    return new Float32Array([this.x, this.y, this.z ] );
+    return new Float32Array([this.x, this.y, this.z]);
   }
 
   clone () {
-    return new Vector3(this.x, this.y, this.z );
+    return new Vector3(this.x, this.y, this.z);
   }
 }
 
@@ -74,50 +74,50 @@ class Matrix4 {
 
   //....................................................................
   // Transformations Methods
-  vtranslate (v: { x: number, y: number, z: number } ) {
-    Matrix4.translate(this.raw, v.x, v.y, v.z );
+  vtranslate (v: { x: number, y: number, z: number }) {
+    Matrix4.translate(this.raw, v.x, v.y, v.z);
 
     return this;
   }
 
-  translate (x: number, y: number, z: number ) {
-    Matrix4.translate(this.raw, x, y, z );
+  translate (x: number, y: number, z: number) {
+    Matrix4.translate(this.raw, x, y, z);
 
     return this;
   }
 
-  rotateY (rad: number ) {
-    Matrix4.rotateY(this.raw, rad );
+  rotateY (rad: number) {
+    Matrix4.rotateY(this.raw, rad);
 
     return this;
   }
 
-  rotateX (rad: number ) {
-    Matrix4.rotateX(this.raw, rad );
+  rotateX (rad: number) {
+    Matrix4.rotateX(this.raw, rad);
 
     return this;
   }
 
-  rotateZ (rad: number ) {
-    Matrix4.rotateZ(this.raw, rad );
+  rotateZ (rad: number) {
+    Matrix4.rotateZ(this.raw, rad);
 
     return this;
   }
 
-  vscale (vec3: { x: number, y: number, z: number } ) {
-    Matrix4.scale(this.raw, vec3.x, vec3.y, vec3.z );
+  vscale (vec3: { x: number, y: number, z: number }) {
+    Matrix4.scale(this.raw, vec3.x, vec3.y, vec3.z);
 
     return this;
   }
 
-  scale (x: number, y: number, z: number ) {
-    Matrix4.scale(this.raw, x, y, z );
+  scale (x: number, y: number, z: number) {
+    Matrix4.scale(this.raw, x, y, z);
 
     return this;
   }
 
   invert () {
-    Matrix4.invert(this.raw );
+    Matrix4.invert(this.raw);
 
     return this;
   }
@@ -146,7 +146,7 @@ class Matrix4 {
   //....................................................................
   // Static Data Methods
   static identity () {
-    const a = new Float32Array(16 );
+    const a = new Float32Array(16);
 
     a[0] = a[5] = a[10] = a[15] = 1;
 
@@ -154,8 +154,8 @@ class Matrix4 {
   }
 
   // From glMatrix
-  static perspective (out: MixedFloat32Array, fovy: number, aspect: number, near: number, far: number ) {
-    const f = 1.0 / Math.tan(fovy / 2 );
+  static perspective (out: MixedFloat32Array, fovy: number, aspect: number, near: number, far: number) {
+    const f = 1.0 / Math.tan(fovy / 2);
     const nf = 1 / (near - far);
 
     out[0] = f / aspect;
@@ -177,7 +177,7 @@ class Matrix4 {
   }
 
 
-  static ortho (out: number[], left: number, right: number, bottom: number, top: number, near: number, far: number ) {
+  static ortho (out: number[], left: number, right: number, bottom: number, top: number, near: number, far: number) {
     const lr = 1 / (left - right);
     const bt = 1 / (bottom - top);
     const nf = 1 / (near - far);
@@ -203,7 +203,7 @@ class Matrix4 {
 
   // https://github.com/toji/gl-matrix/blob/master/src/gl-matrix/mat4.js
   // Make the rows into the columns
-  static transpose (out: number[], a: number[] ) {
+  static transpose (out: number[], a: number[]) {
     //If we are transposing ourselves we can skip a few steps but have to cache some values
     if (out === a) {
 
@@ -250,7 +250,7 @@ class Matrix4 {
   }
 
   //Calculates a 3x3 normal matrix (transpose inverse) from the 4x4 matrix
-  static normalMat3 (out: MixedFloat32Array, a: MixedFloat32Array ) {
+  static normalMat3 (out: MixedFloat32Array, a: MixedFloat32Array) {
     const a00 = a[0];
     const a01 = a[1];
     const a02 = a[2];
@@ -309,7 +309,7 @@ class Matrix4 {
   // Static Operation
 
   // https://github.com/gregtatum/mdn-model-view-projection/blob/master/shared/matrices.js
-  static multiplyVector (mat4: number[], v: number[] ) {
+  static multiplyVector (mat4: number[], v: number[]) {
     const x = v[0];
     const y = v[1];
     const z = v[2];
@@ -341,7 +341,7 @@ class Matrix4 {
   }
 
   //https://github.com/toji/gl-matrix/blob/master/src/gl-matrix/vec4.js, vec4.transformMat4
-  static transformVec4 (out: MixedFloat32Array, v: MixedFloat32Array, m: MixedFloat32Array ) {
+  static transformVec4 (out: MixedFloat32Array, v: MixedFloat32Array, m: MixedFloat32Array) {
     out[0] = m[0] * v[0] + m[4] * v[1] + m[8] * v[2] + m[12] * v[3];
     out[1] = m[1] * v[0] + m[5] * v[1] + m[9] * v[2] + m[13] * v[3];
     out[2] = m[2] * v[0] + m[6] * v[1] + m[10] * v[2] + m[14] * v[3];
@@ -352,7 +352,7 @@ class Matrix4 {
 
   // From glMatrix
   // Multiply two mat4 together
-  static mult (out: MixedFloat32Array, a: MixedFloat32Array, b: MixedFloat32Array ) {
+  static mult (out: MixedFloat32Array, a: MixedFloat32Array, b: MixedFloat32Array) {
     const a00 = a[0];
     const a01 = a[1];
     const a02 = a[2];
@@ -417,7 +417,7 @@ class Matrix4 {
 
   //....................................................................
   // Static Transformation
-  static scale (out: MixedFloat32Array, x: number, y: number, z: number ) {
+  static scale (out: MixedFloat32Array, x: number, y: number, z: number) {
     out[0] *= x;
     out[1] *= x;
     out[2] *= x;
@@ -434,9 +434,9 @@ class Matrix4 {
     return out;
   }
 
-  static rotateY (out: MixedFloat32Array, rad: number ) {
-    const s = Math.sin(rad );
-    const c = Math.cos(rad );
+  static rotateY (out: MixedFloat32Array, rad: number) {
+    const s = Math.sin(rad);
+    const c = Math.cos(rad);
 
     const a00 = out[0];
     const a01 = out[1];
@@ -460,9 +460,9 @@ class Matrix4 {
     return out;
   }
 
-  static rotateX (out: MixedFloat32Array, rad: number ) {
-    const s = Math.sin(rad );
-    const c = Math.cos(rad );
+  static rotateX (out: MixedFloat32Array, rad: number) {
+    const s = Math.sin(rad);
+    const c = Math.cos(rad);
 
     const a10 = out[4];
     const a11 = out[5];
@@ -486,9 +486,9 @@ class Matrix4 {
     return out;
   }
 
-  static rotateZ (out: MixedFloat32Array, rad: number ) {
-    const s = Math.sin(rad );
-    const c = Math.cos(rad );
+  static rotateZ (out: MixedFloat32Array, rad: number) {
+    const s = Math.sin(rad);
+    const c = Math.cos(rad);
 
     const a00 = out[0];
     const a01 = out[1];
@@ -512,12 +512,12 @@ class Matrix4 {
     return out;
   }
 
-  static rotate (out: MixedFloat32Array, rad: number, axis: MixedFloat32Array ) {
+  static rotate (out: MixedFloat32Array, rad: number, axis: MixedFloat32Array) {
     let x = axis[0];
     let y = axis[1];
     let z = axis[2];
 
-    let len = Math.sqrt(x * x + y * y + z * z );
+    let len = Math.sqrt(x * x + y * y + z * z);
     let s;
     let c;
     let t;
@@ -543,7 +543,7 @@ class Matrix4 {
     let b21;
     let b22;
 
-    if (Math.abs(len ) < 0.000001) {
+    if (Math.abs(len) < 0.000001) {
       return null;
     }
 
@@ -552,8 +552,8 @@ class Matrix4 {
     y *= len;
     z *= len;
 
-    s = Math.sin(rad );
-    c = Math.cos(rad );
+    s = Math.sin(rad);
+    c = Math.cos(rad);
     t = 1 - c;
 
     a00 = out[0];
@@ -596,7 +596,7 @@ class Matrix4 {
     out[11] = a03 * b20 + a13 * b21 + a23 * b22;
   }
 
-  static invert (out: MixedFloat32Array, mat?: MixedFloat32Array ) {
+  static invert (out: MixedFloat32Array, mat?: MixedFloat32Array) {
     // If the input isn't sent, then the output is considered the input
     if (mat === undefined) {
       mat = out;
@@ -661,7 +661,7 @@ class Matrix4 {
   }
 
   // https://github.com/toji/gl-matrix/blob/master/src/gl-matrix/mat4.js  mat4.scalar.translate = function (out, a, v) {
-  static translate (out: MixedFloat32Array, x: number, y: number, z: number ) {
+  static translate (out: MixedFloat32Array, x: number, y: number, z: number) {
     out[12] = out[0] * x + out[4] * y + out[8] * z + out[12];
     out[13] = out[1] * x + out[5] * y + out[9] * z + out[13];
     out[14] = out[2] * x + out[6] * y + out[10] * z + out[14];
