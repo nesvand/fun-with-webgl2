@@ -5,11 +5,11 @@ import {
 import Model from './Model';
 
 class GridAxis {
-  static createModel (gl: ExtendedWebGLContext, axis: boolean, ) {
-    return new Model(GridAxis.createMesh(gl, axis, ), );
+  static createModel (gl: ExtendedWebGLContext, axis: boolean ) {
+    return new Model(GridAxis.createMesh(gl, axis ) );
   }
 
-  static createMesh (gl: ExtendedWebGLContext, axis: boolean, ) {
+  static createMesh (gl: ExtendedWebGLContext, axis: boolean ) {
     const verts: number[] = [];
     const size = 1.8;
     const div = 10;
@@ -21,62 +21,62 @@ class GridAxis {
     for (let i = 0; i <= div; i++) {
       // Vertical Line
       p = -half + (i * step);
-      verts.push(p, ); //x1
-      verts.push(0, ); //y1 verts.push(half);
-      verts.push(half, ); //z1 verts.push(0);
-      verts.push(0, ); //c1
+      verts.push(p ); //x1
+      verts.push(0 ); //y1 verts.push(half);
+      verts.push(half ); //z1 verts.push(0);
+      verts.push(0 ); //c1
 
-      verts.push(p, ); //x2
-      verts.push(0, ); //y2 verts.push(-half);
-      verts.push(-half, ); //z2 verts.push(0);
-      verts.push(0, ); //c2 verts.push(1);
+      verts.push(p ); //x2
+      verts.push(0 ); //y2 verts.push(-half);
+      verts.push(-half ); //z2 verts.push(0);
+      verts.push(0 ); //c2 verts.push(1);
 
       // Horizontal Line
       p = half - (i * step);
-      verts.push(-half, ); //x1
-      verts.push(0, ); //y1 verts.push(p);
-      verts.push(p, ); //z1 verts.push(0);
-      verts.push(0, ); //c1
+      verts.push(-half ); //x1
+      verts.push(0 ); //y1 verts.push(p);
+      verts.push(p ); //z1 verts.push(0);
+      verts.push(0 ); //c1
 
-      verts.push(half, ); //x2
-      verts.push(0, ); //y2 verts.push(p);
-      verts.push(p, ); //z2 verts.push(0);
-      verts.push(0, ); //c2 verts.push(1);
+      verts.push(half ); //x2
+      verts.push(0 ); //y2 verts.push(p);
+      verts.push(p ); //z2 verts.push(0);
+      verts.push(0 ); //c2 verts.push(1);
     }
 
     if (axis) {
       // x axis
-      verts.push(-1.1, ); //x1
-      verts.push(-0, ); //y1
-      verts.push(0, ); //z1
-      verts.push(1, ); //c1
+      verts.push(-1.1 ); //x1
+      verts.push(-0 ); //y1
+      verts.push(0 ); //z1
+      verts.push(1 ); //c1
 
-      verts.push(1.1, ); //x2
-      verts.push(0, ); //y2
-      verts.push(0, ); //z2
-      verts.push(1, ); //c2
+      verts.push(1.1 ); //x2
+      verts.push(0 ); //y2
+      verts.push(0 ); //z2
+      verts.push(1 ); //c2
 
       // y axis
-      verts.push(0, ); //x1
-      verts.push(-1.1, ); //y1
-      verts.push(0, ); //z1
-      verts.push(2, ); //c1
+      verts.push(0 ); //x1
+      verts.push(-1.1 ); //y1
+      verts.push(0 ); //z1
+      verts.push(2 ); //c1
 
-      verts.push(0, ); //x2
-      verts.push(1.1, ); //y2
-      verts.push(0, ); //z2
-      verts.push(2, ); //c2
+      verts.push(0 ); //x2
+      verts.push(1.1 ); //y2
+      verts.push(0 ); //z2
+      verts.push(2 ); //c2
 
       // z axis
-      verts.push(0, ); //x1
-      verts.push(0, ); //y1
-      verts.push(-1.1, ); //z1
-      verts.push(3, ); //c1
+      verts.push(0 ); //x1
+      verts.push(0 ); //y1
+      verts.push(-1.1 ); //z1
+      verts.push(3 ); //c1
 
-      verts.push(0, ); //x2
-      verts.push(0, ); //y2
-      verts.push(1.1, ); //z2
-      verts.push(3, ); //c2
+      verts.push(0 ); //x2
+      verts.push(0 ); //y2
+      verts.push(1.1 ); //z2
+      verts.push(3 ); //c2
     }
 
     const attrColorLoc = 4;
@@ -95,11 +95,11 @@ class GridAxis {
     strideLen = Float32Array.BYTES_PER_ELEMENT * mesh.vertexComponentLen;
 
     // Set up our buffer
-    gl.bindVertexArray(mesh.vao, );
-    gl.bindBuffer(gl.ARRAY_BUFFER, mesh.bufVertices, );
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts, ), gl.STATIC_DRAW, );
-    gl.enableVertexAttribArray(ATTR_POSITION_LOC, );
-    gl.enableVertexAttribArray(attrColorLoc, );
+    gl.bindVertexArray(mesh.vao );
+    gl.bindBuffer(gl.ARRAY_BUFFER, mesh.bufVertices );
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts ), gl.STATIC_DRAW );
+    gl.enableVertexAttribArray(ATTR_POSITION_LOC );
+    gl.enableVertexAttribArray(attrColorLoc );
 
     gl.vertexAttribPointer(
       ATTR_POSITION_LOC,
@@ -119,8 +119,8 @@ class GridAxis {
       Float32Array.BYTES_PER_ELEMENT * 3,
     );
 
-    gl.bindVertexArray(null, );
-    gl.bindBuffer(gl.ARRAY_BUFFER, null, );
+    gl.bindVertexArray(null );
+    gl.bindBuffer(gl.ARRAY_BUFFER, null );
     gl.mMeshCache['grid'] = mesh;
 
     return mesh;
@@ -128,11 +128,11 @@ class GridAxis {
 }
 
 class Quad {
-  static createModel (gl: ExtendedWebGLContext, ) {
-    return new Model(Quad.createMesh(gl, ), );
+  static createModel (gl: ExtendedWebGLContext ) {
+    return new Model(Quad.createMesh(gl ) );
   }
 
-  static createMesh (gl: ExtendedWebGLContext, ) {
+  static createMesh (gl: ExtendedWebGLContext ) {
     const aVert = [
       -0.5, 0.5, 0,
       -0.5, -0.5, 0,
@@ -149,7 +149,7 @@ class Quad {
       0, 1, 2,
       2, 3, 0,
     ];
-    const mesh = gl.fCreateMeshVAO('Quad', aIndex, aVert, null, aUV, );
+    const mesh = gl.fCreateMeshVAO('Quad', aIndex, aVert, null, aUV );
 
     mesh.noCulling = true;
     mesh.doBlending = true;
@@ -159,11 +159,11 @@ class Quad {
 }
 
 class MultiQuad {
-  static createModel (gl: ExtendedWebGLContext, ) {
-    return new Model(MultiQuad.createMesh(gl, ), );
+  static createModel (gl: ExtendedWebGLContext ) {
+    return new Model(MultiQuad.createMesh(gl ) );
   }
 
-  static createMesh (gl: ExtendedWebGLContext, ) {
+  static createMesh (gl: ExtendedWebGLContext ) {
     const aIndex: number[] = [];
     const aUV: number[] = [];
     const aVert: number[] = [];
@@ -172,17 +172,17 @@ class MultiQuad {
       const size = 0.2 + (0.8 * Math.random());
       const half = size * 0.5;
       const angle = Math.PI * 2 * Math.random();
-      const dx = half * Math.cos(angle, );
-      const dy = half * Math.sin(angle, );
+      const dx = half * Math.cos(angle );
+      const dy = half * Math.sin(angle );
       const x = -2.5 + (Math.random() * 5);
       const y = -2.5 + (Math.random() * 5);
       const z = -2.5 + (Math.random() * 5);
       const p = i * 4;
 
-      aVert.push(x - dx, y + half, z - dy, ); // Top Left
-      aVert.push(x - dx, y - half, z - dy, ); // Bottom Left
-      aVert.push(x + dx, y - half, z + dy, ); // Bottom Right
-      aVert.push(x + dx, y + half, z + dy, ); // Top Right
+      aVert.push(x - dx, y + half, z - dy ); // Top Left
+      aVert.push(x - dx, y - half, z - dy ); // Bottom Left
+      aVert.push(x + dx, y - half, z + dy ); // Bottom Right
+      aVert.push(x + dx, y + half, z + dy ); // Top Right
 
       aUV.push(
         0, 0,
@@ -197,7 +197,7 @@ class MultiQuad {
       );
     }
 
-    const mesh = gl.fCreateMeshVAO('MultiQuad', aIndex, aVert, null, aUV, );
+    const mesh = gl.fCreateMeshVAO('MultiQuad', aIndex, aVert, null, aUV );
 
     mesh.noCulling = true;
     mesh.doBlending = true;
@@ -207,8 +207,8 @@ class MultiQuad {
 }
 
 class Cube {
-  static createModel (gl: ExtendedWebGLContext, name: string = 'Cube', ) {
-    return new Model(Cube.createMesh(gl, name, 1, 1, 1, 0, 0, 0, ), );
+  static createModel (gl: ExtendedWebGLContext, name: string = 'Cube' ) {
+    return new Model(Cube.createMesh(gl, name, 1, 1, 1, 0, 0, 0 ) );
   }
 
   static createMesh (
@@ -262,7 +262,7 @@ class Cube {
     let aIndex: number[] = [];
 
     for (let i = 0; i < aVert.length / 4; i += 2) {
-      aIndex.push(i, i + 1, (Math.floor(i / 4, ) * 4) + ((i + 2) % 4), );
+      aIndex.push(i, i + 1, (Math.floor(i / 4 ) * 4) + ((i + 2) % 4) );
     }
 
     let aUV: number[] = [];
@@ -285,7 +285,7 @@ class Cube {
       0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
     ];
 
-    const mesh = gl.fCreateMeshVAO(name, aIndex, aVert, aNorm, aUV, 4, );
+    const mesh = gl.fCreateMeshVAO(name, aIndex, aVert, aNorm, aUV, 4 );
 
     mesh.noCulling = true;
 

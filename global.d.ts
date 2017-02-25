@@ -828,6 +828,16 @@ interface UniformLocations {
   mainTexture: WebGLUniformLocation | null;
 }
 
+interface TestUniformLocations extends UniformLocations {
+  time: WebGLUniformLocation | null;
+}
+
+interface SkymapUniformLocations extends UniformLocations {
+  time: WebGLUniformLocation | null;
+  dayTex: WebGLUniformLocation | null;
+  nightTex: WebGLUniformLocation | null;
+}
+
 type ExtendedWebGLContextLike = ExtendedWebGLContext | null;
 type RenderLoopCallback = (deltaTime: number) => any;
 type MixedFloat32Array = Float32Array | number[];
