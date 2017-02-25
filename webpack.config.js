@@ -2,6 +2,21 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+const production = process.env.NODE_ENV === 'production';
+
+let imageWebpackOptions = {
+  optipng: {
+    optimizationLevel: production ? 7 : 2,
+  },
+  mozjpeg: {
+    quality: production ? 40 : 95,
+  },
+  pngquant: {
+    quality: production ? "60-80" : 95,
+    speed: production ? 4 : 10,
+  },
+};
+
 module.exports = {
   entry: {
     app: path.resolve(__dirname, 'src', 'index.ts'),
@@ -48,7 +63,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(jpg|png)$/,
+        test: /\.(jpe?g|png|gif|svg)$/i,
         use: [
           {
             loader: 'file-loader',
@@ -56,6 +71,10 @@ module.exports = {
               name: '[name].[ext]',
               outputPath: 'assets/',
             },
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: imageWebpackOptions,
           },
         ],
       },
@@ -68,5 +87,5 @@ module.exports = {
     ],
     extensions: ['.js', '.json', '.css', '.glsl', '.ts',],
   },
-  devtool: 'cheap-module-eval-source-map',
+  devtool: production ? 'source-map' : 'inline-source-map',
 };
