@@ -8,5 +8,5 @@ uniform float uTime;
 
 out vec4 finalColor;
 void main(void){
-  finalColor = mix( texture(uDayTex, texCoord), texture(uNightTex, texCoord), abs(sin(uTime * 0.0005)) );
+  finalColor = mix( texture(uDayTex, texCoord), texture(uNightTex, texCoord), abs(sin(uTime * 0.0001)) );
 }
