@@ -61,7 +61,7 @@ window.addEventListener('load', () => {
     gl.fFitScreen(0.95, 0.95).fClear();
 
     gCamera = new Camera(gl);
-    gCamera.transform.position.set(0, 1, 3);
+    gCamera.transform.position.set(0, 0, 3);
     gCameraCtrl = new CameraController(gl, gCamera);
 
     // Load up resources
@@ -86,16 +86,16 @@ window.addEventListener('load', () => {
 
     // Setup Grid
     gGridShader = new GridAxisShader(gl, gCamera.projectionMatrix);
-    gGridModel = GridAxis.createModel(gl, false);
+    gGridModel = GridAxis.createModel(gl, true);
 
     // Custom models
     testShader = new TestShader(gl, gCamera.projectionMatrix)
       .setTexture(gl.mTextureCache['tex001']);
 
     gModel = Cube.createModel(gl);
-    gModel.setPosition(0, 0.6, 0);
+    gModel.setPosition(0, 0, 0);
 
-    gSkymapModel = new Model(Cube.createMesh(gl, 'Skymap', 10, 10, 10, 0, 0, 0));
+    gSkymapModel = new Model(Cube.createMesh(gl, 'Skymap', 100, 100, 100, 0, 0, 0));
     gSkymapShader = new SkymapShader(
       gl, gCamera.projectionMatrix,
       gl.mTextureCache['skybox01'],
