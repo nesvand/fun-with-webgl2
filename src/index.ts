@@ -13,6 +13,7 @@ import './assets/interstellar_03.png';
 import './assets/interstellar_04.png';
 import './assets/interstellar_05.png';
 import './assets/interstellar_06.png';
+import './assets/pirate_girl.jpg';
 
 // Libs
 import GLInstance from './lib/gl';
@@ -21,6 +22,7 @@ import { Shader } from './lib/Shader';
 import RenderLoop from './lib/RenderLoop';
 import Model from './lib/Model';
 import { Camera, CameraController } from './lib/Camera';
+import ObjLoader from './lib/ObjLoader';
 
 // Shaders
 import GridAxisShader from './shaders/GridAxisShader';
@@ -31,6 +33,8 @@ import fShader from './shaders/fShader.glsl';
 
 // Models
 import { GridAxis, Quad, MultiQuad, Cube } from './lib/Primatives';
+// Model Courtesy of @Enthymeme - http://www.blendswap.com/blends/view/73788
+import pirateObjFile from './assets/pirate_girl.obj';
 
 window.addEventListener('load', () => {
   // Global Context
@@ -66,6 +70,7 @@ window.addEventListener('load', () => {
 
     // Load up resources
     gl.fLoadTexture('tex001', <HTMLImageElement>document.getElementById('imgTex'));
+    gl.fLoadTexture('tex002', <HTMLImageElement>document.getElementById('pirateGirl'));
     gl.fLoadCubeMap('skybox01', [
       <HTMLImageElement>document.getElementById('imgDay01'),
       <HTMLImageElement>document.getElementById('imgDay02'),
@@ -90,10 +95,14 @@ window.addEventListener('load', () => {
 
     // Custom models
     testShader = new TestShader(gl, gCamera.projectionMatrix)
-      .setTexture(gl.mTextureCache['tex001']);
+      // .setTexture(gl.mTextureCache['tex001']);
+      .setTexture(gl.mTextureCache['tex002']);
 
-    gModel = Cube.createModel(gl);
-    gModel.setPosition(0, 0, 0);
+    // gModel = Cube.createModel(gl);
+    // gModel.setPosition(0, 0.6, 0);
+
+    gModel2 = new Model(ObjLoader.stringToMesh(gl, 'objPirate', pirateObjFile, true));
+    gModel2.setPosition(0, 0, 0).setScale(0.5, 0.5, 0.5);
 
     gSkymapModel = new Model(Cube.createMesh(gl, 'Skymap', 100, 100, 100, 0, 0, 0));
     gSkymapShader = new SkymapShader(
@@ -122,7 +131,8 @@ window.addEventListener('load', () => {
       testShader.activate().preRender()
         .setCameraMatrix(gCamera.viewMatrix)
         .setTime(performance.now())
-        .renderModel(gModel.preRender());
+        // .renderModel(gModel.preRender());
+        .renderModel(gModel2.preRender());
     }
   }
 });
@@ -136,28 +146,8 @@ class TestShader extends Shader {
 
     this.uniformLoc.time = gl.getUniformLocation(this.program, 'uTime');
 
-    const uColor = gl.getUniformLocation(this.program, 'uColor');
-    const colorArray = GLUtil.rgbArray(
-      0xFF0000,
-      0x00FF00,
-      0x0000FF,
-      0xFFFF00,
-      0x00FFFF,
-      0xFF00FF,
-    );
-
-    if (colorArray) {
-      gl.uniform3fv(
-        uColor,
-        new Float32Array(colorArray),
-      );
-    }
-    else {
-      throw TypeError(`[TestShader][constructor] colorArray cannot be empty`);
-    }
-
+    // Standard Uniforms
     this.setPerspective(projectionMatrix);
-
     this.mainTexture = -1;
     gl.useProgram(null);
   }

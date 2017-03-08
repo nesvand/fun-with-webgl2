@@ -8,6 +8,11 @@ declare module "*.glsl" {
   export default _;
 }
 
+declare module "*.obj" {
+  const _: string;
+  export default _;
+}
+
 //------------------------------------
 // WEBGL2 SPECS - https://www.khronos.org/registry/webgl/specs/latest/2.0/
 

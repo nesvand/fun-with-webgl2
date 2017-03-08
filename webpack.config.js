@@ -55,10 +55,10 @@ module.exports = {
         }),
       },
       {
-        test: /\.glsl$/,
+        test: /\.(obj|glsl)$/,
         use: [
           {
-            loader: 'webpack-glsl-loader',
+            loader: 'raw-loader',
           },
         ],
       },
@@ -85,7 +85,7 @@ module.exports = {
       'node_modules',
       path.resolve(__dirname, 'src'),
     ],
-    extensions: ['.js', '.json', '.css', '.glsl', '.ts',],
+    extensions: ['.js', '.json', '.css', '.glsl', '.ts', '.obj',],
   },
   devtool: production ? 'source-map' : 'inline-source-map',
 };

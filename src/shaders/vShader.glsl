@@ -10,11 +10,11 @@ uniform mat4 uCameraMatrix;
 uniform vec3 uColor[6];
 uniform float uTime;
 
-out lowp vec4 color;
+// out lowp vec4 color;
 out highp vec2 texCoord;
 
 void main(void) {
   texCoord = a_uv;
-  color = vec4(uColor[int(a_position.w)], 1.0);
+  // color = vec4(uColor[int(a_position.w)], 1.0);
   gl_Position = uPMatrix * uCameraMatrix * uMVMatrix * vec4(a_position.xyz, 1.0);
 }
