@@ -12,11 +12,11 @@
     "start": "run-s webpack-dev-server",
     "webpack": "webpack -p",
     "webpack-dev-server": "webpack-dev-server",
-    "clean": "rimraf dist",
+    "clean": "rimraf docs",
     "lint:es": "eslint src/ || exit 0",
     "lint:ts": "tslint -c \".tslint.json\" \"src/**/*.ts\" || exit 0",
     "lint": "run-s lint:es lint:ts",
-    "serve:local": "serve dist --port 8080",
+    "serve:local": "serve docs --port 8080",
     "serve": "run-s build serve:local"
   },
   "author": {
