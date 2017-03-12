@@ -105,10 +105,15 @@ window.addEventListener('load', () => {
     gGridModel = GridAxis.createModel(gl, false);
 
     // Custom models
+    const cubeTexture = gl.mTextureCache.get('tex001');
+    const pirateTexture = gl.mTextureCache.get('tex002');
+    const skyboxTextureA = gl.mTextureCache.get('skybox01');
+    const skyboxTextureB = gl.mTextureCache.get('skybox02');
+
     cubeShader = new TestShader(gl, gCamera.projectionMatrix)
-      .setTexture(gl.mTextureCache['tex001']);
+      .setTexture(cubeTexture ? cubeTexture : null);
     pirateShader = new TestShader(gl, gCamera.projectionMatrix)
-      .setTexture(gl.mTextureCache['tex002']);
+      .setTexture(pirateTexture ? pirateTexture : null);
 
     gModel = Cube.createModel(gl);
     gModel.setPosition(-0.1, 0.15, 0.3).setScale(0.3, 0.3, 0.3);
@@ -119,8 +124,8 @@ window.addEventListener('load', () => {
     gSkymapModel = new Model(Cube.createMesh(gl, 'Skymap', 100, 100, 100, 0, 0, 0));
     gSkymapShader = new SkymapShader(
       gl, gCamera.projectionMatrix,
-      gl.mTextureCache['skybox01'],
-      gl.mTextureCache['skybox02'],
+      skyboxTextureA ? skyboxTextureA : null,
+      skyboxTextureB ? skyboxTextureB : null,
     );
 
     new RenderLoop(onRender).start();

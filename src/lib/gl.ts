@@ -13,8 +13,8 @@ export function GLInstance (canvasID: string) {
     throw Error('WebGL context is not available.');
   }
 
-  gl.mMeshCache = {}; // Cache all the mesh structs, easy to unload buffers if they all exist in one place
-  gl.mTextureCache = {};
+  gl.mMeshCache = new Map<string, MeshVAO>(); // Cache all the mesh structs, easy to unload buffers if they all exist in one place
+  gl.mTextureCache = new Map<string, WebGLTexture | null>();
 
   //---------------------
   // Setup GL with default configs
@@ -94,7 +94,7 @@ export function GLInstance (canvasID: string) {
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
     }
 
-    gl.mMeshCache[name] = meshVAO;
+    gl.mMeshCache.set(name, meshVAO);
 
 
     return meshVAO;
@@ -115,7 +115,7 @@ export function GLInstance (canvasID: string) {
     gl.generateMipmap(gl.TEXTURE_2D);
 
     gl.bindTexture(gl.TEXTURE_2D, null);
-    gl.mTextureCache[name] = texture;
+    gl.mTextureCache.set(name, texture);
 
     if (doYFlip) {
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
@@ -150,7 +150,7 @@ export function GLInstance (canvasID: string) {
     gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
 
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, null);
-    gl.mTextureCache[name] = texture;
+    gl.mTextureCache.set(name, texture);
 
     return texture;
   };
