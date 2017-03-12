@@ -1,10 +1,11 @@
-import {
+import * as GLOBALS from './globals';
+const {
   ATTR_NORMAL_LOC,
   ATTR_POSITION_LOC,
   ATTR_UV_LOC,
-} from './globals';
+} = GLOBALS;
 
-export default function GLInstance (canvasID: string) {
+export function GLInstance (canvasID: string) {
   const canvas = <HTMLCanvasElement>document.getElementById(canvasID);
   const gl = <ExtendedWebGLContext>canvas.getContext('webgl2');
 
@@ -177,7 +178,7 @@ export default function GLInstance (canvasID: string) {
   return gl;
 }
 
-class GLUtil {
+export class GLUtil {
   static rgbArray (...args: number[]) {
     if (args.length === 0) {
       return null;
@@ -198,6 +199,7 @@ class GLUtil {
   }
 }
 
-export {
+export default {
+  GLInstance,
   GLUtil,
-}
+};

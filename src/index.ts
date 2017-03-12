@@ -16,20 +16,28 @@ import './assets/interstellar_06.png';
 import './assets/pirate_girl.jpg';
 
 // Libs
-import GLInstance from './lib/gl';
-import { GLUtil } from './lib/gl';
-import { Shader } from './lib/Shader';
-import RenderLoop from './lib/RenderLoop';
-import Model from './lib/Model';
-import { Camera, CameraController } from './lib/Camera';
-import ObjLoader from './lib/ObjLoader';
+import * as GL from './lib/gl';
+import * as SHADER from './lib/Shader';
+import * as RENDERLOOP from './lib/RenderLoop';
+import * as MODEL from './lib/Model';
+import * as CAMERA from './lib/Camera';
+import * as OBJLOADER from './lib/ObjLoader';
+
+const { GLInstance, GLUtil } = GL;
+const { Shader } = SHADER;
+const { RenderLoop } = RENDERLOOP;
+const { Model } = MODEL;
+const { Camera, CameraController } = CAMERA;
+const { ObjLoader } = OBJLOADER;
 
 // Shaders
-import GridAxisShader from './shaders/GridAxisShader';
+import * as GRIDAXISSHADER from './lib/GridAxisShader';
 import skyVShader from './shaders/skyVShader.glsl';
 import skyFShader from './shaders/skyFShader.glsl';
 import vShader from './shaders/vShader.glsl';
 import fShader from './shaders/fShader.glsl';
+
+const { GridAxisShader } = GRIDAXISSHADER;
 
 // Models
 import { GridAxis, Quad, MultiQuad, Cube } from './lib/Primatives';
@@ -41,23 +49,23 @@ window.addEventListener('load', () => {
   let gl: ExtendedWebGLContextLike;
 
   // Global Camera
-  let gCamera: Camera;
-  let gCameraCtrl: CameraController;
+  let gCamera: CAMERA.Camera;
+  let gCameraCtrl: CAMERA.CameraController;
 
   // Render Loop
   // let gRLoop: RenderLoop;
 
   // Grid
-  let gGridShader: Shader;
-  let gGridModel: Model;
+  let gGridShader: SHADER.Shader;
+  let gGridModel: MODEL.Model;
 
   // Skymap
   let gSkymapShader: SkymapShader;
-  let gSkymapModel: Model;
+  let gSkymapModel: MODEL.Model;
 
   let testShader: TestShader;
-  let gModel: Model;
-  let gModel2: Model;
+  let gModel: MODEL.Model;
+  let gModel2: MODEL.Model;
 
   gl = GLInstance('glcanvas');
 

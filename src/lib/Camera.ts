@@ -1,15 +1,18 @@
-import Transform from './Transform';
-import { Matrix4 } from './Math';
+import * as TRANSFORM from './Transform';
+import * as MATH from './Math';
+
+const { Transform } = TRANSFORM;
+const { Matrix4 } = MATH;
 
 enum CameraModes {
   FREE = 0,
   ORBIT = 1 << 0,
 }
 
-class Camera {
+export class Camera {
   projectionMatrix: Float32Array;
   viewMatrix: Float32Array;
-  transform: Transform;
+  transform: TRANSFORM.Transform;
   mode: CameraModes;
 
   public static MODE_FREE = CameraModes.FREE;
@@ -99,7 +102,7 @@ class Camera {
   }
 }
 
-class CameraController {
+export class CameraController {
   canvas: HTMLCanvasElement;
   camera: Camera;
   rotationRate: number;
@@ -189,7 +192,7 @@ class CameraController {
   }
 }
 
-export {
+export default {
   Camera,
-  CameraController
-}
+  CameraController,
+};

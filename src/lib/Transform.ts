@@ -1,10 +1,11 @@
-import { Vector3, Matrix4 } from './Math';
+import * as MATH from './Math';
+const { Vector3, Matrix4 } = MATH;
 
-export default class Transform {
-  position: Vector3;
-  scale: Vector3;
-  rotation: Vector3;
-  matView: Matrix4;
+export class Transform {
+  position: MATH.Vector3;
+  scale: MATH.Vector3;
+  rotation: MATH.Vector3;
+  matView:  MATH.Matrix4;
   matNormal: Float32Array;
   forward: Float32Array;
   up: Float32Array;
@@ -70,3 +71,7 @@ export default class Transform {
 
   static deg2Rad = Math.PI / 180;
 }
+
+export default {
+  Transform,
+};

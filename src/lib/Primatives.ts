@@ -1,10 +1,10 @@
-import {
-  ATTR_POSITION_LOC,
-} from './globals';
+import * as GLOBALS from './globals';
+import * as MODEL from './Model';
 
-import Model from './Model';
+const { ATTR_POSITION_LOC } = GLOBALS;
+const { Model } = MODEL;
 
-class GridAxis {
+export class GridAxis {
   static createModel (gl: ExtendedWebGLContext, axis: boolean) {
     return new Model(GridAxis.createMesh(gl, axis));
   }
@@ -127,7 +127,7 @@ class GridAxis {
   }
 }
 
-class Quad {
+export class Quad {
   static createModel (gl: ExtendedWebGLContext) {
     return new Model(Quad.createMesh(gl));
   }
@@ -158,7 +158,7 @@ class Quad {
   }
 }
 
-class MultiQuad {
+export class MultiQuad {
   static createModel (gl: ExtendedWebGLContext) {
     return new Model(MultiQuad.createMesh(gl));
   }
@@ -206,7 +206,7 @@ class MultiQuad {
   }
 }
 
-class Cube {
+export class Cube {
   static createModel (gl: ExtendedWebGLContext, name: string = 'Cube') {
     return new Model(Cube.createMesh(gl, name, 1, 1, 1, 0, 0, 0));
   }
@@ -293,9 +293,9 @@ class Cube {
   }
 }
 
-export {
+export default {
   GridAxis,
   Quad,
   MultiQuad,
-  Cube
-}
+  Cube,
+};

@@ -1,6 +1,6 @@
 const ONE_SECOND: number = 1000;
 
-export default class RenderLoop {
+export class RenderLoop {
   msLastFrame: number | null;
   callback: RenderLoopCallback;
   isActive: boolean;
@@ -69,3 +69,7 @@ export default class RenderLoop {
     this.isActive = false;
   }
 }
+
+export default {
+  RenderLoop,
+};

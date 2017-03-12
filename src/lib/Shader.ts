@@ -1,15 +1,16 @@
-import {
+import * as GLOBALS from './globals';
+const {
   ATTR_NORMAL_LOC,
   ATTR_NORMAL_NAME,
   ATTR_POSITION_LOC,
   ATTR_POSITION_NAME,
   ATTR_UV_LOC,
   ATTR_UV_NAME,
-} from './globals';
+} = GLOBALS;
 
 import Model from './Model';
 
-class ShaderUtil {
+export class ShaderUtil {
   static createShader (gl: ExtendedWebGLContext, source: string, type: number) {
     const shader = gl.createShader(type);
 
@@ -117,7 +118,7 @@ class ShaderUtil {
   }
 }
 
-class Shader {
+export class Shader {
   program: WebGLProgram | null;
   gl: ExtendedWebGLContext;
   attribLoc: AttribLocations;
@@ -220,7 +221,7 @@ class Shader {
   }
 }
 
-export {
+export default {
   ShaderUtil,
   Shader,
-}
+};

@@ -1,4 +1,4 @@
-export default class ObjLoader {
+export class ObjLoader {
   static stringToMesh (gl: ExtendedWebGLContext, meshName: string, objString: string, flipYUV: boolean) {
     const obj = this.parseObjText(objString, flipYUV);
 
@@ -105,3 +105,7 @@ export default class ObjLoader {
     ];
   }
 }
+
+export default {
+  ObjLoader,
+};

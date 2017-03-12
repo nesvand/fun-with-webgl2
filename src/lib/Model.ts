@@ -1,8 +1,9 @@
-import Transform from './Transform';
+import * as TRANSFORM from './Transform';
+const { Transform } = TRANSFORM;
 
-export default class Model {
+export class Model {
   mesh: MeshVAO;
-  transform: Transform;
+  transform: TRANSFORM.Transform;
 
   constructor (meshData: MeshVAO) {
     this.transform = new Transform();
@@ -60,3 +61,7 @@ export default class Model {
     return this;
   }
 }
+
+export default {
+  Model,
+};

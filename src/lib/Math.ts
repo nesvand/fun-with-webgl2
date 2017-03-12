@@ -1,5 +1,5 @@
 //###########################################################################################
-class Vector3 {
+export class Vector3 {
   x: number;
   y: number;
   z: number;
@@ -65,7 +65,7 @@ class Vector3 {
 
 
 //###########################################################################################
-class Matrix4 {
+export class Matrix4 {
   raw: Float32Array;
 
   constructor () {
@@ -669,7 +669,7 @@ class Matrix4 {
   }
 }
 
-export {
+export default {
   Vector3,
   Matrix4,
-}
+};
