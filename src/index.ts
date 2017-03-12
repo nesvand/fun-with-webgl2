@@ -40,9 +40,11 @@ import fShader from './shaders/fShader.glsl';
 const { GridAxisShader } = GRIDAXISSHADER;
 
 // Models
-import { GridAxis, Quad, MultiQuad, Cube } from './lib/Primatives';
+import * as PRIMITIVES from './lib/Primatives';
 // Model Courtesy of @Enthymeme - http://www.blendswap.com/blends/view/73788
 import pirateObjFile from './assets/pirate_girl.obj';
+
+const { GridAxis, Quad, MultiQuad, Cube } = PRIMITIVES;
 
 window.addEventListener('load', () => {
   // Global Context
@@ -63,7 +65,8 @@ window.addEventListener('load', () => {
   let gSkymapShader: SkymapShader;
   let gSkymapModel: MODEL.Model;
 
-  let testShader: TestShader;
+  let cubeShader: TestShader;
+  let pirateShader: TestShader;
   let gModel: MODEL.Model;
   let gModel2: MODEL.Model;
 
@@ -99,17 +102,18 @@ window.addEventListener('load', () => {
 
     // Setup Grid
     gGridShader = new GridAxisShader(gl, gCamera.projectionMatrix);
-    gGridModel = GridAxis.createModel(gl, true);
+    gGridModel = GridAxis.createModel(gl, false);
 
     // Custom models
-    testShader = new TestShader(gl, gCamera.projectionMatrix)
-      // .setTexture(gl.mTextureCache['tex001']);
+    cubeShader = new TestShader(gl, gCamera.projectionMatrix)
+      .setTexture(gl.mTextureCache['tex001']);
+    pirateShader = new TestShader(gl, gCamera.projectionMatrix)
       .setTexture(gl.mTextureCache['tex002']);
 
-    // gModel = Cube.createModel(gl);
-    // gModel.setPosition(0, 0.6, 0);
+    gModel = Cube.createModel(gl);
+    gModel.setPosition(-0.1, 0.15, 0.3).setScale(0.3, 0.3, 0.3);
 
-    gModel2 = new Model(ObjLoader.stringToMesh(gl, 'objPirate', pirateObjFile, true));
+    gModel2 = new Model(ObjLoader.stringToMesh(gl, 'PirateGirl', pirateObjFile, true));
     gModel2.setPosition(0, 0, 0).setScale(0.5, 0.5, 0.5);
 
     gSkymapModel = new Model(Cube.createMesh(gl, 'Skymap', 100, 100, 100, 0, 0, 0));
@@ -136,10 +140,14 @@ window.addEventListener('load', () => {
         .setCameraMatrix(gCamera.viewMatrix)
         .renderModel(gGridModel.preRender());
 
-      testShader.activate().preRender()
+      cubeShader.activate().preRender()
         .setCameraMatrix(gCamera.viewMatrix)
         .setTime(performance.now())
-        // .renderModel(gModel.preRender());
+        .renderModel(gModel.preRender());
+
+      pirateShader.activate().preRender()
+        .setCameraMatrix(gCamera.viewMatrix)
+        .setTime(performance.now())
         .renderModel(gModel2.preRender());
     }
   }
