@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
@@ -30,6 +31,22 @@ module.exports = {
       template: 'src/index.html',
     }),
     new ExtractTextPlugin('styles.css'),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false,
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      comments: false,
+      sourceMap: true,
+      minimize: true,
+      compress: {
+        dead_code: true,
+        passes: 3,
+      },
+    }),
+    new webpack.SourceMapDevToolPlugin({
+      filename: '[file].map',
+    }),
   ],
   module: {
     rules: [
