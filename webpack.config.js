@@ -23,7 +23,7 @@ module.exports = {
     app: path.resolve(__dirname, 'src', 'index.ts'),
   },
   output: {
-    path: path.resolve(__dirname, 'docs'),
+    path: path.resolve(__dirname, 'example'),
     filename: '[name]-[hash].js',
   },
   plugins: [
