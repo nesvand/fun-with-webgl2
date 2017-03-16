@@ -76,7 +76,7 @@ window.addEventListener('load', () => {
     gl.fFitScreen(0.95, 0.95).fClear();
 
     gCamera = new Camera(gl);
-    gCamera.transform.position.set(0, 0, 3);
+    gCamera.transform.position.set(0, 1, 3);
     gCameraCtrl = new CameraController(gl, gCamera);
 
     // Load up resources
