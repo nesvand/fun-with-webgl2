@@ -22,6 +22,8 @@ import * as RENDERLOOP from './lib/RenderLoop';
 import * as MODEL from './lib/Model';
 import * as CAMERA from './lib/Camera';
 import * as OBJLOADER from './lib/ObjLoader';
+import * as MATH from './lib/Math';
+import * as DEBUG from './lib/Debug';
 
 const { GLInstance, GLUtil } = GL;
 const { Shader } = SHADER;
@@ -29,6 +31,7 @@ const { RenderLoop } = RENDERLOOP;
 const { Model } = MODEL;
 const { Camera, CameraController } = CAMERA;
 const { ObjLoader } = OBJLOADER;
+const { MathUtil } = MATH;
 
 // Shaders
 import * as GRIDAXISSHADER from './lib/GridAxisShader';
@@ -45,6 +48,7 @@ import * as PRIMITIVES from './lib/Primatives';
 import pirateObjFile from './assets/pirate_girl.obj';
 
 const { GridAxis, Quad, MultiQuad, Cube } = PRIMITIVES;
+const { VertexDebugger } = DEBUG;
 
 window.addEventListener('load', () => {
   // Global Context
@@ -69,6 +73,8 @@ window.addEventListener('load', () => {
   let pirateShader: TestShader;
   let gModel: MODEL.Model;
   let gModel2: MODEL.Model;
+
+  let mDebug: DEBUG.VertexDebugger;
 
   gl = GLInstance('glcanvas');
 
@@ -128,10 +134,24 @@ window.addEventListener('load', () => {
       skyboxTextureB ? skyboxTextureB : null,
     );
 
+    mDebug = new VertexDebugger(gl, 10)
+      .addColor(0xff0000)
+      .addPoint(0, 0, 0, 0)
+      .finalize();
+
     new RenderLoop(onRender).start();
   }
 
-  function onRender () {
+  let radius = 1.5;
+  let angle = 0;
+  let angleInc = 1;
+  let yPos = 0;
+  let yPosInc = 0.2;
+  let x: number;
+  let y: number;
+  let z: number;
+
+  function onRender (dt: number) {
     if (gl) {
       gCamera.updateViewMatrix();
       gl.fClear();
@@ -145,15 +165,28 @@ window.addEventListener('load', () => {
         .setCameraMatrix(gCamera.viewMatrix)
         .renderModel(gGridModel.preRender());
 
+      angle += angleInc * dt;
+      yPos += yPosInc * dt;
+
+      x = radius * Math.cos(angle);
+      z = radius * Math.sin(angle);
+      y = MathUtil.Map(Math.sin(yPos), -1 ,1, 0.1, 2);
+
+      mDebug.transform.position.set(x, y ,z);
+
       cubeShader.activate().preRender()
         .setCameraMatrix(gCamera.viewMatrix)
-        .setTime(performance.now())
+        .setCameraPos(gCamera)
+        .setLightPos(mDebug)
+        // .setTime(performance.now())
         .renderModel(gModel.preRender());
 
       pirateShader.activate().preRender()
         .setCameraMatrix(gCamera.viewMatrix)
         .setTime(performance.now())
         .renderModel(gModel2.preRender());
+
+      mDebug.render(gCamera);
     }
   }
 });
@@ -165,7 +198,9 @@ class TestShader extends Shader {
   constructor (gl: ExtendedWebGLContext, projectionMatrix: MixedFloat32Array) {
     super(gl, vShader, fShader);
 
-    this.uniformLoc.time = gl.getUniformLocation(this.program, 'uTime');
+    this.uniformLoc.lightPos = gl.getUniformLocation(this.program, 'uLightPos');
+    this.uniformLoc.camPos = gl.getUniformLocation(this.program, 'uCamPos');
+    this.uniformLoc.matNorm = gl.getUniformLocation(this.program, 'uNormMatrix');
 
     // Standard Uniforms
     this.setPerspective(projectionMatrix);
@@ -186,11 +221,30 @@ class TestShader extends Shader {
     return this;
   }
 
+  setLightPos (obj: DEBUG.VertexDebugger) {
+    this.gl.uniform3fv(this.uniformLoc.lightPos, new Float32Array(obj.transform.position.getArray()));
+
+    return this;
+  }
+
+  setCameraPos (obj: CAMERA.Camera) {
+    this.gl.uniform3fv(this.uniformLoc.camPos, new Float32Array(obj.transform.position.getArray()));
+
+    return this;
+  }
+
   preRender () {
     // Setup Texture
     this.gl.activeTexture(this.gl.TEXTURE0);
     this.gl.bindTexture(this.gl.TEXTURE_2D, this.mainTexture);
     this.gl.uniform1i(this.uniformLoc.mainTexture, 0);
+
+    return this;
+  }
+
+  renderModel (model: MODEL.Model) {
+    this.gl.uniformMatrix3fv(this.uniformLoc.matNorm, false, model.transform.getNormalMatrix());
+    super.renderModel(model);
 
     return this;
   }

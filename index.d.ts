@@ -810,6 +810,9 @@ interface MeshVAO {
   indexLength?: number;
   noCulling?: boolean;
   doBlending?: boolean;
+  aIndex?: number[];
+  aVert?: number[];
+  aNorm?: number[];
 }
 
 interface AttribLocations {
@@ -827,6 +830,9 @@ interface UniformLocations {
 
 interface TestUniformLocations extends UniformLocations {
   time: WebGLUniformLocation | null;
+  lightPos: WebGLUniformLocation | null;
+  camPos: WebGLUniformLocation | null;
+  matNorm: WebGLUniformLocation | null;
 }
 
 interface SkymapUniformLocations extends UniformLocations {

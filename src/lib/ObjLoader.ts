@@ -1,11 +1,19 @@
 export class ObjLoader {
-  static stringToMesh (gl: ExtendedWebGLContext, meshName: string, objString: string, flipYUV: boolean) {
+  static stringToMesh (gl: ExtendedWebGLContext, meshName: string, objString: string, flipYUV?: boolean, keepRawData?: boolean) {
     const obj = this.parseObjText(objString, flipYUV);
 
-    return gl.fCreateMeshVAO(meshName, obj[0], obj[1], obj[2], obj[3], 3);
+    const mesh = gl.fCreateMeshVAO(meshName, obj[0], obj[1], obj[2], obj[3], 3);
+
+    if (keepRawData) {
+      mesh.aIndex = obj[0];
+      mesh.aVert = obj[1];
+      mesh.aNorm = obj[2];
+    }
+
+    return mesh;
   }
 
-  static parseObjText (inputText: string, flipYUV: boolean) {
+  static parseObjText (inputText: string, flipYUV?: boolean) {
     const txt = inputText.trim() + '\n';
 
     let line: string;
