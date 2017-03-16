@@ -669,14 +669,7 @@ export class Matrix4 {
   }
 }
 
-export class MathUtil {
-  static Map (x: number, xMin: number, xMax: number, nMin: number, nMax: number) {
-    return (x - xMin) / (xMax - xMin) * (nMax - nMin) + nMin;
-  }
-}
-
 export default {
   Vector3,
   Matrix4,
-  MathUtil,
 };

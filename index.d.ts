@@ -810,9 +810,6 @@ interface MeshVAO {
   indexLength?: number;
   noCulling?: boolean;
   doBlending?: boolean;
-  aIndex?: NullableNumberArray;
-  aVert?: NullableNumberArray;
-  aNorm?: NullableNumberArray;
 }
 
 interface AttribLocations {

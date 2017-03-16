@@ -22,8 +22,6 @@ import * as RENDERLOOP from './lib/RenderLoop';
 import * as MODEL from './lib/Model';
 import * as CAMERA from './lib/Camera';
 import * as OBJLOADER from './lib/ObjLoader';
-import * as MATH from './lib/Math';
-import * as DEBUG from './lib/Debug';
 
 const { GLInstance, GLUtil } = GL;
 const { Shader } = SHADER;
@@ -31,8 +29,6 @@ const { RenderLoop } = RENDERLOOP;
 const { Model } = MODEL;
 const { Camera, CameraController } = CAMERA;
 const { ObjLoader } = OBJLOADER;
-const { MathUtil } = MATH;
-const { VertexDebugger } = DEBUG;
 
 // Shaders
 import * as GRIDAXISSHADER from './lib/GridAxisShader';
@@ -74,16 +70,13 @@ window.addEventListener('load', () => {
   let gModel: MODEL.Model;
   let gModel2: MODEL.Model;
 
-  let gDebug: DEBUG.VertexDebugger;
-  // let gDebugLine: DEBUG.LineDebugger;
-
   gl = GLInstance('glcanvas');
 
   if (gl) {
     gl.fFitScreen(0.95, 0.95).fClear();
 
     gCamera = new Camera(gl);
-    gCamera.transform.position.set(0, 1, 3);
+    gCamera.transform.position.set(0, 0, 3);
     gCameraCtrl = new CameraController(gl, gCamera);
 
     // Load up resources
@@ -135,24 +128,10 @@ window.addEventListener('load', () => {
       skyboxTextureB ? skyboxTextureB : null,
     );
 
-    gDebug = new VertexDebugger(gl, 10)
-      .addColour(0xff0000)
-      .addPoint(0, 0, 0, 0)
-      .finalise();
-
     new RenderLoop(onRender).start();
   }
 
-  let radius = 1.5;
-  let angle = 0;
-  let angleIncrement = 1;
-  let yPos = 0;
-  let yPosIncrement = 0.2;
-  let tempX: number;
-  let tempZ: number;
-  let tempY: number;
-
-  function onRender (dt: number) {
+  function onRender () {
     if (gl) {
       gCamera.updateViewMatrix();
       gl.fClear();
@@ -175,17 +154,6 @@ window.addEventListener('load', () => {
         .setCameraMatrix(gCamera.viewMatrix)
         .setTime(performance.now())
         .renderModel(gModel2.preRender());
-
-      // @TODO - continue from here https://youtu.be/tAqmloARskQ?t=796
-
-      angle += angleIncrement * dt;
-      yPos += yPosIncrement * dt;
-
-      tempX = radius * Math.cos(angle);
-      tempZ = radius * Math.sin(angle);
-      tempY = MathUtil.Map(Math.sin(yPos), -1, 1, 0.1, 2);
-
-      gDebug.transform.position.set(tempX, tempY, tempZ);
     }
   }
 });
