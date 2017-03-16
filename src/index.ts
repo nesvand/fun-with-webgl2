@@ -170,7 +170,7 @@ window.addEventListener('load', () => {
 
       x = radius * Math.cos(angle);
       z = radius * Math.sin(angle);
-      y = MathUtil.Map(Math.sin(yPos), -1 ,1, 0.1, 2);
+      y = MathUtil.Map(Math.sin(yPos), -1, 1, 0.1, 2);
 
       mDebug.transform.position.set(x, y ,z);
 
@@ -178,12 +178,12 @@ window.addEventListener('load', () => {
         .setCameraMatrix(gCamera.viewMatrix)
         .setCameraPos(gCamera)
         .setLightPos(mDebug)
-        // .setTime(performance.now())
         .renderModel(gModel.preRender());
 
       pirateShader.activate().preRender()
         .setCameraMatrix(gCamera.viewMatrix)
-        .setTime(performance.now())
+        .setCameraPos(gCamera)
+        .setLightPos(mDebug)
         .renderModel(gModel2.preRender());
 
       mDebug.render(gCamera);
