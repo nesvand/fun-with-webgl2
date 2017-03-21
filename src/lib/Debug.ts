@@ -1,11 +1,26 @@
 import * as TRANSFORM from './Transform';
 import * as SHADERS from './Shaders';
+import * as CAMERA from './Camera';
+import * as MODEL from './Model';
 
 const { Transform } = TRANSFORM;
 const { ShaderUtil } = SHADERS;
 
 export class LineDebugger {
-  constructor (gl) {
+  transform: TRANSFORM.Transform;
+  gl: ExtendedWebGLContext;
+  mColor: number[]
+  mVerts: number[];
+  mVertBuffer: WebGLBuffer;
+  mVertCount: number;
+  mVertexComponentLen: number;
+  mShader: SHADERS.Shader;
+  mUniformColor: WebGLUniformLocation | null;
+  mUniformProj: WebGLUniformLocation | null;
+  mUniformCamera: WebGLUniformLocation | null;
+  mUniformModelV: WebGLUniformLocation | null;
+
+  constructor (gl: ExtendedWebGLContext) {
     this.transform = new Transform();
 
     this.gl = gl;
@@ -33,13 +48,13 @@ export class LineDebugger {
     return this;
   }
 
-  addLine (x1, y1, z1, x2, y2, z2, cIndex) {
+  addLine (x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, cIndex: number) {
     this.mVerts.push(x1, y1, z1, cIndex, x2, y2, z2, cIndex);
     this.mVertCount = this.mVerts.length / this.mVertexComponentLen;
     return this;
   }
 
-  addMeshNormal (cIndex, nLen, mesh) {
+  addMeshNormal (cIndex: number, nLen: number, mesh) {
     if (mesh.aVert === undefined || mesh.aNorm === undefined) return this;
 
     let len = mesh.aVert.length, n = 0;
@@ -100,7 +115,7 @@ export class LineDebugger {
     return this;
   }
 
-  render (camera) {
+  render (camera: CAMERA.Camera) {
     //Update Transform Matrix (Modal View)
     this.transform.updateMatrix();
 
@@ -129,7 +144,16 @@ export class LineDebugger {
 
 
 export class VertexDebugger {
-  constructor (gl, pntSize) {
+  transform: TRANSFORM.Transform;
+  gl: ExtendedWebGLContext;
+  mColor: number[];
+  mVerts: number[];
+  mVertBuffer: WebGLBuffer;
+  mVertCount: number;
+  mVertexComponentLen: number;
+  mPointSize: number;
+
+  constructor (gl: ExtendedWebGLContext, pntSize: number) {
     this.transform = new Transform();
     this.gl = gl;
     this.mColor = [];
@@ -140,12 +164,12 @@ export class VertexDebugger {
     this.mPointSize = pntSize;
   }
 
-  addColor () {
-    if (arguments.length == 0) return this;
+  addColor (...args: string[]) {
+    if (args.length == 0) return this;
 
-    for (let i = 0, c, p; i < arguments.length; i++) {
-      if (arguments[i].length < 6) continue;
-      c = arguments[i];		//Just an alias(copy really) of the color text, make code smaller.
+    for (let i = 0, c, p; i < args.length; i++) {
+      if (args[i].length < 6) continue;
+      c = args[i];		//Just an alias(copy really) of the color text, make code smaller.
       p = (c[0] == '#') ? 1 : 0;	//Determine starting position in char array to start pulling from
 
       this.mColor.push(
@@ -157,13 +181,13 @@ export class VertexDebugger {
     return this;
   }
 
-  addPoint (x1, y1, z1, cIndex) {
+  addPoint (x1: number, y1: number, z1: number, cIndex: number) {
     this.mVerts.push(x1, y1, z1, cIndex || 0);
     this.mVertCount = this.mVerts.length / this.mVertexComponentLen;
     return this;
   }
 
-  addMeshPoints (cIndex, mesh) {
+  addMeshPoints (cIndex: number, mesh) {
     if (mesh.aVert === undefined) return this;
 
     let len = mesh.aVert.length;
