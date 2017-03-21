@@ -1,11 +1,17 @@
 import * as TRANSFORM from './Transform';
 import * as MATH from './Math';
+import * as CAMERA from './Camera';
 
 const { Transform } = TRANSFORM;
 const { Matrix4 } = MATH;
 
 export class Camera {
-  constructor (gl, fov = 45, near = 0.1, far = 100.0) {
+  projectionMatrix: Float32Array;
+  transform: TRANSFORM.Transform;
+  viewMatrix: Float32Array;
+  mode: number;
+
+  constructor (gl: ExtendedWebGLContext, fov = 45, near = 0.1, far = 100.0) {
     //Setup the perspective matrix
     this.projectionMatrix = new Float32Array(16);
     let ratio = gl.canvas.width / gl.canvas.height;
@@ -17,7 +23,10 @@ export class Camera {
     this.mode = Camera.MODE_ORBIT;			//Set what sort of control mode to use.
   }
 
-  panX (v) {
+  static MODE_FREE = 0;	//Allows free movement of position and rotation, basicly first person type of camera
+  static MODE_ORBIT = 1;	//Movement is locked to rotate around the origin, Great for 3d editors or a single model viewer
+
+  panX (v: number) {
     if (this.mode == Camera.MODE_ORBIT) return; // Panning on the X Axis is only allowed when in free mode
     this.updateViewMatrix();
     this.transform.position.x += this.transform.right[0] * v;
@@ -25,7 +34,7 @@ export class Camera {
     this.transform.position.z += this.transform.right[2] * v;
   }
 
-  panY (v) {
+  panY (v: number) {
     this.updateViewMatrix();
     this.transform.position.y += this.transform.up[1] * v;
     if (this.mode == Camera.MODE_ORBIT) return; //Can only move up and down the y axix in orbit mode
@@ -33,7 +42,7 @@ export class Camera {
     this.transform.position.z += this.transform.up[2] * v;
   }
 
-  panZ (v) {
+  panZ (v: number) {
     this.updateViewMatrix();
     if (this.mode == Camera.MODE_ORBIT) {
       this.transform.position.z += v; //orbit mode does translate after rotate, so only need to set Z, the rotate will handle the rest.
@@ -76,12 +85,20 @@ export class Camera {
   }
 }
 
-Camera.MODE_FREE = 0;	//Allows free movement of position and rotation, basicly first person type of camera
-Camera.MODE_ORBIT = 1;	//Movement is locked to rotate around the origin, Great for 3d editors or a single model viewer
-
-
 export class CameraController {
-  constructor (gl, camera) {
+  canvas: HTMLCanvasElement;
+  camera: CAMERA.Camera;
+  rotateRate: number;
+  panRate: number;
+  zoomRate: number;
+  offsetX: number;
+  offsetY: number;
+  initX: number;
+  initY: number;
+  prevX: number;
+  prevY: number;
+
+  constructor (gl: ExtendedWebGLContext, camera: CAMERA.Camera) {
     let oThis = this;
     let box = gl.canvas.getBoundingClientRect();
     this.canvas = gl.canvas;						//Need access to the canvas html element, main to access events
@@ -99,18 +116,23 @@ export class CameraController {
     this.prevX = 0;									//Previous X,Y position on mouse move
     this.prevY = 0;
 
-    this.onUpHandler = function (e) { oThis.onMouseUp(e); };		//Cache func reference that gets bound and unbound a lot
-    this.onMoveHandler = function (e) { oThis.onMouseMove(e); };
-
-    this.canvas.addEventListener('mousedown', function (e) { oThis.onMouseDown(e); });		//Initializes the up and move events
-    this.canvas.addEventListener('mousewheel', function (e) { oThis.onMouseWheel(e); });	//Handles zoom/forward movement
+    this.canvas.addEventListener('mousedown', e => { oThis.onMouseDown(e) });		//Initializes the up and move events
+    this.canvas.addEventListener('mousewheel', e => { oThis.onMouseWheel(e) });	//Handles zoom/forward movement
   }
 
+  private onUpHandler = () => this.onMouseUp();		//Cache func reference that gets bound and unbound a lot
+  private onMoveHandler = (e: MouseEvent) => this.onMouseMove(e);
+
   //Transform mouse x,y cords to something useable by the canvas.
-  getMouseVec2 (e) { return { x: e.pageX - this.offsetX, y: e.pageY - this.offsetY }; }
+  getMouseVec2 (e: MouseEvent) {
+    return {
+      x: e.pageX - this.offsetX,
+      y: e.pageY - this.offsetY,
+    };
+  }
 
   //Begin listening for dragging movement
-  onMouseDown (e) {
+  onMouseDown (e: MouseEvent) {
     this.initX = this.prevX = e.pageX - this.offsetX;
     this.initY = this.prevY = e.pageY - this.offsetY;
 
@@ -119,17 +141,17 @@ export class CameraController {
   }
 
   //End listening for dragging movement
-  onMouseUp (e) {
+  onMouseUp () {
     this.canvas.removeEventListener('mouseup', this.onUpHandler);
     this.canvas.removeEventListener('mousemove', this.onMoveHandler);
   }
 
-  onMouseWheel (e) {
+  onMouseWheel (e: WheelEvent) {
     let delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))); //Try to map wheel movement to a number between -1 and 1
     this.camera.panZ(delta * (this.zoomRate / this.canvas.height));		//Keep the movement speed the same, no matter the height diff
   }
 
-  onMouseMove (e) {
+  onMouseMove (e: MouseEvent) {
     let x = e.pageX - this.offsetX,	//Get X,y where the canvas's position is origin.
       y = e.pageY - this.offsetY,
       dx = x - this.prevX,		//Difference since last mouse move
