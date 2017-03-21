@@ -10,7 +10,7 @@ const {
 } = GL;
 
 export class ShaderBuilder {
-  constructor (gl, vertShader, fragShader) {
+  constructor(gl: ExtendedWebGLContext, vertShader: string, fragShader: string) {
     //If the text is small, then its most likely DOM names (very hack) else its actual Source.
     //TODO, Maybe check for new line instead of length, Dom names will never have new lines but source will.
     if (vertShader.length < 20) this.program = ShaderUtil.domShaderProgram(gl, vertShader, fragShader, true);
@@ -31,27 +31,27 @@ export class ShaderBuilder {
   // Methods For Shader Prep.
   //---------------------------------------------------
   //Takes in unlimited arguments. Its grouped by two so for example (UniformName,UniformType): "uColors","3fv"
-  prepareUniforms () {
-    if (arguments.length % 2 != 0) { console.log('prepareUniforms needs arguments to be in pairs.'); return this; }
+  prepareUniforms (...args: string[]) {
+    if (args.length % 2 != 0) { console.log('prepareUniforms needs arguments to be in pairs.'); return this; }
 
     let loc = 0;
-    for (let i = 0; i < arguments.length; i += 2) {
-      loc = this.gl.getUniformLocation(this.program, arguments[i]);
-      if (loc != null) this.mUniformList[arguments[i]] = { loc: loc, type: arguments[i + 1] };
+    for (let i = 0; i < args.length; i += 2) {
+      loc = this.gl.getUniformLocation(this.program, args[i]);
+      if (loc != null) this.mUniformList[args[i]] = { loc: loc, type: args[i + 1] };
     }
     return this;
   }
 
   //Takes in unlimited arguments. Its grouped by two so for example (UniformName,CacheTextureName): "uMask01","tex001";
-  prepareTextures () {
-    if (arguments.length % 2 != 0) { console.log('prepareTextures needs arguments to be in pairs.'); return this; }
+  prepareTextures(...args: string[]) {
+    if (args.length % 2 != 0) { console.log('prepareTextures needs arguments to be in pairs.'); return this; }
 
     let loc = 0, tex = '';
-    for (let i = 0; i < arguments.length; i += 2) {
-      tex = this.gl.mTextureCache[arguments[i + 1]];
-      if (tex === undefined) { console.log('Texture not found in cache ' + arguments[i + 1]); continue; }
+    for (let i = 0; i < args.length; i += 2) {
+      tex = this.gl.mTextureCache[args[i + 1]];
+      if (tex === undefined) { console.log('Texture not found in cache ' + args[i + 1]); continue; }
 
-      loc = this.gl.getUniformLocation(this.program, arguments[i]);
+      loc = this.gl.getUniformLocation(this.program, args[i]);
       if (loc != null) this.mTextureList.push({ loc: loc, tex: tex });
     }
     return this;
@@ -61,7 +61,7 @@ export class ShaderBuilder {
   // Setters Getters
   //---------------------------------------------------
   //Uses a 2 item group argument array. Uniform_Name, Uniform_Value;
-  setUniforms () {
+  setUniforms (...args: any[]) {
     if (arguments.length % 2 != 0) { console.log('setUniforms needs arguments to be in pairs.'); return this; }
 
     let name;
@@ -94,11 +94,11 @@ export class ShaderBuilder {
     this.gl.deleteProgram(this.program);
   }
 
-  preRender () {
+  preRender (...args: any[]) {
     this.gl.useProgram(this.program); //Save a function call and just activate this shader program on preRender
 
     //If passing in arguments, then lets push that to setUniforms for handling. Make less line needed in the main program by having preRender handle Uniforms
-    if (arguments.length > 0) this.setUniforms.apply(this, arguments);
+    if (args.length > 0) this.setUniforms.apply(this, args);
 
     //..........................................
     //Prepare textures that might be loaded up.

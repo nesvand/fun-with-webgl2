@@ -8,7 +8,7 @@ rloop = new RenderLoop(function(dt){
 */
 
 export class RenderLoop {
-  constructor (callback, fps) {
+  constructor (callback: (dt: number) => void, fps?: number) {
     let oThis = this;
     this.msLastFrame = null;	//The time in Miliseconds of the last frame.
     this.callBack = callback;	//What function to call for each frame
