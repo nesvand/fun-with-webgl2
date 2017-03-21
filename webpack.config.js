@@ -104,5 +104,5 @@ module.exports = {
     ],
     extensions: ['.js', '.json', '.css', '.glsl', '.ts', '.obj',],
   },
-  devtool: production ? 'source-map' : 'inline-source-map',
+  devtool: production ? 'source-map' : 'eval-source-map',
 };

@@ -14,7 +14,7 @@
     "webpack-dev-server": "webpack-dev-server",
     "clean": "rimraf example",
     "lint:es": "eslint src/ || exit 0",
-    "lint:ts": "tslint -c \".tslint.json\" \"src/**/*.ts\" || exit 0",
+    "lint:ts": "tslint -c \".tslint.json\" \"src/**/*.ts\" --fix || exit 0",
     "lint": "run-s lint:es lint:ts",
     "serve:local": "serve example --port 8080",
     "serve": "run-s build serve:local"

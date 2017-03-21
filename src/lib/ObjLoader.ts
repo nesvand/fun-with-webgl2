@@ -1,111 +1,123 @@
-export class ObjLoader {
-  static stringToMesh (gl: ExtendedWebGLContext, meshName: string, objString: string, flipYUV: boolean) {
-    const obj = this.parseObjText(objString, flipYUV);
+class ObjLoader{
+	static domToMesh (meshName, elmID, flipYUV, keepRawData){
+		let d = ObjLoader.parseFromDom(elmID, flipYUV);
+		let mesh = gl.fCreateMeshVAO(meshName, d[0], d[1], d[2], d[3], 3);
 
-    return gl.fCreateMeshVAO(meshName, obj[0], obj[1], obj[2], obj[3], 3);
-  }
+		if (keepRawData){ //Have the option to save the data to use for normal debugging or modifying. TODO
+			mesh.aIndex	= d[0];
+			mesh.aVert	= d[1];
+			mesh.aNorm	= d[2];
+		}
 
-  static parseObjText (inputText: string, flipYUV: boolean) {
-    const txt = inputText.trim() + '\n';
+		return mesh;
+	}
 
-    let line: string;
-    let items: string[];
-    let itemArray: string[];
-    let i: number;
-    let index: number;
-    let isQuad = false;
-    let aCache: number[] = [];
-    let cVert: number[] = [];
-    let cUV: number[] = [];
-    let cNorm: number[] = [];
-    let fVert: number[] = [];
-    let fUV: number[] = [];
-    let fNorm: number[] = [];
-    let fIndex: number[] = [];
-    let fIndexCount = 0;
-    let posA = 0;
-    let posB = txt.indexOf('\n', 0);
+	static parseFromDom (elmID, flipYUV){ return ObjLoader.parseObjText(document.getElementById(elmID).innerHTML, flipYUV); }
 
-    while (posB > posA) {
-      line = txt.substring(posA, posB).trim();
+	static parseObjText (txt, flipYUV){
+		txt = txt.trim() + '\n'; //add newline to be able to access last line in the for loop
 
-      switch (line.charAt(0)) {
+		let line,				//Line text from obj file
+			itm,				//Line split into an array
+			ary,				//Itm split into an array, used for faced decoding
+			i,
+			ind,				//used to calculate index of the cache arrays
+			isQuad = false,		//Determine if face is a quad or not
+			aCache = [],		//Cache Dictionary key = itm array element, val = final index of the vertice
+			cVert = [],			//Cache Vertice array read from obj
+			cNorm = [],			//Cache Normal array ...
+			cUV = [],			//Cache UV array ...
+			fVert = [],			//Final Index Sorted Vertice Array
+			fNorm = [],			//Final Index Sorted Normal Array
+			fUV = [],			//Final Index Sorted UV array
+			fIndex = [],		//Final Sorted index array
+			fIndexCnt = 0,		//Final count of unique vertices
+			posA = 0,
+			posB = txt.indexOf('\n', 0);
 
-        case 'v':
-          items = line.split(' ');
-          items.shift();
+		while (posB > posA){
+			line = txt.substring(posA, posB).trim();
 
-          switch (line.charAt(1)) {
-            case ' ':
-              cVert.push(parseFloat(items[0]));
-              cVert.push(parseFloat(items[1]));
-              cVert.push(parseFloat(items[2]));
-              break;
-            case 't':
-              cUV.push(parseFloat(items[0]));
-              cUV.push(parseFloat(items[1]));
-              break;
-            case 'n':
-              cNorm.push(parseFloat(items[0]));
-              cNorm.push(parseFloat(items[1]));
-              cNorm.push(parseFloat(items[2]));
-              break;
-          }
-          break;
-        case 'f':
-          items = line.split(' ');
-          items.shift();
+			switch (line.charAt(0)){
+				//......................................................
+				// Cache Vertex Data for Index processing when going through face data
+				// Sample Data (x,y,z)
+				// v -1.000000 1.000000 1.000000
+				// vt 0.000000 0.666667
+				// vn 0.000000 0.000000 -1.000000
+				case 'v':
+					itm = line.split(' '); itm.shift();
+					switch (line.charAt(1)){
+						case ' ': cVert.push(parseFloat(itm[0]) , parseFloat(itm[1]) , parseFloat(itm[2]) ); break;		//VERTEX
+						case 't': cUV.push( parseFloat(itm[0]) , parseFloat(itm[1]) );	break;							//UV
+						case 'n': cNorm.push( parseFloat(itm[0]) , parseFloat(itm[1]) , parseFloat(itm[2]) ); break;	//NORMAL
+					}
+				break;
 
-          isQuad = false;
+				//......................................................
+				// Process face data
+				// All index values start at 1, but javascript array index start at 0. So need to always subtract 1 from index to match things up
+				// Sample Data [Vertex Index, UV Index, Normal Index], Each line is a triangle or quad.
+				// f 1/1/1 2/2/1 3/3/1 4/4/1
+				// f 34/41/36 34/41/35 34/41/36
+				// f 34//36 34//35 34//36
+				case 'f':
+					itm = line.split(' ');
+					itm.shift();
+					isQuad = false;
 
-          for (i = 0; i < items.length; i++) {
-            if (i === 3 && !isQuad) {
-              i = 2;
-              isQuad = true;
-            }
+					for (i = 0; i < itm.length; i++){
+						//--------------------------------
+						//In the event the face is a quad
+						if (i == 3 && !isQuad){
+							i = 2; //Last vertex in the first triangle is the start of the 2nd triangle in a quad.
+							isQuad = true;
+						}
 
-            if (items[i] in aCache) {
-              fIndex.push(aCache[parseInt(items[i])]);
-            }
-            else {
-              itemArray = items[i].split('/');
+						//--------------------------------
+						//Has this vertex data been processed?
+						if (itm[i] in aCache){
+							fIndex.push( aCache[itm[i]] ); //it has, add its index to the list.
+						}else{
+							//New Unique vertex data, Process it.
+							ary = itm[i].split('/');
 
-              index = (parseInt(itemArray[0]) - 1) * 3;
-              fVert.push(cVert[index], cVert[index + 1], cVert[index + 2]);
+							//Parse Vertex Data and save final version ordred correctly by index
+							ind = (parseInt(ary[0]) - 1) * 3;
+							fVert.push( cVert[ind] , cVert[ind + 1] , cVert[ind + 2] );
 
-              index = (parseInt(itemArray[2]) - 1) * 3;
-              fNorm.push(cNorm[index], cNorm[index + 1], cNorm[index + 2]);
+							//Parse Normal Data and save final version ordered correctly by index
+							ind = (parseInt(ary[2]) - 1) * 3;
+							fNorm.push( cNorm[ind] , cNorm[ind + 1] , cNorm[ind + 2] );
 
-              if (itemArray[1] !== '') {
-                index = (parseInt(itemArray[1]) - 1) * 2;
-                fUV.push(cUV[index], !flipYUV ? cUV[index + 1] : 1 - cUV[index + 1]);
-              }
+							//Parse Texture Data if available and save final version ordered correctly by index
+							if (ary[1] != ''){
+								ind = (parseInt(ary[1]) - 1) * 2;
+								fUV.push( cUV[ind] ,
+									(!flipYUV) ? cUV[ind + 1] : 1 - cUV[ind + 1],
+								);
+							}
 
-              aCache[parseInt(items[i])] = fIndexCount;
-              fIndex.push(fIndexCount);
-              fIndexCount++;
-            }
+							//Cache the vertex item value and its new index.
+							//The idea is to create an index for each unique set of vertex data base on the face data
+							//So when the same item is found, just add the index value without duplicating vertex,normal and texture.
+							aCache[ itm[i] ] = fIndexCnt;
+							fIndex.push(fIndexCnt);
+							fIndexCnt++;
+						}
 
-            if (i === 3 && isQuad) {
-              fIndex.push(aCache[parseInt(items[0])]);
-            }
-          }
-          break;
-      }
+						//--------------------------------
+						//In a quad, the last vertex of the second triangle is the first vertex in the first triangle.
+						if (i == 3 && isQuad) fIndex.push( aCache[itm[0]] );
+					}
+				break;
+			}
 
-      posA = posB + 1;
-      posB = txt.indexOf('\n', posA);
-    }
+			//Get Ready to parse the next line of the obj data.
+			posA = posB + 1;
+			posB = txt.indexOf('\n', posA);
+		}
 
-    return [
-      fIndex,
-      fVert,
-      fNorm,
-      fUV,
-    ];
-  }
-}
-
-export default {
-  ObjLoader,
-};
+		return [fIndex, fVert, fNorm, fUV];
+	}
+}//cls

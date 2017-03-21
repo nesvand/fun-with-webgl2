@@ -1,14 +1,9 @@
 #version 300 es
 precision mediump float;
+uniform sampler2D uTexture;
+in highp vec2 vUV;
+out vec4 outColor;
 
-// in vec4 color;
-in highp vec2 texCoord;
-uniform sampler2D uMainTex;
-
-out vec4 finalColor;
-
-void main(void) {
-  // finalColor = color;
-  finalColor = texture(uMainTex, texCoord);
-  // finalColor = mix(color, texture(uMainTex, texCoord), 0.8f);
+void main(void){
+  outColor = texture(uTexture,vUV*1.5);
 }

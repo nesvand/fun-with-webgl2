@@ -4,154 +4,113 @@ import * as MATH from './Math';
 const { Transform } = TRANSFORM;
 const { Matrix4 } = MATH;
 
-enum CameraModes {
-  FREE = 0,
-  ORBIT = 1 << 0,
-}
-
 export class Camera {
-  projectionMatrix: Float32Array;
-  viewMatrix: Float32Array;
-  transform: TRANSFORM.Transform;
-  mode: CameraModes;
-
-  public static MODE_FREE = CameraModes.FREE;
-  public static MODE_ORBIT = CameraModes.ORBIT;
-
-  constructor (gl: ExtendedWebGLContext, fov?: number, near?: number, far?: number) {
-    const ratio = gl.canvas.width / gl.canvas.height;
-
-    // Setup the perspective matrix
+  constructor (gl, fov = 45, near = 0.1, far = 100.0) {
+    //Setup the perspective matrix
     this.projectionMatrix = new Float32Array(16);
-    Matrix4.perspective(this.projectionMatrix, fov || 45, ratio, near || 0.1, far || 100);
+    let ratio = gl.canvas.width / gl.canvas.height;
+    Matrix4.perspective(this.projectionMatrix, fov, ratio, near, far);
 
-    this.transform = new Transform(); // Setup transform to control the position of the camera
-    this.viewMatrix = new Float32Array(16); // Cache the matrix that will hold the inverse of the transform
+    this.transform = new Transform();		//Setup transform to control the position of the camera
+    this.viewMatrix = new Float32Array(16);	//Cache the matrix that will hold the inverse of the transform.
 
-    this.mode = Camera.MODE_ORBIT; // Set what sort of control mode to use
+    this.mode = Camera.MODE_ORBIT;			//Set what sort of control mode to use.
   }
 
-  panX (v: number) {
-    if (this.mode === Camera.MODE_ORBIT) {
-      return;
-    }
-
+  panX (v) {
+    if (this.mode == Camera.MODE_ORBIT) return; // Panning on the X Axis is only allowed when in free mode
     this.updateViewMatrix();
     this.transform.position.x += this.transform.right[0] * v;
     this.transform.position.y += this.transform.right[1] * v;
     this.transform.position.z += this.transform.right[2] * v;
   }
 
-  panY (v: number) {
+  panY (v) {
     this.updateViewMatrix();
     this.transform.position.y += this.transform.up[1] * v;
-
-    if (this.mode === Camera.MODE_ORBIT) {
-      return;
-    }
-
+    if (this.mode == Camera.MODE_ORBIT) return; //Can only move up and down the y axix in orbit mode
     this.transform.position.x += this.transform.up[0] * v;
     this.transform.position.z += this.transform.up[2] * v;
   }
 
-  panZ (v: number) {
+  panZ (v) {
     this.updateViewMatrix();
-
-    if (this.mode === Camera.MODE_ORBIT) {
-      this.transform.position.z += v;
-    }
-    else {
+    if (this.mode == Camera.MODE_ORBIT) {
+      this.transform.position.z += v; //orbit mode does translate after rotate, so only need to set Z, the rotate will handle the rest.
+    } else {
+      //in freemode to move forward, we need to move based on our forward which is relative to our current rotation
       this.transform.position.x += this.transform.forward[0] * v;
       this.transform.position.y += this.transform.forward[1] * v;
       this.transform.position.z += this.transform.forward[2] * v;
     }
   }
 
+  //To have different modes of movements, this function handles the view matrix update for the transform object.
   updateViewMatrix () {
-    // Optimise camera transform update because we have no need for scale or rotateZ
-
-    if (this.mode === Camera.MODE_FREE) {
+    //Optimize camera transform update, no need for scale nor rotateZ
+    if (this.mode == Camera.MODE_FREE) {
       this.transform.matView.reset()
         .vtranslate(this.transform.position)
         .rotateX(this.transform.rotation.x * Transform.deg2Rad)
         .rotateY(this.transform.rotation.y * Transform.deg2Rad);
-    }
-    else {
+
+    } else {
       this.transform.matView.reset()
         .rotateX(this.transform.rotation.x * Transform.deg2Rad)
         .rotateY(this.transform.rotation.y * Transform.deg2Rad)
         .vtranslate(this.transform.position);
+
     }
 
     this.transform.updateDirection();
 
-    // Cameras work by doing the inverse transformation on all meshes - the camera is a lie
+    //Cameras work by doing the inverse transformation on all meshes, the camera itself is a lie :)
     Matrix4.invert(this.viewMatrix, this.transform.matView.raw);
-
     return this.viewMatrix;
   }
 
-  getMatrix (translate: boolean) {
-    if (!translate) {
-      const matrix = new Float32Array(this.viewMatrix);
-      matrix[12] = matrix[13] = matrix[14] = 0;
-
-      return matrix;
-    }
-    return this.viewMatrix;
+  getTranslatelessMatrix () {
+    let mat = new Float32Array(this.viewMatrix);
+    mat[12] = mat[13] = mat[14] = 0.0; //Reset Translation position in the Matrix to zero.
+    return mat;
   }
 }
 
+Camera.MODE_FREE = 0;	//Allows free movement of position and rotation, basicly first person type of camera
+Camera.MODE_ORBIT = 1;	//Movement is locked to rotate around the origin, Great for 3d editors or a single model viewer
+
+
 export class CameraController {
-  canvas: HTMLCanvasElement;
-  camera: Camera;
-  rotationRate: number;
-  panRate: number;
-  zoomRate: number;
-  offsetX: number;
-  offsetY: number;
-  initX: number;
-  initY: number;
-  prevX: number;
-  prevY: number;
-  onUpHandler: (e: MouseEvent) => void;
-  onMoveHandler: (e: MouseEvent) => void;
+  constructor (gl, camera) {
+    let oThis = this;
+    let box = gl.canvas.getBoundingClientRect();
+    this.canvas = gl.canvas;						//Need access to the canvas html element, main to access events
+    this.camera = camera;							//Reference to the camera to control
 
-  constructor (gl: ExtendedWebGLContext, camera: Camera) {
-    const self = this;
-    const box = gl.canvas.getBoundingClientRect();
+    this.rotateRate = -300;							//How fast to rotate, degrees per dragging delta
+    this.panRate = 5;								//How fast to pan, max unit per dragging delta
+    this.zoomRate = 200;							//How fast to zoom or can be viewed as forward/backward movement
 
-    this.canvas = gl.canvas; // To bind to canvas events
-    this.camera = camera; // Camera control reference
-
-    this.rotationRate = -300; // How fast to rotate, degrees per delta of dragging
-    this.panRate = 5; // How fast to pan, max unit per delta of dragging
-    this.zoomRate = 200; // How fast to zoom - can be viewed as back/forward movement
-
-    this.offsetX = box.left; // Help calc global x,y coords
+    this.offsetX = box.left;						//Help calc global x,y mouse cords.
     this.offsetY = box.top;
 
-    this.initX = 0; // Starting x,y position on mouse down
+    this.initX = 0;									//Starting X,Y position on mouse down
     this.initY = 0;
-    this.prevX = 0; // Previous x,y position on mouse down
+    this.prevX = 0;									//Previous X,Y position on mouse move
     this.prevY = 0;
 
-    this.onUpHandler = e => self.onMouseUp(e);
-    this.onMoveHandler = e => self.onMouseMove(e);
+    this.onUpHandler = function (e) { oThis.onMouseUp(e); };		//Cache func reference that gets bound and unbound a lot
+    this.onMoveHandler = function (e) { oThis.onMouseMove(e); };
 
-    this.canvas.addEventListener('mousedown', e => self.onMouseDown(e));
-    this.canvas.addEventListener('mousewheel', e => self.onMouseWheel(e)); // Everything BUT Firefox
-    this.canvas.addEventListener('DOMMouseScroll', e => self.onMouseWheel(<WheelEvent>e)); // Firefox (derp)
+    this.canvas.addEventListener('mousedown', function (e) { oThis.onMouseDown(e); });		//Initializes the up and move events
+    this.canvas.addEventListener('mousewheel', function (e) { oThis.onMouseWheel(e); });	//Handles zoom/forward movement
   }
 
-  getMouseVec2 (e: MouseEvent) {
-    return {
-      x: e.pageX - this.offsetX,
-      y: e.pageY - this.offsetY,
-    };
-  }
+  //Transform mouse x,y cords to something useable by the canvas.
+  getMouseVec2 (e) { return { x: e.pageX - this.offsetX, y: e.pageY - this.offsetY }; }
 
-  onMouseDown (e: MouseEvent) {
+  //Begin listening for dragging movement
+  onMouseDown (e) {
     this.initX = this.prevX = e.pageX - this.offsetX;
     this.initY = this.prevY = e.pageY - this.offsetY;
 
@@ -159,32 +118,30 @@ export class CameraController {
     this.canvas.addEventListener('mousemove', this.onMoveHandler);
   }
 
-  onMouseUp (e: MouseEvent) {
+  //End listening for dragging movement
+  onMouseUp (e) {
     this.canvas.removeEventListener('mouseup', this.onUpHandler);
     this.canvas.removeEventListener('mousemove', this.onMoveHandler);
   }
 
-  onMouseWheel (e: WheelEvent) {
-    const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))); // Try to map wheel movement to a number between -1 and 1
-
-    this.camera.panZ(-delta * this.zoomRate / this.canvas.height); // Keep the movement speed the same, no matter the height difference
+  onMouseWheel (e) {
+    let delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))); //Try to map wheel movement to a number between -1 and 1
+    this.camera.panZ(delta * (this.zoomRate / this.canvas.height));		//Keep the movement speed the same, no matter the height diff
   }
 
-  onMouseMove (e: MouseEvent) {
-    const x = e.pageX - this.offsetX;
-    const y = e.pageY - this.offsetY;
-    const dx = x - this.prevX;
-    const dy = y - this.prevY;
+  onMouseMove (e) {
+    let x = e.pageX - this.offsetX,	//Get X,y where the canvas's position is origin.
+      y = e.pageY - this.offsetY,
+      dx = x - this.prevX,		//Difference since last mouse move
+      dy = y - this.prevY;
 
-    // When shift is being held down we pan around - else we rotate
-    if (e.shiftKey) {
-      this.camera.panX(-dx * this.panRate / this.canvas.width);
-      this.camera.panY(-dy * this.panRate / this.canvas.height);
-
-    }
-    else {
-      this.camera.transform.rotation.y += dx * this.rotationRate / this.canvas.width;
-      this.camera.transform.rotation.x += dy * this.rotationRate / this.canvas.height;
+    //When shift is being helt down, we pan around else we rotate.
+    if (!e.shiftKey) {
+      this.camera.transform.rotation.y += dx * (this.rotateRate / this.canvas.width);
+      this.camera.transform.rotation.x += dy * (this.rotateRate / this.canvas.height);
+    } else {
+      this.camera.panX(-dx * (this.panRate / this.canvas.width));
+      this.camera.panY(dy * (this.panRate / this.canvas.height));
     }
 
     this.prevX = x;

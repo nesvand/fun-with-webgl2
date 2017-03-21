@@ -1,73 +1,61 @@
-const ONE_SECOND: number = 1000;
+/*NOTES:
+Tutorial on how to control FPS :: http://codetheory.in/controlling-the-frame-rate-with-requestanimationframe/
+
+EXAMPLE:
+rloop = new RenderLoop(function(dt){
+	console.log(rloop.fps + " " + dt);
+},10).start();
+*/
 
 export class RenderLoop {
-  msLastFrame: number | null;
-  callback: RenderLoopCallback;
-  isActive: boolean;
-  fps: number;
-  msFpsLimit: number;
-  run: Function;
+  constructor (callback, fps) {
+    let oThis = this;
+    this.msLastFrame = null;	//The time in Miliseconds of the last frame.
+    this.callBack = callback;	//What function to call for each frame
+    this.isActive = false;		//Control the On/Off state of the render loop
+    this.fps = 0;				//Save the value of how fast the loop is going.
 
-  constructor (cb: RenderLoopCallback, fps?: number) {
-    const self = this;
+    //if(!fps && fps > 0){ //Build a run method that limits the framerate
+    if (fps != undefined && fps > 0) { //Build a run method that limits the framerate
+      this.msFpsLimit = 1000 / fps; //Calc how many milliseconds per frame in one second of time.
+      this.run = function () {
+        //Calculate Deltatime between frames and the FPS currently.
+        let msCurrent = performance.now(),
+          msDelta = (msCurrent - oThis.msLastFrame),
+          deltaTime = msDelta / 1000.0;		//What fraction of a single second is the delta time
 
-    this.msLastFrame = null; // The time in ms of the last frame
-    this.callback = cb; // Function to call each frame
-    this.isActive = false; // Control the on/off state of the render loop
-    this.fps = 0; // Save the value of how fast the loop is going
+        if (msDelta >= oThis.msFpsLimit) { //Now execute frame since the time has elapsed.
+          oThis.fps = Math.floor(1 / deltaTime);
+          oThis.msLastFrame = msCurrent;
+          oThis.callBack(deltaTime);
+        }
 
-    if (fps !== undefined && fps > 0) { // Build a run method that limits the framerate
-      this.msFpsLimit = ONE_SECOND / fps; // Calc ms per frame in one second of time
+        if (oThis.isActive) window.requestAnimationFrame(oThis.run);
+      };
+    } else { //Else build a run method thats optimised as much as possible.
+      this.run = function () {
+        //Calculate Deltatime between frames and the FPS currently.
+        let msCurrent = performance.now(),	//Gives you the whole number of how many milliseconds since the dawn of time :)
+          deltaTime = (msCurrent - oThis.msLastFrame) / 1000.0;	//ms between frames, Then / by 1 second to get the fraction of a second.
 
-      this.run = limitedRun;
-    }
-    else { // Else build a run method that is optimised as much as possible
-      this.run = optimisedRun;
-    }
+        //Now execute frame since the time has elapsed.
+        oThis.fps = Math.floor(1 / deltaTime); //Time it took to generate one frame, divide 1 by that to get how many frames in one second.
+        oThis.msLastFrame = msCurrent;
 
-    function limitedRun () {
-      // Calc deltatime between frames and the FPS currently
-      const msCurrent = performance.now();
-      const msDelta = (msCurrent - self.msLastFrame);
-      const deltaTime = msDelta / ONE_SECOND; // What fraction of a single second has passed
-
-      if (msDelta >= self.msFpsLimit) { // Now execute frame since the correct amount of time has elapsed
-        self.fps = Math.floor(1 / deltaTime);
-        self.msLastFrame = msCurrent;
-        self.callback(deltaTime);
-      }
-
-      if (self.isActive) {
-        window.requestAnimationFrame(<FrameRequestCallback>self.run);
-      }
-    }
-
-    function optimisedRun () {
-      // Calc deltatime between frames and the FPS currently
-      const msCurrent = performance.now(); // gives you the whole number of ms since the dawn of time
-      const deltaTime = (msCurrent - self.msLastFrame) / ONE_SECOND; // ms between frames as a fraction of a second
-
-      // Now execute frame since the correct amount of time has elapsed
-      self.fps = Math.floor(1 / deltaTime);
-      self.msLastFrame = msCurrent;
-      self.callback(deltaTime);
-
-      if (self.isActive) {
-        window.requestAnimationFrame(<FrameRequestCallback>self.run);
-      }
+        oThis.callBack(deltaTime);
+        if (oThis.isActive) window.requestAnimationFrame(oThis.run);
+      };
     }
   }
 
-  start (): RenderLoop {
+  start () {
     this.isActive = true;
     this.msLastFrame = performance.now();
-    window.requestAnimationFrame(<FrameRequestCallback>this.run);
+    window.requestAnimationFrame(this.run);
     return this;
   }
 
-  stop () {
-    this.isActive = false;
-  }
+  stop () { this.isActive = false; }
 }
 
 export default {
