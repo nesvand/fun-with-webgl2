@@ -1,21 +1,13 @@
 {
   "name": "fun-with-webgl2",
   "description": "Building upon @sketchpunklabs YouTube series by utilising a Typescript environment",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "repository": {
     "type": "git",
     "url": "git@github.com:nesvand/fun-with-webgl2.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "run-s clean webpack",
-    "start": "run-s webpack-dev-server",
-    "webpack": "webpack -p",
-    "webpack-dev-server": "webpack-dev-server",
-    "clean": "rimraf example",
-    "lint:es": "eslint src/ || exit 0",
-    "lint:ts": "tslint -c \".tslint.json\" \"src/**/*.ts\" || exit 0",
-    "lint": "run-s lint:es lint:ts",
+    "build": "echo \"Not Building Yet...\"",
     "serve:local": "serve example --port 8080",
     "serve": "run-s build serve:local"
   },
@@ -25,40 +17,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "babel-core": "^6.23.1",
-    "babel-loader": "^6.3.2",
-    "babel-polyfill": "^6.23.0",
-    "babel-preset-env": "^1.1.8",
-    "css-loader": "^0.26.1",
-    "eslint": "^3.16.1",
-    "extract-text-webpack-plugin": "^2.1.0",
-    "file-loader": "0.10.0",
-    "html-webpack-plugin": "^2.28.0",
-    "image-webpack-loader": "^3.2.0",
-    "npm-run-all": "^4.0.1",
-    "raw-loader": "^0.5.1",
-    "rimraf": "^2.6.0",
-    "serve": "^3.4.1",
-    "style-loader": "^0.13.1",
-    "ts-loader": "^2.0.1",
-    "tslint": "^4.4.2",
-    "typescript": "^2.2.1",
-    "webpack": "^2.2.1",
-    "webpack-dev-server": "^2.4.1"
-  },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "browsers": [
-              "last 2 versions"
-            ]
-          }
-        }
-      ]
-    ]
-  },
-  "private": true
+    "typescript": "5.3.3"
+  }
 }
