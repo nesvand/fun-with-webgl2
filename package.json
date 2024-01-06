@@ -7,9 +7,7 @@
     "url": "git@github.com:nesvand/fun-with-webgl2.git"
   },
   "scripts": {
-    "build": "echo \"Not Building Yet...\"",
-    "serve:local": "serve example --port 8080",
-    "serve": "run-s build serve:local"
+    "serve": "parcel src/index.html"
   },
   "author": {
     "name": "Andrew Nesvadba",
@@ -17,6 +15,11 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@parcel/config-default": "^2.11.0",
+    "@parcel/transformer-glsl": "2.11.0",
+    "@parcel/transformer-inline-string": "2.11.0",
+    "@parcel/transformer-typescript-tsc": "^2.11.0",
+    "parcel": "^2.11.0",
     "typescript": "5.3.3"
   }
 }

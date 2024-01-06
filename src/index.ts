@@ -1,20 +1,3 @@
-// Assets
-import './assets/app.css';
-import './assets/uvgrid01.jpg';
-import './assets/miramar_01.png';
-import './assets/miramar_02.png';
-import './assets/miramar_03.png';
-import './assets/miramar_04.png';
-import './assets/miramar_05.png';
-import './assets/miramar_06.png';
-import './assets/interstellar_01.png';
-import './assets/interstellar_02.png';
-import './assets/interstellar_03.png';
-import './assets/interstellar_04.png';
-import './assets/interstellar_05.png';
-import './assets/interstellar_06.png';
-import './assets/pirate_girl.jpg';
-
 // Libs
 import * as GL from './lib/gl';
 import * as SHADER from './lib/Shader';
@@ -42,7 +25,7 @@ const { GridAxisShader } = GRIDAXISSHADER;
 // Models
 import * as PRIMITIVES from './lib/Primatives';
 // Model Courtesy of @Enthymeme - http://www.blendswap.com/blends/view/73788
-import pirateObjFile from './assets/pirate_girl.obj';
+import pirateObjFile from 'bundle-text:./assets/pirate_girl.obj';
 
 const { GridAxis, Quad, MultiQuad, Cube } = PRIMITIVES;
 
@@ -138,7 +121,7 @@ window.addEventListener('load', () => {
 
       gSkymapShader.activate().preRender()
         .setCameraMatrix(gCamera.getMatrix(false))
-        .setTime(performance.now())
+        // .setTime(performance.now())
         .renderModel(gSkymapModel);
 
       gGridShader.activate()
@@ -147,12 +130,12 @@ window.addEventListener('load', () => {
 
       cubeShader.activate().preRender()
         .setCameraMatrix(gCamera.viewMatrix)
-        .setTime(performance.now())
+        // .setTime(performance.now())
         .renderModel(gModel.preRender());
 
       pirateShader.activate().preRender()
         .setCameraMatrix(gCamera.viewMatrix)
-        .setTime(performance.now())
+        // .setTime(performance.now())
         .renderModel(gModel2.preRender());
     }
   }
@@ -160,12 +143,12 @@ window.addEventListener('load', () => {
 
 class TestShader extends Shader {
   mainTexture: WebGLTexture;
-  uniformLoc: TestUniformLocations;
+  // uniformLoc: TestUniformLocations;
 
   constructor (gl: ExtendedWebGLContext, projectionMatrix: MixedFloat32Array) {
     super(gl, vShader, fShader);
 
-    this.uniformLoc.time = gl.getUniformLocation(this.program, 'uTime');
+    // this.uniformLoc.time = gl.getUniformLocation(this.program, 'uTime');
 
     // Standard Uniforms
     this.setPerspective(projectionMatrix);
@@ -173,10 +156,10 @@ class TestShader extends Shader {
     gl.useProgram(null);
   }
 
-  setTime (t: number) {
-    this.gl.uniform1f(this.uniformLoc.time, t);
-    return this;
-  }
+  // setTime (t: number) {
+  //   this.gl.uniform1f(this.uniformLoc.time, t);
+  //   return this;
+  // }
 
   setTexture (textureID: WebGLTexture | null) {
     if (textureID) {
@@ -199,7 +182,7 @@ class TestShader extends Shader {
 class SkymapShader extends Shader {
   texDay: WebGLTexture | null;
   texNight: WebGLTexture | null;
-  uniformLoc: SkymapUniformLocations;
+  // uniformLoc: SkymapUniformLocations;
 
   constructor (
     gl: ExtendedWebGLContext,
@@ -210,9 +193,9 @@ class SkymapShader extends Shader {
     super(gl, skyVShader, skyFShader);
 
     // Custom Uniforms
-    this.uniformLoc.time = gl.getUniformLocation(this.program, 'uTime');
-    this.uniformLoc.dayTex = gl.getUniformLocation(this.program, 'uDayTex');
-    this.uniformLoc.nightTex = gl.getUniformLocation(this.program, 'uNightTex');
+    // this.uniformLoc.time = gl.getUniformLocation(this.program, 'uTime');
+    // this.uniformLoc.dayTex = gl.getUniformLocation(this.program, 'uDayTex');
+    // this.uniformLoc.nightTex = gl.getUniformLocation(this.program, 'uNightTex');
 
     // Standard Uniforms
     this.setPerspective(projectionMatrix);
@@ -222,22 +205,22 @@ class SkymapShader extends Shader {
     gl.useProgram(null);
   }
 
-  setTime (t: number) {
-    this.gl.uniform1f(this.uniformLoc.time, t);
-    return this;
-  }
+  // setTime (t: number) {
+  //   this.gl.uniform1f(this.uniformLoc.time, t);
+  //   return this;
+  // }
 
   preRender () {
     // Setup Textures
     // Day
     this.gl.activeTexture(this.gl.TEXTURE0);
     this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, this.texDay);
-    this.gl.uniform1i(this.uniformLoc.dayTex, 0);
+    // this.gl.uniform1i(this.uniformLoc.dayTex, 0);
 
     // Night
     this.gl.activeTexture(this.gl.TEXTURE1);
     this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, this.texNight);
-    this.gl.uniform1i(this.uniformLoc.nightTex, 1);
+    // this.gl.uniform1i(this.uniformLoc.nightTex, 1);
 
     return this;
   }
