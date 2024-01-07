@@ -87,11 +87,9 @@ export class GridAxis {
 			bufVertices: gl.createBuffer(),
 		};
 
-		let strideLen: number;
-
 		mesh.vertexComponentLen = 4;
 		mesh.vertexCount = verts.length / mesh.vertexComponentLen;
-		strideLen = Float32Array.BYTES_PER_ELEMENT * mesh.vertexComponentLen;
+		const strideLen = Float32Array.BYTES_PER_ELEMENT * mesh.vertexComponentLen;
 
 		// Set up our buffer
 		gl.bindVertexArray(mesh.vao);
@@ -113,7 +111,7 @@ export class GridAxis {
 
 		gl.bindVertexArray(null);
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
-		gl.mMeshCache["grid"] = mesh;
+		gl.mMeshCache.set("grid", mesh);
 
 		return mesh;
 	}
