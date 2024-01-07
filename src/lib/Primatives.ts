@@ -2,13 +2,12 @@ import { Model } from "./Model";
 import { ATTR_POSITION_LOC } from "./globals";
 import type { ExtendedWebGLContext } from "./webgl2-types";
 
-// biome-ignore lint/complexity/noStaticOnlyClass: TODO: Refactor to not be static
-export class GridAxis {
-	static createModel(gl: ExtendedWebGLContext, axis: boolean) {
+export const GridAxis = {
+	createModel(gl: ExtendedWebGLContext, axis: boolean) {
 		return new Model(GridAxis.createMesh(gl, axis));
-	}
+	},
 
-	static createMesh(gl: ExtendedWebGLContext, axis: boolean) {
+	createMesh(gl: ExtendedWebGLContext, axis: boolean) {
 		const verts: number[] = [];
 		const size = 1.8;
 		const div = 10;
@@ -114,16 +113,15 @@ export class GridAxis {
 		gl.mMeshCache.set("grid", mesh);
 
 		return mesh;
-	}
-}
+	},
+};
 
-// biome-ignore lint/complexity/noStaticOnlyClass: TODO: Refactor to not be static
-export class Quad {
-	static createModel(gl: ExtendedWebGLContext) {
+export const Quad = {
+	createModel(gl: ExtendedWebGLContext) {
 		return new Model(Quad.createMesh(gl));
-	}
+	},
 
-	static createMesh(gl: ExtendedWebGLContext) {
+	createMesh(gl: ExtendedWebGLContext) {
 		const aVert = [-0.5, 0.5, 0, -0.5, -0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0];
 		const aUV = [0, 0, 0, 1, 1, 1, 1, 0];
 		const aIndex = [0, 1, 2, 2, 3, 0];
@@ -133,16 +131,15 @@ export class Quad {
 		mesh.doBlending = true;
 
 		return mesh;
-	}
-}
+	},
+};
 
-// biome-ignore lint/complexity/noStaticOnlyClass: TODO: Refactor to not be static
-export class MultiQuad {
-	static createModel(gl: ExtendedWebGLContext) {
+export const MultiQuad = {
+	createModel(gl: ExtendedWebGLContext) {
 		return new Model(MultiQuad.createMesh(gl));
-	}
+	},
 
-	static createMesh(gl: ExtendedWebGLContext) {
+	createMesh(gl: ExtendedWebGLContext) {
 		const aIndex: number[] = [];
 		const aUV: number[] = [];
 		const aVert: number[] = [];
@@ -174,16 +171,15 @@ export class MultiQuad {
 		mesh.doBlending = true;
 
 		return mesh;
-	}
-}
+	},
+};
 
-// biome-ignore lint/complexity/noStaticOnlyClass: TODO: Refactor to not be static
-export class Cube {
-	static createModel(gl: ExtendedWebGLContext, name = "Cube") {
+export const Cube = {
+	createModel(gl: ExtendedWebGLContext, name = "Cube") {
 		return new Model(Cube.createMesh(gl, name, 1, 1, 1, 0, 0, 0));
-	}
+	},
 
-	static createMesh(
+	createMesh(
 		gl: ExtendedWebGLContext,
 		name: string,
 		width: number,
@@ -331,5 +327,5 @@ export class Cube {
 		mesh.noCulling = true;
 
 		return mesh;
-	}
-}
+	},
+};
