@@ -2,10 +2,11 @@ import { Matrix4 } from "./Math";
 import { Transform } from "./Transform";
 import type { ExtendedWebGLContext } from "./webgl2-types";
 
-enum CameraModes {
-	FREE = 0,
-	ORBIT = 1 << 0,
-}
+const CameraModesEnum = {
+	FREE: 0,
+	ORBIT: 1 << 0,
+};
+type CameraModes = (typeof CameraModesEnum)[keyof typeof CameraModesEnum];
 
 export class Camera {
 	projectionMatrix: Float32Array;
@@ -13,8 +14,8 @@ export class Camera {
 	transform: Transform;
 	mode: CameraModes;
 
-	public static MODE_FREE = CameraModes.FREE;
-	public static MODE_ORBIT = CameraModes.ORBIT;
+	public static MODE_FREE = CameraModesEnum.FREE;
+	public static MODE_ORBIT = CameraModesEnum.ORBIT;
 
 	constructor(
 		gl: ExtendedWebGLContext,
@@ -127,6 +128,9 @@ export class CameraController {
 	onMoveHandler: (e: MouseEvent) => void;
 
 	constructor(gl: ExtendedWebGLContext, camera: Camera) {
+		if (!("getBoundingClientRect" in gl.canvas))
+			throw new Error("Incorrect canvas type");
+
 		const box = gl.canvas.getBoundingClientRect();
 
 		this.canvas = gl.canvas; // To bind to canvas events
@@ -148,10 +152,7 @@ export class CameraController {
 		this.onMoveHandler = (e) => this.onMouseMove(e);
 
 		this.canvas.addEventListener("mousedown", (e) => this.onMouseDown(e));
-		this.canvas.addEventListener("mousewheel", (e) => this.onMouseWheel(e)); // Everything BUT Firefox
-		this.canvas.addEventListener("DOMMouseScroll", (e) =>
-			this.onMouseWheel(<WheelEvent>e),
-		); // Firefox (derp)
+		this.canvas.addEventListener("wheel", (e) => this.onMouseWheel(e));
 	}
 
 	getMouseVec2(e: MouseEvent) {
@@ -175,7 +176,7 @@ export class CameraController {
 	}
 
 	onMouseWheel(e: WheelEvent) {
-		const delta = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail)); // Try to map wheel movement to a number between -1 and 1
+		const delta = Math.max(-1, Math.min(1, -e.deltaY)); // Try to map wheel movement to a number between -1 and 1
 
 		this.camera.panZ((-delta * this.zoomRate) / this.canvas.height); // Keep the movement speed the same, no matter the height difference
 	}
