@@ -1,9 +1,9 @@
-import * as TRANSFORM from "./Transform";
-const { Transform } = TRANSFORM;
+import { Transform } from "./Transform";
+import type { MeshVAO } from "./webgl2-types";
 
 export class Model {
 	mesh: MeshVAO;
-	transform: TRANSFORM.Transform;
+	transform: Transform;
 
 	constructor(meshData: MeshVAO) {
 		this.transform = new Transform();
@@ -61,7 +61,3 @@ export class Model {
 		return this;
 	}
 }
-
-export default {
-	Model,
-};

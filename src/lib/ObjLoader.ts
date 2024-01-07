@@ -1,3 +1,6 @@
+import type { ExtendedWebGLContext } from "./webgl2-types";
+
+// biome-ignore lint/complexity/noStaticOnlyClass: TODO: Refactor to not be static
 export class ObjLoader {
 	static stringToMesh(
 		gl: ExtendedWebGLContext,
@@ -106,7 +109,3 @@ export class ObjLoader {
 		return [fIndex, fVert, fNorm, fUV];
 	}
 }
-
-export default {
-	ObjLoader,
-};

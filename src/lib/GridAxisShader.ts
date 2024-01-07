@@ -1,8 +1,7 @@
-import * as SHADER from "../lib/Shader";
+import { Shader } from "../lib/Shader";
 import vShader from "../shaders/grid_axis_vshader.glsl";
 import fShader from "../shaders/grid_axis_fshader.glsl";
-
-const { Shader } = SHADER;
+import type { ExtendedWebGLContext, MixedFloat32Array } from "./webgl2-types";
 
 export class GridAxisShader extends Shader {
 	constructor(gl: ExtendedWebGLContext, projectionMatrix: MixedFloat32Array) {
@@ -16,7 +15,3 @@ export class GridAxisShader extends Shader {
 		gl.useProgram(null);
 	}
 }
-
-export default {
-	GridAxisShader,
-};

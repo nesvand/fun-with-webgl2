@@ -1,3 +1,5 @@
+import { RenderLoopCallback } from "./webgl2-types";
+
 const ONE_SECOND: number = 1000;
 
 export class RenderLoop {
@@ -71,7 +73,3 @@ export class RenderLoop {
 		this.isActive = false;
 	}
 }
-
-export default {
-	RenderLoop,
-};

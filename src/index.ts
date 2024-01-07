@@ -1,59 +1,53 @@
 // Libs
-import * as GL from "./lib/gl";
-import * as SHADER from "./lib/Shader";
-import * as RENDERLOOP from "./lib/RenderLoop";
-import * as MODEL from "./lib/Model";
-import * as CAMERA from "./lib/Camera";
-import * as OBJLOADER from "./lib/ObjLoader";
-
-const { GLInstance, GLUtil } = GL;
-const { Shader } = SHADER;
-const { RenderLoop } = RENDERLOOP;
-const { Model } = MODEL;
-const { Camera, CameraController } = CAMERA;
-const { ObjLoader } = OBJLOADER;
+import { GLInstance, GLUtil } from "./lib/gl";
+import { Shader } from "./lib/Shader";
+import { RenderLoop } from "./lib/RenderLoop";
+import { Model } from "./lib/Model";
+import { Camera, CameraController } from "./lib/Camera";
+import { ObjLoader } from "./lib/ObjLoader";
 
 // Shaders
-import * as GRIDAXISSHADER from "./lib/GridAxisShader";
+import { GridAxisShader } from "./lib/GridAxisShader";
 import skyVShader from "./shaders/skyVShader.glsl";
 import skyFShader from "./shaders/skyFShader.glsl";
 import vShader from "./shaders/vShader.glsl";
 import fShader from "./shaders/fShader.glsl";
 
-const { GridAxisShader } = GRIDAXISSHADER;
-
 // Models
 import * as PRIMITIVES from "./lib/Primatives";
 // Model Courtesy of @Enthymeme - http://www.blendswap.com/blends/view/73788
 import pirateObjFile from "bundle-text:./assets/pirate_girl.obj";
+import {
+	ExtendedWebGLContext,
+	ExtendedWebGLContextLike,
+	MixedFloat32Array,
+} from "./lib/webgl2-types";
 
 const { GridAxis, Quad, MultiQuad, Cube } = PRIMITIVES;
 
 window.addEventListener("load", () => {
-	// Global Context
-	let gl: ExtendedWebGLContextLike;
-
 	// Global Camera
-	let gCamera: CAMERA.Camera;
-	let gCameraCtrl: CAMERA.CameraController;
+	let gCamera: Camera;
+	let gCameraCtrl: CameraController;
 
 	// Render Loop
 	// let gRLoop: RenderLoop;
 
 	// Grid
-	let gGridShader: SHADER.Shader;
-	let gGridModel: MODEL.Model;
+	let gGridShader: Shader;
+	let gGridModel: Model;
 
 	// Skymap
 	let gSkymapShader: SkymapShader;
-	let gSkymapModel: MODEL.Model;
+	let gSkymapModel: Model;
 
 	let cubeShader: TestShader;
 	let pirateShader: TestShader;
-	let gModel: MODEL.Model;
-	let gModel2: MODEL.Model;
+	let gModel: Model;
+	let gModel2: Model;
 
-	gl = GLInstance("glcanvas");
+	// Global Context
+	const gl = GLInstance("glcanvas");
 
 	if (gl) {
 		gl.fFitScreen(0.95, 0.95).fClear();

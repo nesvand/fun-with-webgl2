@@ -1,15 +1,20 @@
-import * as GLOBALS from "./globals";
-const {
+import {
 	ATTR_NORMAL_LOC,
 	ATTR_NORMAL_NAME,
 	ATTR_POSITION_LOC,
 	ATTR_POSITION_NAME,
 	ATTR_UV_LOC,
 	ATTR_UV_NAME,
-} = GLOBALS;
+} from "./globals";
+import { Model } from "./Model";
+import type {
+	AttribLocations,
+	ExtendedWebGLContext,
+	MixedFloat32Array,
+	UniformLocations,
+} from "./webgl2-types";
 
-import Model from "./Model";
-
+// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 export class ShaderUtil {
 	static createShader(gl: ExtendedWebGLContext, source: string, type: number) {
 		const shader = gl.createShader(type);
@@ -253,8 +258,3 @@ export class Shader {
 		return this;
 	}
 }
-
-export default {
-	ShaderUtil,
-	Shader,
-};

@@ -1,3 +1,5 @@
+import { MixedFloat32Array } from "./webgl2-types";
+
 //###########################################################################################
 export class Vector3 {
 	x: number;
@@ -685,8 +687,3 @@ export class Matrix4 {
 		out[15] = out[3] * x + out[7] * y + out[11] * z + out[15];
 	}
 }
-
-export default {
-	Vector3,
-	Matrix4,
-};

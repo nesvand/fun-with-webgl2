@@ -1,8 +1,6 @@
-import * as TRANSFORM from "./Transform";
-import * as MATH from "./Math";
-
-const { Transform } = TRANSFORM;
-const { Matrix4 } = MATH;
+import { Transform } from "./Transform";
+import { Matrix4 } from "./Math";
+import type { ExtendedWebGLContext } from "./webgl2-types";
 
 enum CameraModes {
 	FREE = 0,
@@ -12,7 +10,7 @@ enum CameraModes {
 export class Camera {
 	projectionMatrix: Float32Array;
 	viewMatrix: Float32Array;
-	transform: TRANSFORM.Transform;
+	transform: Transform;
 	mode: CameraModes;
 
 	public static MODE_FREE = CameraModes.FREE;
@@ -204,8 +202,3 @@ export class CameraController {
 		this.prevY = y;
 	}
 }
-
-export default {
-	Camera,
-	CameraController,
-};

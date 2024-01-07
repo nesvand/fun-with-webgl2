@@ -1,5 +1,5 @@
-import * as GLOBALS from "./globals";
-const { ATTR_NORMAL_LOC, ATTR_POSITION_LOC, ATTR_UV_LOC } = GLOBALS;
+import { ATTR_NORMAL_LOC, ATTR_POSITION_LOC, ATTR_UV_LOC } from "./globals";
+import type { ExtendedWebGLContext, MeshVAO } from "./webgl2-types";
 
 export function GLInstance(canvasID: string) {
 	const canvas = <HTMLCanvasElement>document.getElementById(canvasID);
@@ -227,8 +227,3 @@ export class GLUtil {
 		}, []);
 	}
 }
-
-export default {
-	GLInstance,
-	GLUtil,
-};

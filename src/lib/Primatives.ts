@@ -1,9 +1,8 @@
-import * as GLOBALS from "./globals";
-import * as MODEL from "./Model";
+import { ATTR_POSITION_LOC } from "./globals";
+import { Model } from "./Model";
+import type { ExtendedWebGLContext } from "./webgl2-types";
 
-const { ATTR_POSITION_LOC } = GLOBALS;
-const { Model } = MODEL;
-
+// biome-ignore lint/complexity/noStaticOnlyClass: TODO: Refactor to not be static
 export class GridAxis {
 	static createModel(gl: ExtendedWebGLContext, axis: boolean) {
 		return new Model(GridAxis.createMesh(gl, axis));
@@ -120,6 +119,7 @@ export class GridAxis {
 	}
 }
 
+// biome-ignore lint/complexity/noStaticOnlyClass: TODO: Refactor to not be static
 export class Quad {
 	static createModel(gl: ExtendedWebGLContext) {
 		return new Model(Quad.createMesh(gl));
@@ -138,6 +138,7 @@ export class Quad {
 	}
 }
 
+// biome-ignore lint/complexity/noStaticOnlyClass: TODO: Refactor to not be static
 export class MultiQuad {
 	static createModel(gl: ExtendedWebGLContext) {
 		return new Model(MultiQuad.createMesh(gl));
@@ -178,6 +179,7 @@ export class MultiQuad {
 	}
 }
 
+// biome-ignore lint/complexity/noStaticOnlyClass: TODO: Refactor to not be static
 export class Cube {
 	static createModel(gl: ExtendedWebGLContext, name: string = "Cube") {
 		return new Model(Cube.createMesh(gl, name, 1, 1, 1, 0, 0, 0));
@@ -333,10 +335,3 @@ export class Cube {
 		return mesh;
 	}
 }
-
-export default {
-	GridAxis,
-	Quad,
-	MultiQuad,
-	Cube,
-};
