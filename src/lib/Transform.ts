@@ -1,28 +1,17 @@
 import { Matrix4, Vector3 } from "./Math";
 
 export class Transform {
-	position: Vector3;
-	scale: Vector3;
-	rotation: Vector3;
-	matView: Matrix4;
-	matNormal: Float32Array;
-	forward: Float32Array;
-	up: Float32Array;
-	right: Float32Array;
+	// Transform vectors
+	position = new Vector3(0, 0, 0); // Traditional X, Y, Z 3d positioning
+	scale = new Vector3(1, 1, 1); // How much to scale a mesh. 1 means no scaling
+	rotation = new Vector3(0, 0, 0); // Hold rotation values based on degrees - object will translate it to radians
+	matView = new Matrix4(); // Cache the results when calling updateMatrix
+	matNormal = new Float32Array(9); // This is a Mat3 raw array to hold values - good enough for what it is used for
 
-	constructor() {
-		// Transform vectors
-		this.position = new Vector3(0, 0, 0); // Traditional X, Y, Z 3d positioning
-		this.scale = new Vector3(1, 1, 1); // How much to scale a mesh. 1 means no scaling
-		this.rotation = new Vector3(0, 0, 0); // Hold rotation values based on degrees - object will translate it to radians
-		this.matView = new Matrix4(); // Cache the results when calling updateMatrix
-		this.matNormal = new Float32Array(9); // This is a Mat3 raw array to hold values - good enough for what it is used for
-
-		// Directional vectors
-		this.forward = new Float32Array(4); // When rotating keep track of what the forward direction is
-		this.up = new Float32Array(4); // The 'up' direction - invert to get 'bottom'
-		this.right = new Float32Array(4); // The 'right' direction - invert to get 'left'
-	}
+	// Directional vectors
+	forward = new Float32Array(4); // When rotating keep track of what the forward direction is
+	up = new Float32Array(4); // The 'up' direction - invert to get 'bottom'
+	right = new Float32Array(4); // The 'right' direction - invert to get 'left'
 
 	// ---------------------------
 	// METHODS
