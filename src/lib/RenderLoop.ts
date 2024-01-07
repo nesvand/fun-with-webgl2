@@ -7,8 +7,8 @@ export class RenderLoop {
 	callback: RenderLoopCallback;
 	isActive: boolean;
 	fps: number;
-	msFpsLimit: number;
-	run: Function;
+	msFpsLimit: number | undefined;
+	run: FrameRequestCallback;
 
 	constructor(cb: RenderLoopCallback, fps?: number) {
 		const self = this;
@@ -31,9 +31,12 @@ export class RenderLoop {
 		function limitedRun() {
 			// Calc deltatime between frames and the FPS currently
 			const msCurrent = performance.now();
+			if (self.msLastFrame === null) throw Error("msLastFrame is null");
 			const msDelta = msCurrent - self.msLastFrame;
 			const deltaTime = msDelta / ONE_SECOND; // What fraction of a single second has passed
 
+			if (typeof self.msFpsLimit !== "number")
+				throw Error("msFpsLimit is not a number");
 			if (msDelta >= self.msFpsLimit) {
 				// Now execute frame since the correct amount of time has elapsed
 				self.fps = Math.floor(1 / deltaTime);
@@ -49,6 +52,7 @@ export class RenderLoop {
 		function optimisedRun() {
 			// Calc deltatime between frames and the FPS currently
 			const msCurrent = performance.now(); // gives you the whole number of ms since the dawn of time
+			if (self.msLastFrame === null) throw Error("msLastFrame is null");
 			const deltaTime = (msCurrent - self.msLastFrame) / ONE_SECOND; // ms between frames as a fraction of a second
 
 			// Now execute frame since the correct amount of time has elapsed
@@ -65,7 +69,7 @@ export class RenderLoop {
 	start(): RenderLoop {
 		this.isActive = true;
 		this.msLastFrame = performance.now();
-		window.requestAnimationFrame(<FrameRequestCallback>this.run);
+		window.requestAnimationFrame(this.run);
 		return this;
 	}
 
