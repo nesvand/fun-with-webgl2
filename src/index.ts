@@ -15,7 +15,12 @@ import vShader from "./shaders/vShader.glsl";
 
 // Models
 import * as PRIMITIVES from "./lib/Primatives";
-import { ExtendedWebGLContext, MixedFloat32Array } from "./lib/webgl2-types";
+import type {
+	ExtendedWebGLContext,
+	MixedFloat32Array,
+	SkymapUniformLocations,
+	TestUniformLocations,
+} from "./lib/webgl2-types";
 // Model Courtesy of @Enthymeme - http://www.blendswap.com/blends/view/73788
 import pirateObjFile from "bundle-text:./assets/pirate_girl.obj";
 
@@ -106,7 +111,7 @@ window.addEventListener("load", () => {
 				.activate()
 				.preRender()
 				.setCameraMatrix(gCamera.getMatrix(false))
-				// .setTime(performance.now())
+				.setTime(performance.now())
 				.renderModel(gSkymapModel);
 
 			gGridShader
@@ -118,14 +123,14 @@ window.addEventListener("load", () => {
 				.activate()
 				.preRender()
 				.setCameraMatrix(gCamera.viewMatrix)
-				// .setTime(performance.now())
+				.setTime(performance.now())
 				.renderModel(gModel.preRender());
 
 			pirateShader
 				.activate()
 				.preRender()
 				.setCameraMatrix(gCamera.viewMatrix)
-				// .setTime(performance.now())
+				.setTime(performance.now())
 				.renderModel(gModel2.preRender());
 		}
 	}
@@ -133,12 +138,12 @@ window.addEventListener("load", () => {
 
 class TestShader extends Shader {
 	mainTexture: WebGLTexture;
-	// uniformLoc: TestUniformLocations;
+	declare uniformLoc: TestUniformLocations;
 
 	constructor(gl: ExtendedWebGLContext, projectionMatrix: MixedFloat32Array) {
 		super(gl, vShader, fShader);
 
-		// this.uniformLoc.time = gl.getUniformLocation(this.program, 'uTime');
+		this.uniformLoc.time = gl.getUniformLocation(this.program, "uTime");
 
 		// Standard Uniforms
 		this.setPerspective(projectionMatrix);
@@ -146,10 +151,10 @@ class TestShader extends Shader {
 		gl.useProgram(null);
 	}
 
-	// setTime (t: number) {
-	//   this.gl.uniform1f(this.uniformLoc.time, t);
-	//   return this;
-	// }
+	setTime(t: number) {
+		this.gl.uniform1f(this.uniformLoc.time, t);
+		return this;
+	}
 
 	setTexture(textureID: WebGLTexture | null) {
 		if (textureID) {
@@ -172,7 +177,7 @@ class TestShader extends Shader {
 class SkymapShader extends Shader {
 	texDay: WebGLTexture | null;
 	texNight: WebGLTexture | null;
-	// uniformLoc: SkymapUniformLocations;
+	declare uniformLoc: SkymapUniformLocations;
 
 	constructor(
 		gl: ExtendedWebGLContext,
@@ -183,9 +188,9 @@ class SkymapShader extends Shader {
 		super(gl, skyVShader, skyFShader);
 
 		// Custom Uniforms
-		// this.uniformLoc.time = gl.getUniformLocation(this.program, 'uTime');
-		// this.uniformLoc.dayTex = gl.getUniformLocation(this.program, 'uDayTex');
-		// this.uniformLoc.nightTex = gl.getUniformLocation(this.program, 'uNightTex');
+		this.uniformLoc.time = gl.getUniformLocation(this.program, "uTime");
+		this.uniformLoc.dayTex = gl.getUniformLocation(this.program, "uDayTex");
+		this.uniformLoc.nightTex = gl.getUniformLocation(this.program, "uNightTex");
 
 		// Standard Uniforms
 		this.setPerspective(projectionMatrix);
@@ -195,22 +200,22 @@ class SkymapShader extends Shader {
 		gl.useProgram(null);
 	}
 
-	// setTime (t: number) {
-	//   this.gl.uniform1f(this.uniformLoc.time, t);
-	//   return this;
-	// }
+	setTime(t: number) {
+		this.gl.uniform1f(this.uniformLoc.time, t);
+		return this;
+	}
 
 	preRender() {
 		// Setup Textures
 		// Day
 		this.gl.activeTexture(this.gl.TEXTURE0);
 		this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, this.texDay);
-		// this.gl.uniform1i(this.uniformLoc.dayTex, 0);
+		this.gl.uniform1i(this.uniformLoc.dayTex, 0);
 
 		// Night
 		this.gl.activeTexture(this.gl.TEXTURE1);
 		this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, this.texNight);
-		// this.gl.uniform1i(this.uniformLoc.nightTex, 1);
+		this.gl.uniform1i(this.uniformLoc.nightTex, 1);
 
 		return this;
 	}

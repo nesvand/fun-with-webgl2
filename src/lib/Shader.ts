@@ -141,7 +141,7 @@ export const ShaderUtil = {
 };
 
 export class Shader {
-	program: WebGLProgram | null;
+	program: WebGLProgram;
 	attribLoc: AttribLocations;
 	uniformLoc: UniformLocations;
 
@@ -150,13 +150,14 @@ export class Shader {
 		vertShaderSource: string,
 		fragmentShaderSource: string,
 	) {
-		this.program = ShaderUtil.shaderProgram(
+		const program = ShaderUtil.shaderProgram(
 			gl,
 			vertShaderSource,
 			fragmentShaderSource,
 			true,
 		);
-		if (this.program === null) throw Error("Shader program is null");
+		if (program === null) throw Error("Shader program is null");
+		this.program = program;
 
 		gl.useProgram(this.program);
 		this.attribLoc = ShaderUtil.getStandardAttribLocations(
