@@ -301,7 +301,7 @@ export class Matrix4 {
 	}
 
 	//Calculates a 3x3 normal matrix (transpose inverse) from the 4x4 matrix
-	static normalMat3(out: MixedFloat32Array, a: MixedFloat32Array) {
+	static normalMat3(out: Float32Array, a: Float32Array) {
 		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
 		const a00 = a[0]!;
 		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
@@ -430,18 +430,18 @@ export class Matrix4 {
 
 	//https://github.com/toji/gl-matrix/blob/master/src/gl-matrix/vec4.js, vec4.transformMat4
 	static transformVec4(
-		out: MixedFloat32Array,
-		v: MixedFloat32Array,
-		m: MixedFloat32Array,
+		out: Float32Array,
+		v: [number, number, number, number],
+		m: Float32Array,
 	) {
 		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are always set
-		out[0] = m[0]! * v[0]! + m[4]! * v[1]! + m[8]! * v[2]! + m[12]! * v[3]!;
+		out[0] = m[0]! * v[0] + m[4]! * v[1] + m[8]! * v[2] + m[12]! * v[3];
 		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are always set
-		out[1] = m[1]! * v[0]! + m[5]! * v[1]! + m[9]! * v[2]! + m[13]! * v[3]!;
+		out[1] = m[1]! * v[0] + m[5]! * v[1] + m[9]! * v[2] + m[13]! * v[3];
 		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are always set
-		out[2] = m[2]! * v[0]! + m[6]! * v[1]! + m[10]! * v[2]! + m[14]! * v[3]!;
+		out[2] = m[2]! * v[0] + m[6]! * v[1] + m[10]! * v[2] + m[14]! * v[3];
 		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are always set
-		out[3] = m[3]! * v[0]! + m[7]! * v[1]! + m[11]! * v[2]! + m[15]! * v[3]!;
+		out[3] = m[3]! * v[0] + m[7]! * v[1] + m[11]! * v[2] + m[15]! * v[3];
 
 		return out;
 	}
@@ -548,7 +548,7 @@ export class Matrix4 {
 
 	//....................................................................
 	// Static Transformation
-	static scale(out: MixedFloat32Array, x: number, y: number, z: number) {
+	static scale(out: Float32Array, x: number, y: number, z: number) {
 		out[0] *= x;
 		out[1] *= x;
 		out[2] *= x;
@@ -565,7 +565,7 @@ export class Matrix4 {
 		return out;
 	}
 
-	static rotateY(out: MixedFloat32Array, rad: number) {
+	static rotateY(out: Float32Array, rad: number) {
 		const s = Math.sin(rad);
 		const c = Math.cos(rad);
 
@@ -599,7 +599,7 @@ export class Matrix4 {
 		return out;
 	}
 
-	static rotateX(out: MixedFloat32Array, rad: number) {
+	static rotateX(out: Float32Array, rad: number) {
 		const s = Math.sin(rad);
 		const c = Math.cos(rad);
 
@@ -633,7 +633,7 @@ export class Matrix4 {
 		return out;
 	}
 
-	static rotateZ(out: MixedFloat32Array, rad: number) {
+	static rotateZ(out: Float32Array, rad: number) {
 		const s = Math.sin(rad);
 		const c = Math.cos(rad);
 
@@ -741,7 +741,7 @@ export class Matrix4 {
 		out[11] = a03 * b20 + a13 * b21 + a23 * b22;
 	}
 
-	static invert(out: MixedFloat32Array, mat?: MixedFloat32Array) {
+	static invert(out: Float32Array, mat?: Float32Array) {
 		let _mat = mat;
 		// If the input isn't sent, then the output is considered the input
 		if (typeof _mat === "undefined") {
@@ -824,7 +824,7 @@ export class Matrix4 {
 	}
 
 	// https://github.com/toji/gl-matrix/blob/master/src/gl-matrix/mat4.js  mat4.scalar.translate = function (out, a, v) {
-	static translate(out: MixedFloat32Array, x: number, y: number, z: number) {
+	static translate(out: Float32Array, x: number, y: number, z: number) {
 		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
 		out[12] = out[0]! * x + out[4]! * y + out[8]! * z + out[12]!;
 		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
