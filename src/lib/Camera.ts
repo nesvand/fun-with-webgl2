@@ -1,5 +1,6 @@
 import { Matrix4 } from "./Math";
 import { Transform } from "./Transform";
+import { mustIndexArray } from "./util";
 import type { ExtendedWebGLContext } from "./webgl2-types";
 
 const CameraModesEnum = {
@@ -33,27 +34,21 @@ export class Camera {
 		}
 
 		this.updateViewMatrix();
-		// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
-		this.transform.position.x += this.transform.right[0]! * v;
-		// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
-		this.transform.position.y += this.transform.right[1]! * v;
-		// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
-		this.transform.position.z += this.transform.right[2]! * v;
+		this.transform.position.x += mustIndexArray(this.transform.right, 0) * v;
+		this.transform.position.y += mustIndexArray(this.transform.right, 1) * v;
+		this.transform.position.z += mustIndexArray(this.transform.right, 2) * v;
 	}
 
 	panY(v: number) {
 		this.updateViewMatrix();
-		// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
-		this.transform.position.y += this.transform.up[1]! * v;
+		this.transform.position.y += mustIndexArray(this.transform.up, 1) * v;
 
 		if (this.mode === CameraModesEnum.ORBIT) {
 			return;
 		}
 
-		// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
-		this.transform.position.x += this.transform.up[0]! * v;
-		// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
-		this.transform.position.z += this.transform.up[2]! * v;
+		this.transform.position.x += mustIndexArray(this.transform.up, 0) * v;
+		this.transform.position.z += mustIndexArray(this.transform.up, 2) * v;
 	}
 
 	panZ(v: number) {
@@ -62,12 +57,12 @@ export class Camera {
 		if (this.mode === CameraModesEnum.ORBIT) {
 			this.transform.position.z += v;
 		} else {
-			// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
-			this.transform.position.x += this.transform.forward[0]! * v;
-			// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
-			this.transform.position.y += this.transform.forward[1]! * v;
-			// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
-			this.transform.position.z += this.transform.forward[2]! * v;
+			this.transform.position.x +=
+				mustIndexArray(this.transform.forward, 0) * v;
+			this.transform.position.y +=
+				mustIndexArray(this.transform.forward, 1) * v;
+			this.transform.position.z +=
+				mustIndexArray(this.transform.forward, 2) * v;
 		}
 	}
 
