@@ -14,72 +14,67 @@ export class Camera {
 	transform: Transform;
 	mode: CameraModes;
 
-	public static MODE_FREE = CameraModesEnum.FREE;
-	public static MODE_ORBIT = CameraModesEnum.ORBIT;
-
-	constructor(
-		gl: ExtendedWebGLContext,
-		fov?: number,
-		near?: number,
-		far?: number,
-	) {
+	constructor(gl: ExtendedWebGLContext, fov = 45, near = 0.1, far = 100) {
 		const ratio = gl.canvas.width / gl.canvas.height;
 
 		// Setup the perspective matrix
 		this.projectionMatrix = new Float32Array(16);
-		Matrix4.perspective(
-			this.projectionMatrix,
-			fov || 45,
-			ratio,
-			near || 0.1,
-			far || 100,
-		);
+		Matrix4.perspective(this.projectionMatrix, fov, ratio, near, far);
 
 		this.transform = new Transform(); // Setup transform to control the position of the camera
 		this.viewMatrix = new Float32Array(16); // Cache the matrix that will hold the inverse of the transform
 
-		this.mode = Camera.MODE_ORBIT; // Set what sort of control mode to use
+		this.mode = CameraModesEnum.ORBIT; // Set what sort of control mode to use
 	}
 
 	panX(v: number) {
-		if (this.mode === Camera.MODE_ORBIT) {
+		if (this.mode === CameraModesEnum.ORBIT) {
 			return;
 		}
 
 		this.updateViewMatrix();
-		this.transform.position.x += this.transform.right[0] * v;
-		this.transform.position.y += this.transform.right[1] * v;
-		this.transform.position.z += this.transform.right[2] * v;
+		// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
+		this.transform.position.x += this.transform.right[0]! * v;
+		// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
+		this.transform.position.y += this.transform.right[1]! * v;
+		// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
+		this.transform.position.z += this.transform.right[2]! * v;
 	}
 
 	panY(v: number) {
 		this.updateViewMatrix();
-		this.transform.position.y += this.transform.up[1] * v;
+		// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
+		this.transform.position.y += this.transform.up[1]! * v;
 
-		if (this.mode === Camera.MODE_ORBIT) {
+		if (this.mode === CameraModesEnum.ORBIT) {
 			return;
 		}
 
-		this.transform.position.x += this.transform.up[0] * v;
-		this.transform.position.z += this.transform.up[2] * v;
+		// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
+		this.transform.position.x += this.transform.up[0]! * v;
+		// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
+		this.transform.position.z += this.transform.up[2]! * v;
 	}
 
 	panZ(v: number) {
 		this.updateViewMatrix();
 
-		if (this.mode === Camera.MODE_ORBIT) {
+		if (this.mode === CameraModesEnum.ORBIT) {
 			this.transform.position.z += v;
 		} else {
-			this.transform.position.x += this.transform.forward[0] * v;
-			this.transform.position.y += this.transform.forward[1] * v;
-			this.transform.position.z += this.transform.forward[2] * v;
+			// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
+			this.transform.position.x += this.transform.forward[0]! * v;
+			// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
+			this.transform.position.y += this.transform.forward[1]! * v;
+			// biome-ignore lint/style/noNonNullAssertion: Initialised as a Float32Array size 4
+			this.transform.position.z += this.transform.forward[2]! * v;
 		}
 	}
 
 	updateViewMatrix() {
 		// Optimise camera transform update because we have no need for scale or rotateZ
 
-		if (this.mode === Camera.MODE_FREE) {
+		if (this.mode === CameraModesEnum.FREE) {
 			this.transform.matView
 				.reset()
 				.vtranslate(this.transform.position)
@@ -115,17 +110,18 @@ export class Camera {
 export class CameraController {
 	canvas: HTMLCanvasElement;
 	camera: Camera;
-	rotationRate: number;
-	panRate: number;
-	zoomRate: number;
 	offsetX: number;
 	offsetY: number;
-	initX: number;
-	initY: number;
-	prevX: number;
-	prevY: number;
 	onUpHandler: (e: MouseEvent) => void;
 	onMoveHandler: (e: MouseEvent) => void;
+
+	rotationRate = -300; // How fast to rotate, degrees per delta of dragging
+	panRate = 5; // How fast to pan, max unit per delta of dragging
+	zoomRate = 200; // How fast to zoom - can be viewed as back/forward movement
+	initX = 0; // Starting x,y position on mouse down
+	initY = 0;
+	prevX = 0; // Previous x,y position on mouse down
+	prevY = 0;
 
 	constructor(gl: ExtendedWebGLContext, camera: Camera) {
 		if (!("getBoundingClientRect" in gl.canvas))
@@ -136,17 +132,8 @@ export class CameraController {
 		this.canvas = gl.canvas; // To bind to canvas events
 		this.camera = camera; // Camera control reference
 
-		this.rotationRate = -300; // How fast to rotate, degrees per delta of dragging
-		this.panRate = 5; // How fast to pan, max unit per delta of dragging
-		this.zoomRate = 200; // How fast to zoom - can be viewed as back/forward movement
-
 		this.offsetX = box.left; // Help calc global x,y coords
 		this.offsetY = box.top;
-
-		this.initX = 0; // Starting x,y position on mouse down
-		this.initY = 0;
-		this.prevX = 0; // Previous x,y position on mouse down
-		this.prevY = 0;
 
 		this.onUpHandler = (e) => this.onMouseUp(e);
 		this.onMoveHandler = (e) => this.onMouseMove(e);
@@ -170,7 +157,7 @@ export class CameraController {
 		this.canvas.addEventListener("mousemove", this.onMoveHandler);
 	}
 
-	onMouseUp(e: MouseEvent) {
+	onMouseUp(_: MouseEvent) {
 		this.canvas.removeEventListener("mouseup", this.onUpHandler);
 		this.canvas.removeEventListener("mousemove", this.onMoveHandler);
 	}
