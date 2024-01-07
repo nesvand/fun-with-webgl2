@@ -14,7 +14,7 @@ export class ObjLoader {
 	}
 
 	static parseObjText(inputText: string, flipYUV: boolean) {
-		const txt = inputText.trim() + "\n";
+		const txt = `${inputText.trim()}\n`;
 
 		let line: string;
 		let items: string[];
