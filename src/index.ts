@@ -24,7 +24,7 @@ import type {
 // Model Courtesy of @Enthymeme - http://www.blendswap.com/blends/view/73788
 import pirateObjFile from "bundle-text:./assets/pirate_girl.obj";
 
-const { GridAxis, Quad, MultiQuad, Cube } = PRIMITIVES;
+const { GridAxis, Cube } = PRIMITIVES;
 
 window.addEventListener("load", () => {
 	// Global Context

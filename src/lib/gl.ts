@@ -1,15 +1,17 @@
 import { ATTR_NORMAL_LOC, ATTR_POSITION_LOC, ATTR_UV_LOC } from "./globals";
+import { mustIndexArray } from "./util";
 import type { ExtendedWebGLContext, MeshVAO } from "./webgl2-types";
 
 export function GLInstance(canvasID: string) {
 	const canvas = document.getElementById(canvasID) as HTMLCanvasElement | null;
 	if (!canvas) throw Error("Invalid canvas element");
+
 	const gl = canvas.getContext("webgl2") as ExtendedWebGLContext | null;
 
+	// Validate WebGL2 context
 	if (!gl) {
 		throw Error("WebGL context is not available.");
 	}
-
 	if (!("style" in gl.canvas)) throw Error("Invalid canvas element");
 
 	gl.mMeshCache = new Map<string, MeshVAO>(); // Cache all the mesh structs, easy to unload buffers if they all exist in one place
@@ -32,7 +34,9 @@ export function GLInstance(canvasID: string) {
 	};
 
 	gl.fCreateArrayBuffer = (floatArray, isStatic = true) => {
-		const buffer = <WebGLBuffer>gl.createBuffer();
+		const buffer = gl.createBuffer();
+		if (!buffer) throw Error("Unable to create buffer.");
+
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 		gl.bufferData(
 			gl.ARRAY_BUFFER,
@@ -171,8 +175,7 @@ export function GLInstance(canvasID: string) {
 				gl.RGBA,
 				gl.RGBA,
 				gl.UNSIGNED_BYTE,
-				// biome-ignore lint/style/noNonNullAssertion: UNSAFE - assuming imageArray is always 6 elements long
-				imageArray[i]!,
+				mustIndexArray(imageArray, i),
 			);
 		}
 
