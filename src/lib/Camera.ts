@@ -1,5 +1,5 @@
-import { Transform } from "./Transform";
 import { Matrix4 } from "./Math";
+import { Transform } from "./Transform";
 import type { ExtendedWebGLContext } from "./webgl2-types";
 
 enum CameraModes {
@@ -127,7 +127,6 @@ export class CameraController {
 	onMoveHandler: (e: MouseEvent) => void;
 
 	constructor(gl: ExtendedWebGLContext, camera: Camera) {
-		const self = this;
 		const box = gl.canvas.getBoundingClientRect();
 
 		this.canvas = gl.canvas; // To bind to canvas events
@@ -145,13 +144,13 @@ export class CameraController {
 		this.prevX = 0; // Previous x,y position on mouse down
 		this.prevY = 0;
 
-		this.onUpHandler = (e) => self.onMouseUp(e);
-		this.onMoveHandler = (e) => self.onMouseMove(e);
+		this.onUpHandler = (e) => this.onMouseUp(e);
+		this.onMoveHandler = (e) => this.onMouseMove(e);
 
-		this.canvas.addEventListener("mousedown", (e) => self.onMouseDown(e));
-		this.canvas.addEventListener("mousewheel", (e) => self.onMouseWheel(e)); // Everything BUT Firefox
+		this.canvas.addEventListener("mousedown", (e) => this.onMouseDown(e));
+		this.canvas.addEventListener("mousewheel", (e) => this.onMouseWheel(e)); // Everything BUT Firefox
 		this.canvas.addEventListener("DOMMouseScroll", (e) =>
-			self.onMouseWheel(<WheelEvent>e),
+			this.onMouseWheel(<WheelEvent>e),
 		); // Firefox (derp)
 	}
 

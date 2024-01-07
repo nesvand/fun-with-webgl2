@@ -1,5 +1,5 @@
-import { ATTR_POSITION_LOC } from "./globals";
 import { Model } from "./Model";
+import { ATTR_POSITION_LOC } from "./globals";
 import type { ExtendedWebGLContext } from "./webgl2-types";
 
 // biome-ignore lint/complexity/noStaticOnlyClass: TODO: Refactor to not be static
@@ -181,7 +181,7 @@ export class MultiQuad {
 
 // biome-ignore lint/complexity/noStaticOnlyClass: TODO: Refactor to not be static
 export class Cube {
-	static createModel(gl: ExtendedWebGLContext, name: string = "Cube") {
+	static createModel(gl: ExtendedWebGLContext, name = "Cube") {
 		return new Model(Cube.createMesh(gl, name, 1, 1, 1, 0, 0, 0));
 	}
 
@@ -198,12 +198,12 @@ export class Cube {
 		const w = width * 0.5;
 		const h = height * 0.5;
 		const d = depth * 0.5;
-		let x0 = x - w;
-		let x1 = x + w;
-		let y0 = y - h;
-		let y1 = y + h;
-		let z0 = z - d;
-		let z1 = z + d;
+		const x0 = x - w;
+		const x1 = x + w;
+		const y0 = y - h;
+		const y1 = y + h;
+		const z0 = z - d;
+		const z1 = z + d;
 
 		const aVert = [
 			x0,
@@ -309,13 +309,13 @@ export class Cube {
 			5,
 		];
 
-		let aIndex: number[] = [];
+		const aIndex: number[] = [];
 
 		for (let i = 0; i < aVert.length / 4; i += 2) {
 			aIndex.push(i, i + 1, Math.floor(i / 4) * 4 + ((i + 2) % 4));
 		}
 
-		let aUV: number[] = [];
+		const aUV: number[] = [];
 
 		for (let i = 0; i < 6; i++) {
 			aUV.push(0, 0, 0, 1, 1, 1, 1, 0);

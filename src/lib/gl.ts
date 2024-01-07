@@ -23,12 +23,12 @@ export function GLInstance(canvasID: string) {
 	gl.clearColor(1, 1, 1, 1); // Set clear colour
 
 	// Methods
-	gl.fClear = function () {
+	gl.fClear = () => {
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 		return gl;
 	};
 
-	gl.fCreateArrayBuffer = function (floatArray, isStatic = true) {
+	gl.fCreateArrayBuffer = (floatArray, isStatic = true) => {
 		const buffer = <WebGLBuffer>gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 		gl.bufferData(
@@ -41,14 +41,14 @@ export function GLInstance(canvasID: string) {
 		return buffer;
 	};
 
-	gl.fCreateMeshVAO = function (
+	gl.fCreateMeshVAO = (
 		name,
 		arrayIndex,
 		arrayVert,
 		arrayNorm,
 		arrayUv,
 		vertLength,
-	) {
+	) => {
 		const meshVAO: MeshVAO = {
 			drawMode: gl.TRIANGLES,
 		};
@@ -125,7 +125,7 @@ export function GLInstance(canvasID: string) {
 		return meshVAO;
 	};
 
-	gl.fLoadTexture = function (name, image, doYFlip) {
+	gl.fLoadTexture = (name, image, doYFlip) => {
 		const texture = gl.createTexture();
 
 		if (doYFlip) {
@@ -153,7 +153,7 @@ export function GLInstance(canvasID: string) {
 		return texture;
 	};
 
-	gl.fLoadCubeMap = function (name, imageArray) {
+	gl.fLoadCubeMap = (name, imageArray) => {
 		if (imageArray.length !== 6) {
 			return null;
 		}
@@ -187,7 +187,7 @@ export function GLInstance(canvasID: string) {
 	// Setters/Getters
 
 	// Set the size of the canvas html element and the rendering view port
-	gl.fSetSize = function (w, h) {
+	gl.fSetSize = (w, h) => {
 		gl.canvas.style.width = w + "px";
 		gl.canvas.style.height = h + "px";
 		gl.canvas.width = w;
@@ -200,16 +200,13 @@ export function GLInstance(canvasID: string) {
 		return gl;
 	};
 
-	gl.fFitScreen = function (wp: number, hp: number) {
-		return gl.fSetSize(
-			window.innerWidth * (wp || 1),
-			window.innerHeight * (hp || 1),
-		);
-	};
+	gl.fFitScreen = (wp: number, hp: number) =>
+		gl.fSetSize(window.innerWidth * (wp || 1), window.innerHeight * (hp || 1));
 
 	return gl;
 }
 
+// biome-ignore lint/complexity/noStaticOnlyClass: TODO: Refactor to not be static
 export class GLUtil {
 	static rgbArray(...args: number[]) {
 		if (args.length === 0) {

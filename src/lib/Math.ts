@@ -19,9 +19,9 @@ export class Vector3 {
 		}
 
 		// Get magnitude based on another vector
-		let x = v.x - this.x;
-		let y = v.y - this.y;
-		let z = v.y - this.z;
+		const x = v.x - this.x;
+		const y = v.y - this.y;
+		const z = v.y - this.z;
 
 		return Math.sqrt(x * x + y * y + z * z);
 	}
@@ -620,7 +620,7 @@ export class Matrix4 {
 			mat = out;
 		}
 
-		let a00 = mat[0];
+		const a00 = mat[0];
 		const a01 = mat[1];
 		const a02 = mat[2];
 		const a03 = mat[3];

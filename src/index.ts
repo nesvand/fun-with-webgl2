@@ -1,27 +1,27 @@
+import { Camera, CameraController } from "./lib/Camera";
+import { Model } from "./lib/Model";
+import { ObjLoader } from "./lib/ObjLoader";
+import { RenderLoop } from "./lib/RenderLoop";
+import { Shader } from "./lib/Shader";
 // Libs
 import { GLInstance, GLUtil } from "./lib/gl";
-import { Shader } from "./lib/Shader";
-import { RenderLoop } from "./lib/RenderLoop";
-import { Model } from "./lib/Model";
-import { Camera, CameraController } from "./lib/Camera";
-import { ObjLoader } from "./lib/ObjLoader";
 
 // Shaders
 import { GridAxisShader } from "./lib/GridAxisShader";
-import skyVShader from "./shaders/skyVShader.glsl";
-import skyFShader from "./shaders/skyFShader.glsl";
-import vShader from "./shaders/vShader.glsl";
 import fShader from "./shaders/fShader.glsl";
+import skyFShader from "./shaders/skyFShader.glsl";
+import skyVShader from "./shaders/skyVShader.glsl";
+import vShader from "./shaders/vShader.glsl";
 
 // Models
 import * as PRIMITIVES from "./lib/Primatives";
-// Model Courtesy of @Enthymeme - http://www.blendswap.com/blends/view/73788
-import pirateObjFile from "bundle-text:./assets/pirate_girl.obj";
 import {
 	ExtendedWebGLContext,
 	ExtendedWebGLContextLike,
 	MixedFloat32Array,
 } from "./lib/webgl2-types";
+// Model Courtesy of @Enthymeme - http://www.blendswap.com/blends/view/73788
+import pirateObjFile from "bundle-text:./assets/pirate_girl.obj";
 
 const { GridAxis, Quad, MultiQuad, Cube } = PRIMITIVES;
 

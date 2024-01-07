@@ -1,6 +1,6 @@
 import { Shader } from "../lib/Shader";
-import vShader from "../shaders/grid_axis_vshader.glsl";
 import fShader from "../shaders/grid_axis_fshader.glsl";
+import vShader from "../shaders/grid_axis_vshader.glsl";
 import type { ExtendedWebGLContext, MixedFloat32Array } from "./webgl2-types";
 
 export class GridAxisShader extends Shader {

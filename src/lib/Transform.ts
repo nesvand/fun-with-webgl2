@@ -1,4 +1,4 @@
-import { Vector3, Matrix4 } from "./Math";
+import { Matrix4, Vector3 } from "./Math";
 
 export class Transform {
 	position: Vector3;

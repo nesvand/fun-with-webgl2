@@ -1,3 +1,4 @@
+import { Model } from "./Model";
 import {
 	ATTR_NORMAL_LOC,
 	ATTR_NORMAL_NAME,
@@ -6,7 +7,6 @@ import {
 	ATTR_UV_LOC,
 	ATTR_UV_NAME,
 } from "./globals";
-import { Model } from "./Model";
 import type {
 	AttribLocations,
 	ExtendedWebGLContext,
