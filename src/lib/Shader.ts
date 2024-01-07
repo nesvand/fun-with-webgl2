@@ -18,6 +18,7 @@ import type {
 export class ShaderUtil {
 	static createShader(gl: ExtendedWebGLContext, source: string, type: number) {
 		const shader = gl.createShader(type);
+		if (shader === null) throw Error("Shader is null");
 
 		gl.shaderSource(shader, source);
 		gl.compileShader(shader);
@@ -46,6 +47,7 @@ export class ShaderUtil {
 	): WebGLProgram | null {
 		// Link shaders together
 		const prog = gl.createProgram();
+		if (prog === null) throw Error("Program is null");
 		gl.attachShader(prog, vShader);
 		gl.attachShader(prog, fShader);
 
@@ -156,19 +158,18 @@ export class Shader {
 			fragmentShaderSource,
 			true,
 		);
+		if (this.program === null) throw Error("Shader program is null");
 
-		if (this.program !== null) {
-			this.gl = gl;
-			gl.useProgram(this.program);
-			this.attribLoc = ShaderUtil.getStandardAttribLocations(
-				this.gl,
-				this.program,
-			);
-			this.uniformLoc = ShaderUtil.getStandardUniformLocations(
-				this.gl,
-				this.program,
-			);
-		}
+		this.gl = gl;
+		gl.useProgram(this.program);
+		this.attribLoc = ShaderUtil.getStandardAttribLocations(
+			this.gl,
+			this.program,
+		);
+		this.uniformLoc = ShaderUtil.getStandardUniformLocations(
+			this.gl,
+			this.program,
+		);
 	}
 
 	// --------------
