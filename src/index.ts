@@ -4,7 +4,7 @@ import { ObjLoader } from "./lib/ObjLoader";
 import { RenderLoop } from "./lib/RenderLoop";
 import { Shader } from "./lib/Shader";
 // Libs
-import { GLInstance, GLUtil } from "./lib/gl";
+import { GLInstance } from "./lib/gl";
 
 // Shaders
 import { GridAxisShader } from "./lib/GridAxisShader";
@@ -22,100 +22,80 @@ import pirateObjFile from "bundle-text:./assets/pirate_girl.obj";
 const { GridAxis, Quad, MultiQuad, Cube } = PRIMITIVES;
 
 window.addEventListener("load", () => {
-	// Global Camera
-	let gCamera: Camera;
-	let gCameraCtrl: CameraController;
-
-	// Render Loop
-	// let gRLoop: RenderLoop;
-
-	// Grid
-	let gGridShader: Shader;
-	let gGridModel: Model;
-
-	// Skymap
-	let gSkymapShader: SkymapShader;
-	let gSkymapModel: Model;
-
-	let cubeShader: TestShader;
-	let pirateShader: TestShader;
-	let gModel: Model;
-	let gModel2: Model;
-
 	// Global Context
 	const gl = GLInstance("glcanvas");
+	if (!gl) throw Error("Unable to create WebGL context.");
 
-	if (gl) {
-		gl.fFitScreen(0.95, 0.95).fClear();
+	gl.fFitScreen(0.95, 0.95).fClear();
 
-		gCamera = new Camera(gl);
-		gCamera.transform.position.set(0, 1, 3);
-		gCameraCtrl = new CameraController(gl, gCamera);
+	// Global Camera
+	const gCamera = new Camera(gl);
+	gCamera.transform.position.set(0, 1, 3);
+	const gCameraCtrl = new CameraController(gl, gCamera);
 
-		// Load up resources
-		gl.fLoadTexture(
-			"tex001",
-			<HTMLImageElement>document.getElementById("imgTex"),
-		);
-		gl.fLoadTexture(
-			"tex002",
-			<HTMLImageElement>document.getElementById("pirateGirl"),
-		);
-		gl.fLoadCubeMap("skybox01", [
-			<HTMLImageElement>document.getElementById("imgDay01"),
-			<HTMLImageElement>document.getElementById("imgDay02"),
-			<HTMLImageElement>document.getElementById("imgDay03"),
-			<HTMLImageElement>document.getElementById("imgDay04"),
-			<HTMLImageElement>document.getElementById("imgDay05"),
-			<HTMLImageElement>document.getElementById("imgDay06"),
-		]);
+	// Load up resources
+	gl.fLoadTexture(
+		"tex001",
+		<HTMLImageElement>document.getElementById("imgTex"),
+	);
+	gl.fLoadTexture(
+		"tex002",
+		<HTMLImageElement>document.getElementById("pirateGirl"),
+	);
+	gl.fLoadCubeMap("skybox01", [
+		<HTMLImageElement>document.getElementById("imgDay01"),
+		<HTMLImageElement>document.getElementById("imgDay02"),
+		<HTMLImageElement>document.getElementById("imgDay03"),
+		<HTMLImageElement>document.getElementById("imgDay04"),
+		<HTMLImageElement>document.getElementById("imgDay05"),
+		<HTMLImageElement>document.getElementById("imgDay06"),
+	]);
 
-		gl.fLoadCubeMap("skybox02", [
-			<HTMLImageElement>document.getElementById("imgSpace01"),
-			<HTMLImageElement>document.getElementById("imgSpace02"),
-			<HTMLImageElement>document.getElementById("imgSpace03"),
-			<HTMLImageElement>document.getElementById("imgSpace04"),
-			<HTMLImageElement>document.getElementById("imgSpace05"),
-			<HTMLImageElement>document.getElementById("imgSpace06"),
-		]);
+	gl.fLoadCubeMap("skybox02", [
+		<HTMLImageElement>document.getElementById("imgSpace01"),
+		<HTMLImageElement>document.getElementById("imgSpace02"),
+		<HTMLImageElement>document.getElementById("imgSpace03"),
+		<HTMLImageElement>document.getElementById("imgSpace04"),
+		<HTMLImageElement>document.getElementById("imgSpace05"),
+		<HTMLImageElement>document.getElementById("imgSpace06"),
+	]);
 
-		// Setup Grid
-		gGridShader = new GridAxisShader(gl, gCamera.projectionMatrix);
-		gGridModel = GridAxis.createModel(gl, false);
+	// Setup Grid
+	const gGridShader = new GridAxisShader(gl, gCamera.projectionMatrix);
+	const gGridModel = GridAxis.createModel(gl, false);
 
-		// Custom models
-		const cubeTexture = gl.mTextureCache.get("tex001");
-		const pirateTexture = gl.mTextureCache.get("tex002");
-		const skyboxTextureA = gl.mTextureCache.get("skybox01");
-		const skyboxTextureB = gl.mTextureCache.get("skybox02");
+	// Custom models
+	const cubeTexture = gl.mTextureCache.get("tex001");
+	const pirateTexture = gl.mTextureCache.get("tex002");
+	const skyboxTextureA = gl.mTextureCache.get("skybox01");
+	const skyboxTextureB = gl.mTextureCache.get("skybox02");
 
-		cubeShader = new TestShader(gl, gCamera.projectionMatrix).setTexture(
-			cubeTexture ? cubeTexture : null,
-		);
-		pirateShader = new TestShader(gl, gCamera.projectionMatrix).setTexture(
-			pirateTexture ? pirateTexture : null,
-		);
+	const cubeShader = new TestShader(gl, gCamera.projectionMatrix).setTexture(
+		cubeTexture ? cubeTexture : null,
+	);
+	const pirateShader = new TestShader(gl, gCamera.projectionMatrix).setTexture(
+		pirateTexture ? pirateTexture : null,
+	);
 
-		gModel = Cube.createModel(gl);
-		gModel.setPosition(-0.1, 0.15, 0.3).setScale(0.3, 0.3, 0.3);
+	const gModel = Cube.createModel(gl);
+	gModel.setPosition(-0.1, 0.15, 0.3).setScale(0.3, 0.3, 0.3);
 
-		gModel2 = new Model(
-			ObjLoader.stringToMesh(gl, "PirateGirl", pirateObjFile, true),
-		);
-		gModel2.setPosition(0, 0, 0).setScale(0.5, 0.5, 0.5);
+	const gModel2 = new Model(
+		ObjLoader.stringToMesh(gl, "PirateGirl", pirateObjFile, true),
+	);
+	gModel2.setPosition(0, 0, 0).setScale(0.5, 0.5, 0.5);
 
-		gSkymapModel = new Model(
-			Cube.createMesh(gl, "Skymap", 100, 100, 100, 0, 0, 0),
-		);
-		gSkymapShader = new SkymapShader(
-			gl,
-			gCamera.projectionMatrix,
-			skyboxTextureA ? skyboxTextureA : null,
-			skyboxTextureB ? skyboxTextureB : null,
-		);
+	const gSkymapModel = new Model(
+		Cube.createMesh(gl, "Skymap", 100, 100, 100, 0, 0, 0),
+	);
+	const gSkymapShader = new SkymapShader(
+		gl,
+		gCamera.projectionMatrix,
+		skyboxTextureA ? skyboxTextureA : null,
+		skyboxTextureB ? skyboxTextureB : null,
+	);
 
-		new RenderLoop(onRender).start();
-	}
+	new RenderLoop(onRender).start();
 
 	function onRender() {
 		if (gl) {
