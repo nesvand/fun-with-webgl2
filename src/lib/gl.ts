@@ -2,8 +2,9 @@ import { ATTR_NORMAL_LOC, ATTR_POSITION_LOC, ATTR_UV_LOC } from "./globals";
 import type { ExtendedWebGLContext, MeshVAO } from "./webgl2-types";
 
 export function GLInstance(canvasID: string) {
-	const canvas = <HTMLCanvasElement>document.getElementById(canvasID);
-	const gl = <ExtendedWebGLContext>canvas.getContext("webgl2");
+	const canvas = document.getElementById(canvasID) as HTMLCanvasElement | null;
+	if (!canvas) throw Error("Invalid canvas element");
+	const gl = canvas.getContext("webgl2") as ExtendedWebGLContext | null;
 
 	if (!gl) {
 		throw Error("WebGL context is not available.");
@@ -170,7 +171,8 @@ export function GLInstance(canvasID: string) {
 				gl.RGBA,
 				gl.RGBA,
 				gl.UNSIGNED_BYTE,
-				imageArray[i],
+				// biome-ignore lint/style/noNonNullAssertion: UNSAFE - assuming imageArray is always 6 elements long
+				imageArray[i]!,
 			);
 		}
 
@@ -210,9 +212,8 @@ export function GLInstance(canvasID: string) {
 	return gl;
 }
 
-// biome-ignore lint/complexity/noStaticOnlyClass: TODO: Refactor to not be static
-export class GLUtil {
-	static rgbArray(...args: number[]) {
+export const GLUtil = {
+	rgbArray(...args: number[]) {
 		if (args.length === 0) {
 			return null;
 		}
@@ -226,5 +227,5 @@ export class GLUtil {
 
 			return rgbArray;
 		}, []);
-	}
-}
+	},
+};
