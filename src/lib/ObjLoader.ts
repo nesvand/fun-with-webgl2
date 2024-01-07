@@ -1,8 +1,7 @@
 import type { ExtendedWebGLContext } from "./webgl2-types";
 
-// biome-ignore lint/complexity/noStaticOnlyClass: TODO: Refactor to not be static
-export class ObjLoader {
-	static stringToMesh(
+export const ObjLoader = {
+	stringToMesh(
 		gl: ExtendedWebGLContext,
 		meshName: string,
 		objString: string,
@@ -10,10 +9,11 @@ export class ObjLoader {
 	) {
 		const obj = this.parseObjText(objString, flipYUV);
 
-		return gl.fCreateMeshVAO(meshName, obj[0], obj[1], obj[2], obj[3], 3);
-	}
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+		return gl.fCreateMeshVAO(meshName, obj[0]!, obj[1]!, obj[2]!, obj[3]!, 3);
+	},
 
-	static parseObjText(inputText: string, flipYUV: boolean) {
+	parseObjText(inputText: string, flipYUV: boolean) {
 		const txt = `${inputText.trim()}\n`;
 
 		let line: string;
@@ -44,18 +44,26 @@ export class ObjLoader {
 
 					switch (line.charAt(1)) {
 						case " ":
-							cVert.push(parseFloat(items[0]));
-							cVert.push(parseFloat(items[1]));
-							cVert.push(parseFloat(items[2]));
+							// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+							cVert.push(parseFloat(items[0]!));
+							// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+							cVert.push(parseFloat(items[1]!));
+							// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+							cVert.push(parseFloat(items[2]!));
 							break;
 						case "t":
-							cUV.push(parseFloat(items[0]));
-							cUV.push(parseFloat(items[1]));
+							// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+							cUV.push(parseFloat(items[0]!));
+							// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+							cUV.push(parseFloat(items[1]!));
 							break;
 						case "n":
-							cNorm.push(parseFloat(items[0]));
-							cNorm.push(parseFloat(items[1]));
-							cNorm.push(parseFloat(items[2]));
+							// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+							cNorm.push(parseFloat(items[0]!));
+							// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+							cNorm.push(parseFloat(items[1]!));
+							// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+							cNorm.push(parseFloat(items[2]!));
 							break;
 					}
 					break;
@@ -71,32 +79,44 @@ export class ObjLoader {
 							isQuad = true;
 						}
 
-						if (items[i] in aCache) {
-							fIndex.push(aCache[parseInt(items[i])]);
+						// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+						if (items[i]! in aCache) {
+							// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+							fIndex.push(aCache[parseInt(items[i]!)]!);
 						} else {
-							itemArray = items[i].split("/");
+							// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+							itemArray = items[i]!.split("/");
 
-							index = (parseInt(itemArray[0]) - 1) * 3;
-							fVert.push(cVert[index], cVert[index + 1], cVert[index + 2]);
+							// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+							index = (parseInt(itemArray[0]!) - 1) * 3;
+							// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+							fVert.push(cVert[index]!, cVert[index + 1]!, cVert[index + 2]!);
 
-							index = (parseInt(itemArray[2]) - 1) * 3;
-							fNorm.push(cNorm[index], cNorm[index + 1], cNorm[index + 2]);
+							// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+							index = (parseInt(itemArray[2]!) - 1) * 3;
+							// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+							fNorm.push(cNorm[index]!, cNorm[index + 1]!, cNorm[index + 2]!);
 
 							if (itemArray[1] !== "") {
-								index = (parseInt(itemArray[1]) - 1) * 2;
+								// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+								index = (parseInt(itemArray[1]!) - 1) * 2;
 								fUV.push(
-									cUV[index],
-									!flipYUV ? cUV[index + 1] : 1 - cUV[index + 1],
+									// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+									cUV[index]!,
+									// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+									!flipYUV ? cUV[index + 1]! : 1 - cUV[index + 1]!,
 								);
 							}
 
-							aCache[parseInt(items[i])] = fIndexCount;
+							// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+							aCache[parseInt(items[i]!)] = fIndexCount;
 							fIndex.push(fIndexCount);
 							fIndexCount++;
 						}
 
 						if (i === 3 && isQuad) {
-							fIndex.push(aCache[parseInt(items[0])]);
+							// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
+							fIndex.push(aCache[parseInt(items[0]!)]!);
 						}
 					}
 					break;
@@ -107,5 +127,5 @@ export class ObjLoader {
 		}
 
 		return [fIndex, fVert, fNorm, fUV];
-	}
-}
+	},
+};
