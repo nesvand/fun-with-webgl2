@@ -58,9 +58,9 @@ export function GLInstance(canvasID: string) {
 	) => {
 		const meshVAO: MeshVAO = {
 			drawMode: gl.TRIANGLES,
+			vao: gl.createVertexArray(),
 		};
 
-		meshVAO.vao = gl.createVertexArray();
 		gl.bindVertexArray(meshVAO.vao);
 
 		if (arrayVert) {

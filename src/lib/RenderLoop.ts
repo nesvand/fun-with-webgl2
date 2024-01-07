@@ -53,7 +53,7 @@ export class RenderLoop {
 		}
 
 		if (this.isActive) {
-			window.requestAnimationFrame(<FrameRequestCallback>this.run);
+			window.requestAnimationFrame(this.run);
 		}
 	}
 

@@ -37,8 +37,7 @@ export type ExtendedWebGLContext = WebGL2RenderingContext & {
 
 export type MeshVAO = {
 	drawMode?: number;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	vao?: any;
+	vao: WebGLVertexArrayObject | null;
 	bufVertices?: WebGLBuffer | null;
 	vertexComponentLen?: number;
 	vertexCount?: number;

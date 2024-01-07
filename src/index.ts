@@ -41,28 +41,28 @@ window.addEventListener("load", () => {
 	// Load up resources
 	gl.fLoadTexture(
 		"tex001",
-		<HTMLImageElement>document.getElementById("imgTex"),
+		document.getElementById("imgTex") as HTMLImageElement,
 	);
 	gl.fLoadTexture(
 		"tex002",
-		<HTMLImageElement>document.getElementById("pirateGirl"),
+		document.getElementById("pirateGirl") as HTMLImageElement,
 	);
 	gl.fLoadCubeMap("skybox01", [
-		<HTMLImageElement>document.getElementById("imgDay01"),
-		<HTMLImageElement>document.getElementById("imgDay02"),
-		<HTMLImageElement>document.getElementById("imgDay03"),
-		<HTMLImageElement>document.getElementById("imgDay04"),
-		<HTMLImageElement>document.getElementById("imgDay05"),
-		<HTMLImageElement>document.getElementById("imgDay06"),
+		document.getElementById("imgDay01") as HTMLImageElement,
+		document.getElementById("imgDay02") as HTMLImageElement,
+		document.getElementById("imgDay03") as HTMLImageElement,
+		document.getElementById("imgDay04") as HTMLImageElement,
+		document.getElementById("imgDay05") as HTMLImageElement,
+		document.getElementById("imgDay06") as HTMLImageElement,
 	]);
 
 	gl.fLoadCubeMap("skybox02", [
-		<HTMLImageElement>document.getElementById("imgSpace01"),
-		<HTMLImageElement>document.getElementById("imgSpace02"),
-		<HTMLImageElement>document.getElementById("imgSpace03"),
-		<HTMLImageElement>document.getElementById("imgSpace04"),
-		<HTMLImageElement>document.getElementById("imgSpace05"),
-		<HTMLImageElement>document.getElementById("imgSpace06"),
+		document.getElementById("imgSpace01") as HTMLImageElement,
+		document.getElementById("imgSpace02") as HTMLImageElement,
+		document.getElementById("imgSpace03") as HTMLImageElement,
+		document.getElementById("imgSpace04") as HTMLImageElement,
+		document.getElementById("imgSpace05") as HTMLImageElement,
+		document.getElementById("imgSpace06") as HTMLImageElement,
 	]);
 
 	// Setup Grid
