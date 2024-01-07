@@ -219,42 +219,70 @@ export class Matrix4 {
 	static transpose(out: number[], a: number[]) {
 		//If we are transposing ourselves we can skip a few steps but have to cache some values
 		if (out === a) {
-			const a01 = a[1];
-			const a02 = a[2];
-			const a03 = a[3];
-			const a12 = a[6];
-			const a13 = a[7];
-			const a23 = a[11];
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			const a01 = a[1]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			const a02 = a[2]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			const a03 = a[3]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			const a12 = a[6]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			const a13 = a[7]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			const a23 = a[11]!;
 
-			out[1] = a[4];
-			out[2] = a[8];
-			out[3] = a[12];
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[1] = a[4]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[2] = a[8]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[3] = a[12]!;
 			out[4] = a01;
-			out[6] = a[9];
-			out[7] = a[13];
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[6] = a[9]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[7] = a[13]!;
 			out[8] = a02;
 			out[9] = a12;
-			out[11] = a[14];
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[11] = a[14]!;
 			out[12] = a03;
 			out[13] = a13;
 			out[14] = a23;
 		} else {
-			out[0] = a[0];
-			out[1] = a[4];
-			out[2] = a[8];
-			out[3] = a[12];
-			out[4] = a[1];
-			out[5] = a[5];
-			out[6] = a[9];
-			out[7] = a[13];
-			out[8] = a[2];
-			out[9] = a[6];
-			out[10] = a[10];
-			out[11] = a[14];
-			out[12] = a[3];
-			out[13] = a[7];
-			out[14] = a[11];
-			out[15] = a[15];
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[0] = a[0]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[1] = a[4]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[2] = a[8]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[3] = a[12]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[4] = a[1]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[5] = a[5]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[6] = a[9]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[7] = a[13]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[8] = a[2]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[9] = a[6]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[10] = a[10]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[11] = a[14]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[12] = a[3]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[13] = a[7]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[14] = a[11]!;
+			// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+			out[15] = a[15]!;
 		}
 
 		return out;
@@ -262,22 +290,38 @@ export class Matrix4 {
 
 	//Calculates a 3x3 normal matrix (transpose inverse) from the 4x4 matrix
 	static normalMat3(out: MixedFloat32Array, a: MixedFloat32Array) {
-		const a00 = a[0];
-		const a01 = a[1];
-		const a02 = a[2];
-		const a03 = a[3];
-		const a10 = a[4];
-		const a11 = a[5];
-		const a12 = a[6];
-		const a13 = a[7];
-		const a20 = a[8];
-		const a21 = a[9];
-		const a22 = a[10];
-		const a23 = a[11];
-		const a30 = a[12];
-		const a31 = a[13];
-		const a32 = a[14];
-		const a33 = a[15];
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a00 = a[0]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a01 = a[1]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a02 = a[2]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a03 = a[3]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a10 = a[4]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a11 = a[5]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a12 = a[6]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a13 = a[7]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a20 = a[8]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a21 = a[9]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a22 = a[10]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a23 = a[11]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a30 = a[12]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a31 = a[13]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a32 = a[14]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a33 = a[15]!;
 
 		const b00 = a00 * a11 - a01 * a10;
 		const b01 = a00 * a12 - a02 * a10;
@@ -322,27 +366,47 @@ export class Matrix4 {
 
 	// https://github.com/gregtatum/mdn-model-view-projection/blob/master/shared/matrices.js
 	static multiplyVector(mat4: number[], v: number[]) {
-		const x = v[0];
-		const y = v[1];
-		const z = v[2];
-		const w = v[3];
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 4 elements
+		const x = v[0]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 4 elements
+		const y = v[1]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 4 elements
+		const z = v[2]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 4 elements
+		const w = v[3]!;
 
-		const c1r1 = mat4[0];
-		const c2r1 = mat4[1];
-		const c3r1 = mat4[2];
-		const c4r1 = mat4[3];
-		const c1r2 = mat4[4];
-		const c2r2 = mat4[5];
-		const c3r2 = mat4[6];
-		const c4r2 = mat4[7];
-		const c1r3 = mat4[8];
-		const c2r3 = mat4[9];
-		const c3r3 = mat4[10];
-		const c4r3 = mat4[11];
-		const c1r4 = mat4[12];
-		const c2r4 = mat4[13];
-		const c3r4 = mat4[14];
-		const c4r4 = mat4[15];
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const c1r1 = mat4[0]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const c2r1 = mat4[1]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const c3r1 = mat4[2]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const c4r1 = mat4[3]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const c1r2 = mat4[4]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const c2r2 = mat4[5]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const c3r2 = mat4[6]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const c4r2 = mat4[7]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const c1r3 = mat4[8]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const c2r3 = mat4[9]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const c3r3 = mat4[10]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const c4r3 = mat4[11]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const c1r4 = mat4[12]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const c2r4 = mat4[13]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const c3r4 = mat4[14]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const c4r4 = mat4[15]!;
 
 		return [
 			x * c1r1 + y * c1r2 + z * c1r3 + w * c1r4,
@@ -358,10 +422,14 @@ export class Matrix4 {
 		v: MixedFloat32Array,
 		m: MixedFloat32Array,
 	) {
-		out[0] = m[0] * v[0] + m[4] * v[1] + m[8] * v[2] + m[12] * v[3];
-		out[1] = m[1] * v[0] + m[5] * v[1] + m[9] * v[2] + m[13] * v[3];
-		out[2] = m[2] * v[0] + m[6] * v[1] + m[10] * v[2] + m[14] * v[3];
-		out[3] = m[3] * v[0] + m[7] * v[1] + m[11] * v[2] + m[15] * v[3];
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are always set
+		out[0] = m[0]! * v[0]! + m[4]! * v[1]! + m[8]! * v[2]! + m[12]! * v[3]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are always set
+		out[1] = m[1]! * v[0]! + m[5]! * v[1]! + m[9]! * v[2]! + m[13]! * v[3]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are always set
+		out[2] = m[2]! * v[0]! + m[6]! * v[1]! + m[10]! * v[2]! + m[14]! * v[3]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are always set
+		out[3] = m[3]! * v[0]! + m[7]! * v[1]! + m[11]! * v[2]! + m[15]! * v[3]!;
 
 		return out;
 	}
@@ -373,58 +441,90 @@ export class Matrix4 {
 		a: MixedFloat32Array,
 		b: MixedFloat32Array,
 	) {
-		const a00 = a[0];
-		const a01 = a[1];
-		const a02 = a[2];
-		const a03 = a[3];
-		const a10 = a[4];
-		const a11 = a[5];
-		const a12 = a[6];
-		const a13 = a[7];
-		const a20 = a[8];
-		const a21 = a[9];
-		const a22 = a[10];
-		const a23 = a[11];
-		const a30 = a[12];
-		const a31 = a[13];
-		const a32 = a[14];
-		const a33 = a[15];
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a00 = a[0]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a01 = a[1]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a02 = a[2]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a03 = a[3]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a10 = a[4]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a11 = a[5]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a12 = a[6]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a13 = a[7]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a20 = a[8]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a21 = a[9]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a22 = a[10]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a23 = a[11]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a30 = a[12]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a31 = a[13]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a32 = a[14]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		const a33 = a[15]!;
 
 		// Cache only the current line of the second matrix
-		let b0 = b[0];
-		let b1 = b[1];
-		let b2 = b[2];
-		let b3 = b[3];
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		let b0 = b[0]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		let b1 = b[1]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		let b2 = b[2]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		let b3 = b[3]!;
 
 		out[0] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
 		out[1] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
 		out[2] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
 		out[3] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
 
-		b0 = b[4];
-		b1 = b[5];
-		b2 = b[6];
-		b3 = b[7];
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		b0 = b[4]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		b1 = b[5]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		b2 = b[6]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		b3 = b[7]!;
 
 		out[4] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
 		out[5] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
 		out[6] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
 		out[7] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
 
-		b0 = b[8];
-		b1 = b[9];
-		b2 = b[10];
-		b3 = b[11];
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		b0 = b[8]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		b1 = b[9]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		b2 = b[10]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		b3 = b[11]!;
 
 		out[8] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
 		out[9] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
 		out[10] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
 		out[11] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
 
-		b0 = b[12];
-		b1 = b[13];
-		b2 = b[14];
-		b3 = b[15];
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		b0 = b[12]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		b1 = b[13]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		b2 = b[14]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume to be always using arrays with 16 elements
+		b3 = b[15]!;
 
 		out[12] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
 		out[13] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
@@ -457,14 +557,22 @@ export class Matrix4 {
 		const s = Math.sin(rad);
 		const c = Math.cos(rad);
 
-		const a00 = out[0];
-		const a01 = out[1];
-		const a02 = out[2];
-		const a03 = out[3];
-		const a20 = out[8];
-		const a21 = out[9];
-		const a22 = out[10];
-		const a23 = out[11];
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a00 = out[0]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a01 = out[1]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a02 = out[2]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a03 = out[3]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a20 = out[8]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a21 = out[9]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a22 = out[10]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a23 = out[11]!;
 
 		// Perform axis-specific matrix multiplication
 		out[0] = a00 * c - a20 * s;
@@ -483,14 +591,22 @@ export class Matrix4 {
 		const s = Math.sin(rad);
 		const c = Math.cos(rad);
 
-		const a10 = out[4];
-		const a11 = out[5];
-		const a12 = out[6];
-		const a13 = out[7];
-		const a20 = out[8];
-		const a21 = out[9];
-		const a22 = out[10];
-		const a23 = out[11];
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a10 = out[4]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a11 = out[5]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a12 = out[6]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a13 = out[7]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a20 = out[8]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a21 = out[9]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a22 = out[10]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a23 = out[11]!;
 
 		// Perform axis-specific matrix multiplication
 		out[4] = a10 * c + a20 * s;
@@ -509,14 +625,22 @@ export class Matrix4 {
 		const s = Math.sin(rad);
 		const c = Math.cos(rad);
 
-		const a00 = out[0];
-		const a01 = out[1];
-		const a02 = out[2];
-		const a03 = out[3];
-		const a10 = out[4];
-		const a11 = out[5];
-		const a12 = out[6];
-		const a13 = out[7];
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a00 = out[0]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a01 = out[1]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a02 = out[2]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a03 = out[3]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a10 = out[4]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a11 = out[5]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a12 = out[6]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a13 = out[7]!;
 
 		// Perform axis-specific matrix multiplication
 		out[0] = a00 * c + a10 * s;
@@ -532,35 +656,14 @@ export class Matrix4 {
 	}
 
 	static rotate(out: MixedFloat32Array, rad: number, axis: MixedFloat32Array) {
-		let x = axis[0];
-		let y = axis[1];
-		let z = axis[2];
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		let x = axis[0]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		let y = axis[1]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		let z = axis[2]!;
 
 		let len = Math.sqrt(x * x + y * y + z * z);
-		let s;
-		let c;
-		let t;
-		let a00;
-		let a01;
-		let a02;
-		let a03;
-		let a10;
-		let a11;
-		let a12;
-		let a13;
-		let a20;
-		let a21;
-		let a22;
-		let a23;
-		let b00;
-		let b01;
-		let b02;
-		let b10;
-		let b11;
-		let b12;
-		let b20;
-		let b21;
-		let b22;
 
 		if (Math.abs(len) < 0.000001) {
 			return null;
@@ -571,33 +674,45 @@ export class Matrix4 {
 		y *= len;
 		z *= len;
 
-		s = Math.sin(rad);
-		c = Math.cos(rad);
-		t = 1 - c;
+		const s = Math.sin(rad);
+		const c = Math.cos(rad);
+		const t = 1 - c;
 
-		a00 = out[0];
-		a01 = out[1];
-		a02 = out[2];
-		a03 = out[3];
-		a10 = out[4];
-		a11 = out[5];
-		a12 = out[6];
-		a13 = out[7];
-		a20 = out[8];
-		a21 = out[9];
-		a22 = out[10];
-		a23 = out[11];
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a00 = out[0]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a01 = out[1]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a02 = out[2]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a03 = out[3]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a10 = out[4]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a11 = out[5]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a12 = out[6]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a13 = out[7]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a20 = out[8]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a21 = out[9]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a22 = out[10]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are set
+		const a23 = out[11]!;
 
 		// Construct the elements of the rotation matrix
-		b00 = x * x * t + c;
-		b01 = y * x * t + z * s;
-		b02 = z * x * t - y * s;
-		b10 = x * y * t - z * s;
-		b11 = y * y * t + c;
-		b12 = z * y * t + x * s;
-		b20 = x * z * t + y * s;
-		b21 = y * z * t - x * s;
-		b22 = z * z * t + c;
+		const b00 = x * x * t + c;
+		const b01 = y * x * t + z * s;
+		const b02 = z * x * t - y * s;
+		const b10 = x * y * t - z * s;
+		const b11 = y * y * t + c;
+		const b12 = z * y * t + x * s;
+		const b20 = x * z * t + y * s;
+		const b21 = y * z * t - x * s;
+		const b22 = z * z * t + c;
 
 		// Perform rotation-specific matrix multiplication
 		out[0] = a00 * b00 + a10 * b01 + a20 * b02;
@@ -615,27 +730,44 @@ export class Matrix4 {
 	}
 
 	static invert(out: MixedFloat32Array, mat?: MixedFloat32Array) {
+		let _mat = mat;
 		// If the input isn't sent, then the output is considered the input
-		if (mat === undefined) {
-			mat = out;
+		if (typeof _mat === "undefined") {
+			_mat = out;
 		}
 
-		const a00 = mat[0];
-		const a01 = mat[1];
-		const a02 = mat[2];
-		const a03 = mat[3];
-		const a10 = mat[4];
-		const a11 = mat[5];
-		const a12 = mat[6];
-		const a13 = mat[7];
-		const a20 = mat[8];
-		const a21 = mat[9];
-		const a22 = mat[10];
-		const a23 = mat[11];
-		const a30 = mat[12];
-		const a31 = mat[13];
-		const a32 = mat[14];
-		const a33 = mat[15];
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		const a00 = _mat[0]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		const a01 = _mat[1]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		const a02 = _mat[2]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		const a03 = _mat[3]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		const a10 = _mat[4]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		const a11 = _mat[5]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		const a12 = _mat[6]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		const a13 = _mat[7]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		const a20 = _mat[8]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		const a21 = _mat[9]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		const a22 = _mat[10]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		const a23 = _mat[11]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		const a30 = _mat[12]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		const a31 = _mat[13]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		const a32 = _mat[14]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		const a33 = _mat[15]!;
 		const b00 = a00 * a11 - a01 * a10;
 		const b01 = a00 * a12 - a02 * a10;
 		const b02 = a00 * a13 - a03 * a10;
@@ -681,9 +813,13 @@ export class Matrix4 {
 
 	// https://github.com/toji/gl-matrix/blob/master/src/gl-matrix/mat4.js  mat4.scalar.translate = function (out, a, v) {
 	static translate(out: MixedFloat32Array, x: number, y: number, z: number) {
-		out[12] = out[0] * x + out[4] * y + out[8] * z + out[12];
-		out[13] = out[1] * x + out[5] * y + out[9] * z + out[13];
-		out[14] = out[2] * x + out[6] * y + out[10] * z + out[14];
-		out[15] = out[3] * x + out[7] * y + out[11] * z + out[15];
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		out[12] = out[0]! * x + out[4]! * y + out[8]! * z + out[12]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		out[13] = out[1]! * x + out[5]! * y + out[9]! * z + out[13]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		out[14] = out[2]! * x + out[6]! * y + out[10]! * z + out[14]!;
+		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume we always have 16 elements
+		out[15] = out[3]! * x + out[7]! * y + out[11]! * z + out[15]!;
 	}
 }
