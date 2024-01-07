@@ -1,3 +1,7 @@
+export function mustIndexObj<T extends Record<string | number | symbol, V>, V>(
+	obj: T,
+	key: keyof T,
+): V;
 export function mustIndexObj<
 	T extends Record<string | number | symbol, unknown>,
 >(obj: T, key: keyof T) {
@@ -7,14 +11,17 @@ export function mustIndexObj<
 	return obj[key];
 }
 
-export function mustIndexArray<T extends Array<U> | Float32Array, U = number>(
-	arr: T,
-	index: number,
-) {
+export function mustIndexArray(arr: Float32Array, index: number): number;
+export function mustIndexArray<T>(arr: Array<T>, index: number): T;
+
+export function mustIndexArray(arr: unknown[] | Float32Array, index: number) {
 	if (arr[index] === undefined) {
 		throw new Error(`Index ${index} not found in array ${arr}`);
 	}
 
-	// biome-ignore lint/style/noNonNullAssertion: index is checked above
-	return arr.at(index)!;
+	if (Array.isArray(arr)) {
+		return arr[index];
+	}
+
+	return arr.at(index);
 }
