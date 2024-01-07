@@ -1,4 +1,4 @@
-declare module "*.css" {
+declare module "*.obj" {
 	const _: string;
 	export default _;
 }
