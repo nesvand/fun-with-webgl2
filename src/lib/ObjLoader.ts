@@ -9,8 +9,7 @@ export const ObjLoader = {
 	) {
 		const obj = this.parseObjText(objString, flipYUV);
 
-		// biome-ignore lint/style/noNonNullAssertion: UNSAFE - we assume the values are not null
-		return gl.fCreateMeshVAO(meshName, obj[0]!, obj[1]!, obj[2]!, obj[3]!, 3);
+		return gl.fCreateMeshVAO(meshName, obj[0], obj[1], obj[2], obj[3], 3);
 	},
 
 	parseObjText(inputText: string, flipYUV: boolean) {
@@ -126,6 +125,6 @@ export const ObjLoader = {
 			posB = txt.indexOf("\n", posA);
 		}
 
-		return [fIndex, fVert, fNorm, fUV];
+		return [fIndex, fVert, fNorm, fUV] as const;
 	},
 };
