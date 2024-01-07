@@ -2,14 +2,34 @@ import { MixedFloat32Array } from "./webgl2-types";
 
 //###########################################################################################
 export class Vector3 {
-	x: number;
-	y: number;
-	z: number;
+	coords: [number, number, number];
 
-	constructor(x?: number | null, y?: number | null, z?: number | null) {
-		this.x = x || 0.0;
-		this.y = y || 0.0;
-		this.z = z || 0.0;
+	constructor(x = 0.0, y = 0.0, z = 0.0) {
+		this.coords = [x, y, z];
+	}
+
+	get x() {
+		return this.coords[0];
+	}
+
+	set x(value: number) {
+		this.coords[0] = value;
+	}
+
+	get y() {
+		return this.coords[1];
+	}
+
+	set y(value: number) {
+		this.coords[1] = value;
+	}
+
+	get z() {
+		return this.coords[2];
+	}
+
+	set z(value: number) {
+		this.coords[2] = value;
 	}
 
 	magnitude(v?: { x: number; y: number }) {
@@ -29,35 +49,27 @@ export class Vector3 {
 	normalize() {
 		const mag = this.magnitude();
 
-		this.x /= mag;
-		this.y /= mag;
-		this.z /= mag;
+		this.coords[0] /= mag;
+		this.coords[1] /= mag;
+		this.coords[2] /= mag;
 
 		return this;
 	}
 
 	set(x: number, y: number, z: number) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		this.coords[0] = x;
+		this.coords[1] = y;
+		this.coords[2] = z;
 
 		return this;
 	}
 
 	multiScalar(v: number) {
-		this.x *= v;
-		this.y *= v;
-		this.z *= v;
+		this.coords[0] *= v;
+		this.coords[1] *= v;
+		this.coords[2] *= v;
 
 		return this;
-	}
-
-	getArray() {
-		return [this.x, this.y, this.z];
-	}
-
-	getFloatArray() {
-		return new Float32Array([this.x, this.y, this.z]);
 	}
 
 	clone() {
