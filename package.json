@@ -8,6 +8,7 @@
   },
   "scripts": {
     "serve": "parcel src/index.html",
+    "serve:clean": "rimraf .parcel-cache && rimraf dist && parcel src/index.html",
     "format": "biome format ./src --write",
     "lint": "biome lint ./src"
   },
@@ -22,7 +23,8 @@
     "@parcel/transformer-glsl": "2.11.0",
     "@parcel/transformer-inline-string": "2.11.0",
     "@parcel/transformer-typescript-tsc": "^2.11.0",
-    "parcel": "^2.11.0",
+    "parcel": "2.11.0",
+    "rimraf": "5.0.5",
     "typescript": "5.3.3"
   }
 }
