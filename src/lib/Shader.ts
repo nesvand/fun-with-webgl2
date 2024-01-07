@@ -14,9 +14,8 @@ import type {
 	UniformLocations,
 } from "./webgl2-types";
 
-// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
-export class ShaderUtil {
-	static createShader(gl: ExtendedWebGLContext, source: string, type: number) {
+export const ShaderUtil = {
+	createShader(gl: ExtendedWebGLContext, source: string, type: number) {
 		const shader = gl.createShader(type);
 		if (shader === null) throw Error("Shader is null");
 
@@ -37,9 +36,9 @@ export class ShaderUtil {
 		}
 
 		return shader;
-	}
+	},
 
-	static createProgram(
+	createProgram(
 		gl: ExtendedWebGLContext,
 		vShader: WebGLShader,
 		fShader: WebGLShader,
@@ -87,12 +86,12 @@ export class ShaderUtil {
 		gl.deleteShader(vShader);
 
 		return prog;
-	}
+	},
 
 	// ----------------------
 	// HELPER FUNCTIONS
 	// ----------------------
-	static shaderProgram(
+	shaderProgram(
 		gl: ExtendedWebGLContext,
 		vShaderTxt: string,
 		fShaderTxt: string,
@@ -111,13 +110,13 @@ export class ShaderUtil {
 		}
 
 		return ShaderUtil.createProgram(gl, vShader, fShader, doValidate);
-	}
+	},
 
 	// ----------------------
 	// SETTERS / GETTERS
 	// ----------------------
 
-	static getStandardAttribLocations(
+	getStandardAttribLocations(
 		gl: ExtendedWebGLContext,
 		program: WebGLProgram,
 	): AttribLocations {
@@ -126,9 +125,9 @@ export class ShaderUtil {
 			norm: gl.getAttribLocation(program, ATTR_NORMAL_NAME),
 			uv: gl.getAttribLocation(program, ATTR_UV_NAME),
 		};
-	}
+	},
 
-	static getStandardUniformLocations(
+	getStandardUniformLocations(
 		gl: ExtendedWebGLContext,
 		program: WebGLProgram,
 	): UniformLocations {
@@ -138,17 +137,16 @@ export class ShaderUtil {
 			cameraMatrix: gl.getUniformLocation(program, "uCameraMatrix"),
 			mainTexture: gl.getUniformLocation(program, "uMainTex"),
 		};
-	}
-}
+	},
+};
 
 export class Shader {
 	program: WebGLProgram | null;
-	gl: ExtendedWebGLContext;
 	attribLoc: AttribLocations;
 	uniformLoc: UniformLocations;
 
 	constructor(
-		gl: ExtendedWebGLContext,
+		public gl: ExtendedWebGLContext,
 		vertShaderSource: string,
 		fragmentShaderSource: string,
 	) {
@@ -160,7 +158,6 @@ export class Shader {
 		);
 		if (this.program === null) throw Error("Shader program is null");
 
-		this.gl = gl;
 		gl.useProgram(this.program);
 		this.attribLoc = ShaderUtil.getStandardAttribLocations(
 			this.gl,
