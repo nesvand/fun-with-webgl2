@@ -1,16 +1,14 @@
-import { RenderLoopCallback } from "./webgl2-types";
-
 const ONE_SECOND: number = 1000;
 
 export class RenderLoop {
 	msLastFrame: number | null;
-	callback: RenderLoopCallback;
+	callback: FrameRequestCallback;
 	isActive: boolean;
 	fps: number;
 	msFpsLimit: number | undefined;
 	run: FrameRequestCallback;
 
-	constructor(cb: RenderLoopCallback, fps?: number) {
+	constructor(cb: FrameRequestCallback, fps?: number) {
 		const self = this;
 
 		this.msLastFrame = null; // The time in ms of the last frame

@@ -74,7 +74,5 @@ export interface SkymapUniformLocations extends UniformLocations {
 	nightTex: WebGLUniformLocation | null;
 }
 
-export type ExtendedWebGLContextLike = ExtendedWebGLContext | null;
-export type RenderLoopCallback = (deltaTime: number) => any;
 export type MixedFloat32Array = Float32Array | number[];
 export type NullableNumberArray = number[] | null;

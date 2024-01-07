@@ -15,11 +15,7 @@ import vShader from "./shaders/vShader.glsl";
 
 // Models
 import * as PRIMITIVES from "./lib/Primatives";
-import {
-	ExtendedWebGLContext,
-	ExtendedWebGLContextLike,
-	MixedFloat32Array,
-} from "./lib/webgl2-types";
+import { ExtendedWebGLContext, MixedFloat32Array } from "./lib/webgl2-types";
 // Model Courtesy of @Enthymeme - http://www.blendswap.com/blends/view/73788
 import pirateObjFile from "bundle-text:./assets/pirate_girl.obj";
 
