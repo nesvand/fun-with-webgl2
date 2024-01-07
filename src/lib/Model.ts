@@ -2,12 +2,10 @@ import { Transform } from "./Transform";
 import type { MeshVAO } from "./webgl2-types";
 
 export class Model {
-	mesh: MeshVAO;
 	transform: Transform;
 
-	constructor(meshData: MeshVAO) {
+	constructor(public mesh: MeshVAO) {
 		this.transform = new Transform();
-		this.mesh = meshData;
 	}
 
 	//-------------------------
