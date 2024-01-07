@@ -9,6 +9,8 @@ export function GLInstance(canvasID: string) {
 		throw Error("WebGL context is not available.");
 	}
 
+	if (!("style" in gl.canvas)) throw Error("Invalid canvas element");
+
 	gl.mMeshCache = new Map<string, MeshVAO>(); // Cache all the mesh structs, easy to unload buffers if they all exist in one place
 	gl.mTextureCache = new Map<string, WebGLTexture | null>();
 
@@ -56,7 +58,7 @@ export function GLInstance(canvasID: string) {
 		meshVAO.vao = gl.createVertexArray();
 		gl.bindVertexArray(meshVAO.vao);
 
-		if (!!arrayVert) {
+		if (arrayVert) {
 			meshVAO.bufVertices = gl.createBuffer();
 			meshVAO.vertexComponentLen = vertLength || 3;
 			meshVAO.vertexCount = arrayVert.length / meshVAO.vertexComponentLen;
@@ -78,7 +80,7 @@ export function GLInstance(canvasID: string) {
 			);
 		}
 
-		if (!!arrayNorm) {
+		if (arrayNorm) {
 			meshVAO.bufNormals = gl.createBuffer();
 
 			gl.bindBuffer(gl.ARRAY_BUFFER, meshVAO.bufNormals);
@@ -91,7 +93,7 @@ export function GLInstance(canvasID: string) {
 			gl.vertexAttribPointer(ATTR_NORMAL_LOC, 3, gl.FLOAT, false, 0, 0);
 		}
 
-		if (!!arrayUv) {
+		if (arrayUv) {
 			meshVAO.bufUvs = gl.createBuffer();
 
 			gl.bindBuffer(gl.ARRAY_BUFFER, meshVAO.bufUvs);
@@ -100,7 +102,7 @@ export function GLInstance(canvasID: string) {
 			gl.vertexAttribPointer(ATTR_UV_LOC, 2, gl.FLOAT, false, 0, 0);
 		}
 
-		if (!!arrayIndex) {
+		if (arrayIndex) {
 			meshVAO.bufIndex = gl.createBuffer();
 			meshVAO.indexCount = arrayIndex.length;
 
@@ -188,8 +190,10 @@ export function GLInstance(canvasID: string) {
 
 	// Set the size of the canvas html element and the rendering view port
 	gl.fSetSize = (w, h) => {
-		gl.canvas.style.width = w + "px";
-		gl.canvas.style.height = h + "px";
+		if (!("style" in gl.canvas)) throw Error("Invalid canvas element");
+
+		gl.canvas.style.width = `${w}px`;
+		gl.canvas.style.height = `${h}px`;
 		gl.canvas.width = w;
 		gl.canvas.height = h;
 
